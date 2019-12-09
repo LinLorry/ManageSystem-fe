@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>登录</title>
     <link href="css/login.css" rel="stylesheet" >
+    <script src="js/login.js"></script>
+    <script src="js/util.js"></script>
 </head>
 <body>
 <div class="login">
@@ -18,13 +20,15 @@
                     <p>登录</p>
                     <div class="login-group">
                         <label>用户名</label>
-                        <input type="text" name="name" autocomplete="name" class="login-input">
+                        <input type="text" name="username" id="username" class="login-input">
+                        <small></small>
                     </div>
                     <div class="login-group">
                         <label>密码</label>
-                        <input type="password" name="password" autocomplete="current-password" class="login-input">
+                        <input type="password" name="password" id="password" class="login-input">
+                        <small></small>
                     </div>
-                    <button class="login-btn login-btn">
+                    <button class="login-btn login-btn" type="button" onclick="login()">
                         登录
                     </button>
 

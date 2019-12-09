@@ -70,7 +70,7 @@ body {
     background-color: #fff;
     -webkit-box-shadow: 0 7px 25px rgba(0, 0, 0, .08);
     box-shadow: 0 7px 25px rgba(0, 0, 0, .08);
-    padding: 60px 25px 25px 25px;
+    padding: 35px 25px 25px 25px;
     text-align: left;
     border-radius: 3px;
 }
@@ -102,12 +102,12 @@ body {
 .login .login-box p {
     color: var(--color-semidark);
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     text-align: center;
 }
 
 .login .login-box .login-group {
-    margin-bottom: 30px;
+    margin-bottom: 14px;
 }
 
 .login .login-box label {
@@ -127,7 +127,7 @@ body {
     color: var(--color-dark);
     border: none;
     border-radius: 3px;
-    padding: 15px 20px;
+    padding: 10px 5px;
     width: 100%;
     outline: 0;
 }
@@ -137,7 +137,8 @@ body {
     width: 100%;
     border: none;
     color: #fff;
-    padding: 15px;
+    padding: 10px;
+    margin-top: 10px;
     border-radius: 3px;
     background-color: var(--color-primary);
     -webkit-box-shadow: 0 2px 7px var(--color-semidark);
