@@ -1,5 +1,43 @@
 var token = window.localStorage.token;
 var userProfileURL = "/api/user/profile";
+var Popup =new Popup();
+function updateWork(work_id) {
+    function editWork(){
+        url="/api/work/update";
+        var name=updateForm.name.value;
+        var comment=updateForm.comment.value;
+        var data={
+            "id":work_id,
+            "name": name,
+            "comment": comment
+        };
+        fetch(url,{
+            body: JSON.stringify(data),
+            headers: {
+                'Authorization': 'manage ' + token,
+                'content-type': 'application/json;charset=UTF-8'
+            },
+            method: "POST"
+        })
+            .then(response => response.json())
+            .then(function(data) {
+                if (data.status == 1) {
+                    // window.localStorage.token = data.token;
+                    window.location.href = "/findWork.html";
+                } else {
+                    var hint = document.getElementById("hint");
+                    hint.style.display = "block";
+                    hint.innerHTML = data.message;
+                }
+            });
+    }
+
+    var title = '编辑生产流程管理',
+        text = '<form id="updateForm">生产流程名称<input type="text" id="name"><br>' +
+            '生产流程备注<input type="text" id="comment"></form>';
+    Popup.confirm(title,text,editWork);
+
+}
 function disposeHint(message) {
     var hint = document.getElementById('hint');
     hint.textContent = message;
@@ -15,6 +53,9 @@ function parseDate(time) {
         + result[4] + '点'
         + result[5] + '分';
 }
+
+
+
 window.onload=function f() {
     url="/api/work/find";
     var headers;
@@ -52,7 +93,15 @@ window.onload=function f() {
                     var updateTime=document.createElement('td');
                     updateTime.innerHTML=parseDate(element.updateTime);
                     tr.appendChild(updateTime);
+
+                    var update=document.createElement('td');
+                    var button=document.createElement('button');
+                    button.innerHTML='编辑';
+                    button.onclick=function(){updateWork(element.id)};
+                    update.appendChild(button);
+                    tr.appendChild(update);
                     queryResult.appendChild(tr);
+
                 })
             }
             else{
@@ -141,7 +190,16 @@ function query(){
                     var updateTime=document.createElement('td');
                     updateTime.innerHTML=parseDate(element.updateTime);
                     tr.appendChild(updateTime);
+
+                    var update=document.createElement('td');
+                    var button=document.createElement('button');
+                    button.innerHTML='编辑';
+                    button.onclick=function(){updateWork(element.id)};
+                    update.appendChild(button);
+                    tr.appendChild(update);
+
                     queryResult.appendChild(tr);
+
                 })
             }
             else{
