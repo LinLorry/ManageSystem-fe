@@ -7,7 +7,8 @@ function Popup () {
         var model = document.getElementById('model');
         if (model) {
             var content = document.getElementById('alertContent');
-            content.innerText = text;
+            // content.innerText = text;
+            content.innerHTML = text;
             model.style.display = 'block';
             return
         }
@@ -49,7 +50,7 @@ function Popup () {
             var confirmModel = document.getElementById('confirmModel');
             if (confirmModel) {
                 var content = document.getElementById('confirmContent');
-                content.innerText = text;
+                content.innerHTML = text;
                 confirmModel.style.display = 'block';
                 return
             }
@@ -100,7 +101,7 @@ function Popup () {
             if (confirmModel) {
                 var content = document.getElementById('imgContent');
                 var imgC = document.getElementById('imgC');
-                content.innerText = text;
+                content.innerHTML = text;
                 imgC.src = img;
                 confirmModel.style.display = 'block';
                 return
@@ -151,7 +152,7 @@ function Popup () {
             var model = document.getElementById('toast-popup');
             if (model) {
                 var content = document.getElementById('toast-content');
-                content.innerText = text;
+                content.innerHTML = text;
                 model.style.display = 'block';
                 that.cancelToast(time);
                 return
