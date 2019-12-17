@@ -1,0 +1,26 @@
+.create-box img {
+    display: inline-block;
+    width: 16px;
+}
+
+.create-box label {
+    display: inline-block;
+    width: 150px;
+    text-align: right;
+    margin-top: 10px;
+}
+
+.show-box {
+    text-align: left;
+    display: inline-block;
+    width: 200px;
+    margin: 5px;
+}
+
+.show-box input {
+    width: 150px;
+}
+
+.show-box img {
+    margin-left: 10px;
+}
