@@ -56,7 +56,7 @@
                 <div id="container">
                     <div style="margin-top: 10px;">
                         <button class="tag tag-light" onclick="loadOrder()">所有</button>
-                        <button class="tag tag-success el-tag--light" onclick="finishOrder()">完成</button>
+                        <button class="tag tag-success el-tag--light" onclick="queryOrder('progress')">未完成</button>
                         <button class="tag tag-info el-tag--light" onclick="sortOrder('todayCreate')">今天创建</button>
                         <button class="tag tag-warning el-tag--light" onclick="sortOrder('accordEnd?accord=0')">今天出货</button>
                         <button class="tag tag-danger el-tag--light" onclick="sortOrder('accordEnd?accord=1')">明天出货</button>
