@@ -37,6 +37,7 @@ function loadWorkProcess(pageNumber) {
                 let data = json.data
                 totalNumber = data.total
                 dealWithPageSelect()
+                workPorcessTbody.innerHTML = ''
                 data.workProcesses.forEach(element => {
                     let tr = document.createElement('tr')
                     workPorcessTbody.appendChild(tr)
@@ -107,7 +108,7 @@ function dealWithPageSelect() {
     }
 }
 
-function create() {
+function createAction() {
     const title = '创建会议'
     const text = '<div class="create-box">' +
         '<label for="workId">生产流程Id：</label>' +
@@ -138,11 +139,50 @@ function create() {
         '</div><br>' +
         '</div>'
 
-    let createFunction = function () {
-        console.log("???")
-    }
-    Popup.confirm(title, text, createFunction);
+    Popup.confirm(title, text, create);
+}
 
+function create() {
+    let workId = document.getElementById('workId').value
+    let processId = document.getElementById('processId').value
+    let sequenceNumber = document.getElementById('sequenceNumber').value
+
+    if (workId.length === 0) {
+        Popup.alert('流程工序创建', '生产流程Id不能为空')
+        return
+    } else if (processId.length === 0) {
+        Popup.alert('流程工序创建', '工序Id不能为空')
+        return
+    } else if (sequenceNumber.length === 0) {
+        Popup.alert('流程工序创建', '流程工序顺序不能为空')
+        return
+    }
+
+    const url = '/api/workProcess/create'
+
+    const data = {
+        workId: workId,
+        processId: processId,
+        sequenceNumber: sequenceNumber
+    }
+
+    const headers = {
+        'Authorization': 'manage ' + localStorage.getItem('token'),
+        'content-type': 'application/json;charset=UTF-8'
+    }
+
+    fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(function (json) {
+            Popup.alert('流程工序创建', json.message)
+            if (json.status === 1) {
+                loadWorkProcess();
+            }
+        })
 }
 
 function loadWorkName() {

@@ -18,7 +18,13 @@
 }
 
 .show-box input {
+    height: 25px;
     width: 150px;
+}
+
+.show-box input[type=number] {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
 }
 
 .show-box img {
