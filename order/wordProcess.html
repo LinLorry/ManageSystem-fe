@@ -58,7 +58,10 @@
                 </div>
                 <div class="widget-content">
                     <div class="button-box">
-                        <button id="createButton" onclick="createAction()">创建</button>
+                        <input type="number" placeholder="生产流程Id" name="workId" id="findWorkId">
+                        <input type="number" placeholder="工序Id" name="processId" id="findProcessId">
+                        <button onclick="query()">查询</button>
+                        <button id="create-button" onclick="createAction()">创建</button>
                     </div>
                     <div>
                         <table>

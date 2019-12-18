@@ -1,6 +1,9 @@
 .button-box {
     padding: 10px 30px;
-    text-align: right;
+}
+
+#create-button {
+    float: right;
 }
 
 .pageSelectBox {
@@ -38,7 +41,7 @@
     width: 150px;
 }
 
-.show-box input[type=number] {
+input[type=number] {
     -webkit-appearance: none;
     -moz-appearance: textfield;
 }

@@ -1,6 +1,7 @@
-var Popup = new Popup();
-var totalNumber = 1;
-var nowPage = 1;
+var Popup = new Popup()
+var nowPage = 1
+var findWorkId = 0
+var findProcessId = 0
 
 const workProcessField = [
     'workId', 'workName',
@@ -11,8 +12,9 @@ const workProcessField = [
 window.onload = loadWorkProcess(1)
 
 function loadWorkProcess(pageNumber) {
+    nowPage = pageNumber
     const url = '/api/workProcess/find'
-    const data = {
+    let data = {
         'pageNumber': pageNumber - 1
     }
     const headers = {
@@ -20,62 +22,34 @@ function loadWorkProcess(pageNumber) {
         'content-type': 'application/json;charset=UTF-8'
     }
 
-    nowPage = pageNumber
+    if (findWorkId !== 0) {
+        data.work = {
+            id: findWorkId
+        }
+    }
+
+    if (findProcessId !== 0) {
+        data.process = {
+            id: findProcessId
+        }
+    }
 
     fetch(url, {
-            body: JSON.stringify(data),
+            method: 'POST',
             headers: headers,
-            method: 'POST'
+            body: JSON.stringify(data)
         })
         .then(response => response.json())
         .then(function (json) {
             Popup.toast(json.message)
             if (json.status === 1) {
-                let data = json.data
-                totalNumber = data.total
-                dealWithPageSelect()
-                workPorcessTbody.innerHTML = ''
-                data.workProcesses.forEach(element => {
-                    let tr = document.createElement('tr')
-                    tr.id = 'work-' + element.workId + '-process-' + element.processId
-                    workPorcessTbody.appendChild(tr)
-
-                    for (key of workProcessField) {
-                        let td = document.createElement('td')
-                        tr.appendChild(td)
-                        td.textContent = element[key]
-                    }
-
-                    let td = document.createElement('td')
-                    tr.appendChild(td)
-                    td.textContent = new Date(element.updateTime).toLocaleDateString()
-
-                    td = document.createElement('td')
-                    tr.appendChild(td)
-                    td.textContent = new Date(element.createTime).toLocaleDateString()
-
-                    td = document.createElement('td')
-                    tr.appendChild(td)
-
-                    let button = document.createElement('button')
-                    td.append(button)
-                    button.textContent = '修改'
-                    button.onclick = function () {
-                        updateWorkProcessAction(element)
-                    }
-
-                    button = document.createElement('button')
-                    td.append(button)
-                    button.textContent = '删除'
-                    button.onclick = function () {
-                        deleteWorkProcessAction(element)
-                    }
-                });
+                dealWithPageSelect(json.data.total)
+                loadWorkProcesses(json.data.workProcesses)
             }
         })
 }
 
-function dealWithPageSelect() {
+function dealWithPageSelect(totalNumber) {
     let pageSelectBox = document.getElementsByClassName('pageSelectBox')[0]
     pageSelectBox.innerHTML = ''
 
@@ -379,4 +353,64 @@ function loadProcessName() {
         .catch(e => {
             cross.style.display = 'inline'
         })
+}
+
+function loadWorkProcesses(data) {
+    let workPorcessTbody = document.getElementById('workPorcessTbody')
+    workPorcessTbody.innerHTML = ''
+    data.forEach(element => {
+        let tr = document.createElement('tr')
+        tr.id = 'work-' + element.workId + '-process-' + element.processId
+        workPorcessTbody.appendChild(tr)
+
+        for (key of workProcessField) {
+            let td = document.createElement('td')
+            tr.appendChild(td)
+            td.textContent = element[key]
+        }
+
+        let td = document.createElement('td')
+        tr.appendChild(td)
+        td.textContent = new Date(element.updateTime).toLocaleDateString()
+
+        td = document.createElement('td')
+        tr.appendChild(td)
+        td.textContent = new Date(element.createTime).toLocaleDateString()
+
+        td = document.createElement('td')
+        tr.appendChild(td)
+
+        let button = document.createElement('button')
+        td.append(button)
+        button.textContent = '修改'
+        button.onclick = function () {
+            updateWorkProcessAction(element)
+        }
+
+        button = document.createElement('button')
+        td.append(button)
+        button.textContent = '删除'
+        button.onclick = function () {
+            deleteWorkProcessAction(element)
+        }
+    });
+}
+
+function query() {
+    let workId = document.getElementById('findWorkId').value
+    let processId = document.getElementById('findProcessId').value
+
+    if (workId.length !== 0) {
+        findWorkId = workId
+    } else {
+        findWorkId = 0
+    }
+
+    if (processId.length !== 0) {
+        findProcessId = processId
+    } else {
+        findProcessId = 0
+    }
+
+    loadWorkProcess(1)
 }
