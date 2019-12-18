@@ -191,7 +191,7 @@ function loadProcessName() {
     tick.style.display = 'none'
     cross.style.display = 'none'
 
-    if (workId.value.length === 0) return
+    if (processId.value.length === 0) return
     const url = '/api/process/find?id=' + processId.value
     const headers = {
         'Authorization': 'manage ' + localStorage.getItem('token')
