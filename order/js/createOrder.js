@@ -31,7 +31,7 @@ function createOrder() {
     let data = {
         serial: serial.value,
         workId: workId.value,
-        endTime: workId.value,
+        endTime: endTime.value,
         comment: comment.value
     }
 
