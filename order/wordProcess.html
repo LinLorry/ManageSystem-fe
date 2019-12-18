@@ -10,14 +10,7 @@
     <script src="js/popup.js"></script>
     <script src="js/workProcess.js"></script>
     <style>
-        .pageSelectBox {
-            overflow-x: scroll;
-        }
 
-        .pageSelectBox select {
-            appearance: none;
-            -webkit-appearance: none;
-        }
     </style>
 </head>
 
@@ -28,7 +21,7 @@
         </div>
         <div id="sidebar-nav">
             <ul>
-                <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="home.html"><i class="fa fa-dashboard"></i> 首页</a></li>
                 <li><a href="#"><i class="fa fa-desktop"></i> 工序管理</a></li>
                 <li><a href="#"><i class="fa fa-usd"></i> 生产流程管理</a></li>
                 <li class="active"><a href="wordProcess.html"><i class="fa fa-pencil-square-o"></i> 流程工序配置</a></li>
@@ -64,8 +57,8 @@
                     <h2>流程工序</h2>
                 </div>
                 <div class="widget-content">
-                    <div id="button-box">
-                        <button id="createButton" onclick="createAction()">创建流程工序</button>
+                    <div class="button-box">
+                        <button id="createButton" onclick="createAction()">创建</button>
                     </div>
                     <div>
                         <table>
