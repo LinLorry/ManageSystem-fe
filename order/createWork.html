@@ -49,14 +49,33 @@
             <div class="widget-header">
                 <h2>新建生产流程</h2>
             </div>
-            <div class="widget-content">
-                <form id="createWork">
+            <div style="text-align:center">
+                <form id="createWork" class="form-item">
+                    <table align="center">
+                        <tr>
+                            <td>生产流程名称</td>
+                            <td><input type="text" id="name1" name="name" placeholder="生产流程名称"/></td>
+                        </tr>
+                        <tr>
+                            <td>生产流程备注</td>
+                            <td><textarea  name="comment" id="comment1" placeholder="生产流程备注" rows="4"></textarea></td>
+                        </tr>
+                        <!--
+                        <tr>
+                            <td><input class="create-button"type="button" value="创建" onclick="create()"/></td>
+                        </tr>
+                        <tr>
+                            <p id="hint"></p>
+                        </tr>-->
+                    </table>
+                    <!--
                     生产流程名称<input type="text" id="name" name="name"/><br>
                     生产流程备注<br>
-                    <textarea name="comment" id="comment" placeholder="生产流程备注" rows="4"></textarea>
+                    <textarea class="multieditbox" name="comment" id="comment" placeholder="生产流程备注" rows="4"></textarea>-->
                     <p id="hint"></p>
-                    <input type="button" value="创建" onclick="create()"/>
+                    <input class="create-button"type="button" value="创建" onclick="create()"/>
                 </form>
+
             </div>
         </div>
     </div>
