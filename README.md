@@ -45,5 +45,20 @@
     Popup.toast('toast提示！时间可以自定义单位秒',3);
     ```
     
-## 下一个写啥还没想好...
+### 2019/12/17 
+修复弹窗第一次点击后，传入text参数不渲染的问题
+
+## 分工
+四个模块开设四个分支，四个人在不同分支编写代码
+- [feature/process:](#feature/process)
+- [feature/product:](#feature/product)
+- [feature/work-process:](#feature/work-process)
+- [feature/work:](#feature/work)
+
+### 1. feature/process
+### 2. feature/product
+### 3. feature/work-process
+### 4. feature/work
+
+
 
