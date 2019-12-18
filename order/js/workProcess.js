@@ -37,6 +37,7 @@ function loadWorkProcess(pageNumber) {
                 workPorcessTbody.innerHTML = ''
                 data.workProcesses.forEach(element => {
                     let tr = document.createElement('tr')
+                    tr.id = 'work-' + element.workId + '-process-' + element.processId
                     workPorcessTbody.appendChild(tr)
 
                     for (key of workProcessField) {
@@ -52,6 +53,23 @@ function loadWorkProcess(pageNumber) {
                     td = document.createElement('td')
                     tr.appendChild(td)
                     td.textContent = new Date(element.createTime).toLocaleDateString()
+
+                    td = document.createElement('td')
+                    tr.appendChild(td)
+
+                    let button = document.createElement('button')
+                    td.append(button)
+                    button.textContent = '修改'
+                    button.onclick = function () {
+                        updateWorkProcessAction(element)
+                    }
+
+                    button = document.createElement('button')
+                    td.append(button)
+                    button.textContent = '删除'
+                    button.onclick = function () {
+                        deleteWorkProcessAction(element)
+                    }
                 });
             }
         })
@@ -107,7 +125,7 @@ function dealWithPageSelect() {
 }
 
 function createAction() {
-    const title = '创建会议'
+    const title = '创建流程工序'
     const text = '<div class="create-box">' +
         '<label for="workId">生产流程Id：</label>' +
         '<div class="show-box">' +
@@ -137,10 +155,10 @@ function createAction() {
         '</div><br>' +
         '</div>'
 
-    Popup.confirm(title, text, create);
+    Popup.confirm(title, text, createWorkProcess);
 }
 
-function create() {
+function createWorkProcess() {
     let workId = document.getElementById('workId').value
     let processId = document.getElementById('processId').value
     let sequenceNumber = document.getElementById('sequenceNumber').value
@@ -182,6 +200,112 @@ function create() {
             }
         })
 }
+
+function updateWorkProcessAction(data) {
+    const title = '修改流程工序'
+    const text = '<div class="create-box">' +
+        '<label for="workId">生产流程Id：</label>' +
+        '<div class="show-box">' +
+        '<input type="number" name="workId" id="workId" disabled="true" value="' + data.workId + '">' +
+        '</div><br>' +
+        '<label for="workName">生产流程名称：</label>' +
+        '<div class="show-box">' +
+        '<input type="text" name="workName" id="workName" disabled="true" value="' + data.workName + '">' +
+        '</div><br>' +
+        '<label for="processId">工序Id：</label>' +
+        '<div class="show-box">' +
+        '<input type="number" name="processId" id="processId" disabled="true" value="' + data.processId + '">' +
+        '</div><br>' +
+        '<label for="workName">工序名称：</label>' +
+        '<div class="show-box">' +
+        '<input type="text" name="processName" id="processName" disabled="true" value="' + data.workName + '">' +
+        '</div><br>' +
+        '<label for="sequenceNumber">流程工序顺序：</label>' +
+        '<div class="show-box">' +
+        '<input type="number" name="sequenceNumber" id="sequenceNumber" value="' + data.sequenceNumber + '">' +
+        '</div><br>' +
+        '</div>'
+
+    Popup.confirm(title, text, function () {
+        updateWorkProcess(data.workId, data.processId)
+    });
+}
+
+function updateWorkProcess(workId, processId) {
+    let sequenceNumber = document.getElementById('sequenceNumber').value
+
+    if (sequenceNumber.length === 0) {
+        Popup.alert('流程工序创建', '流程工序顺序不能为空')
+        return
+    }
+
+    const url = '/api/workProcess/update'
+
+    const headers = {
+        'Authorization': 'manage ' + localStorage.getItem('token'),
+        'content-type': 'application/json;charset=UTF-8'
+    }
+
+    const data = {
+        workId: workId,
+        processId: processId,
+        sequenceNumber: sequenceNumber
+    }
+
+    fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(function (json) {
+            Popup.alert('流程工序更新', json.message)
+            if (json.status === 1) {
+                loadWorkProcess();
+            }
+        })
+}
+
+function deleteWorkProcessAction(data) {
+    const title = '删除流程工序'
+    const content = '<p>确定删除这个流程工序？</p>' +
+        '<p>生产流程Id：' + data.workId + '</p>' +
+        '<p>生产流程名称：' + data.workName + '</p>' +
+        '<p>工序Id：' + data.processId + '</p>' +
+        '<p>工序名称：' + data.processName + '</p>' +
+        '<p>工序顺序：' + data.sequenceNumber + '</p>'
+
+    Popup.confirm(title, content, function () {
+        deleteWorkProcess({
+            workId: data.workId,
+            processId: data.processId,
+            sequenceNumber: data.sequenceNumber
+        })
+    })
+}
+
+function deleteWorkProcess(data) {
+    const url = '/api/workProcess/delete'
+
+    const headers = {
+        'Authorization': 'manage ' + localStorage.getItem('token'),
+        'content-type': 'application/json;charset=UTF-8'
+    }
+
+    fetch(url, {
+            method: 'DELETE',
+            headers: headers,
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(function (json) {
+            Popup.alert('流程工序删除', json.message)
+            if (json.status === 1) {
+                loadWorkProcess()
+            }
+        })
+}
+
 
 function loadWorkName() {
     let load = document.getElementById('work-img-load')
