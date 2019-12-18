@@ -8,10 +8,7 @@ const workProcessField = [
     'sequenceNumber'
 ]
 
-window.onload = function () {
-    // this.create()
-    this.loadWorkProcess(1)
-}
+window.onload = loadWorkProcess(1)
 
 function loadWorkProcess(pageNumber) {
     const url = '/api/workProcess/find'
@@ -67,9 +64,10 @@ function dealWithPageSelect() {
     if (totalNumber == 1) {
         return;
     } else if (totalNumber < 6) {
-        for (var i = 1; i <= totalNumber; ++i) {
+        for (let i = 1; i <= totalNumber; ++i) {
             let b = document.createElement('button')
             b.textContent = i
+
             b.onclick = function () {
                 loadWorkProcess(i)
             }
