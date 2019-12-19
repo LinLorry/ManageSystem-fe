@@ -1,6 +1,44 @@
 var token = window.localStorage.token;
-var userProfileURL = "/api/user/profile";
 var Popup =new Popup();
+function create(){
+    function createWork() {
+        var name=createWork.name.value;
+        var comment=document.getElementById("comment1").value;
+        if (name.length === 0) {
+            disposeHint('生产流程名字不能为空！');
+            return;
+        }
+        var data={
+            "name": name,
+            "comment": comment
+        };
+        url="/api/work/create";
+        fetch(url,{
+            body: JSON.stringify(data),
+            headers: {
+                'Authorization': 'manage ' + token,
+                'content-type': 'application/json;charset=UTF-8'
+            },
+            method: "POST"
+        })
+            .then(response => response.json())
+            .then(function(data) {
+                if (data.status == 1) {
+                    // window.localStorage.token = data.token;
+                    window.location.href = "/findWork.html";
+                } else {
+                    var hint = document.getElementById("hint");
+                    hint.style.display = "block";
+                    hint.innerHTML = data.message;
+                }
+            });
+    }
+    var title = '新建生产流程管理',
+        text = '<div class="confirm-box"><form id="updateForm">' +
+            '<label>生产流程名称</label><input type="text" id="name"><br>' +
+            '<label>生产流程备注</label><input type="text" id="comment"></form></div>';
+    Popup.confirm(title,text,createWork);
+}
 function updateWork(work_id) {
     function editWork(){
         url="/api/work/update";
@@ -33,8 +71,9 @@ function updateWork(work_id) {
     }
 
     var title = '编辑生产流程管理',
-        text = '<form id="updateForm">生产流程名称<input type="text" id="name"><br>' +
-            '生产流程备注<input type="text" id="comment"></form>';
+        text = '<div class="confirm-box"><form id="updateForm">' +
+            '<label>生产流程名称</label><input type="text" id="name"><br>' +
+            '<label>生产流程备注</label><input type="text" id="comment"></form></div>';
     Popup.confirm(title,text,editWork);
 
 }
@@ -134,9 +173,7 @@ window.onload=function f() {
             }
         });
 }
-function create(){
-    window.location.href = "/createWork.html";
-}
+
 function query(){
     var id=queryBox.id.value;
     var name=queryBox.name.value;
@@ -145,41 +182,12 @@ function query(){
     console.log(name);
     console.log(comment);
     var counter=0;
-   // url="/api/work/find";
+    // url="/api/work/find";
     let url = new URL('/api/work/find', 'http://' + document.domain + ':8080');
     if (id !== '') url.searchParams.append('id', id);
     if (name !== '') url.searchParams.append('name', name);
     if (comment !== '') url.searchParams.append('comment', comment);
-    // if (pageNumber !== '') url.searchParams.append('pageNumber', pageNumber);
-/*
-    var temp="";
-    if(id!=='')
-    {
-        if(counter===0){
-            temp+="id="+id;
-            counter=1;
-        }
-    }
-    if(name!=='') {
-        if (counter !== 0) {
-            temp += "&"
-        } else counter = 1;
-        temp += "name="+name;
-    }
 
-    
-    if(comment!=='') {
-        if(counter!==0){
-            temp+="&"
-        }else counter=1;
-        temp+="comment="+comment;
-    }
-
-    if(counter===1){
-        url+="?";
-        url+=temp;
-    }*/
-   // url="/api/work/find?"+"id="+id+"&name="+name+"&comment="+comment+"&pageNumber="+pageNumber;
     var headers;
     if (token != null && token != '') {
         headers = {
@@ -227,7 +235,6 @@ function query(){
                     button.onclick=function () {deletework(element.id)};
                     deleteButton.appendChild(button);
                     tr.appendChild(deleteButton);
-
                     queryResult.appendChild(tr);
 
                 })
