@@ -4,79 +4,11 @@
     <meta charset="UTF-8">
     <title>创建订单</title>
     <link href="css/home.css" rel="stylesheet">
-    <style>
-        /*#createOrder {*/
-            /*!* variables *!*/
-            /*--color-primary: #44a0b3;*/
-            /*--color-grey: rgba(68, 160, 179, .06);*/
-            /*--color-dark: rgba(68, 160, 179, .5);*/
-            /*--color-semidark: rgba(68, 160, 179, .5);*/
-
-            /*text-align: center;*/
-            /*margin: 20px 0 0 0;*/
-            /*font-family: 'Segoe UI';*/
-            /*font-size: 14px;*/
-        /*}*/
-
-        /*#createOrder .form-item {*/
-            /*margin-bottom: 14px;*/
-        /*}*/
-
-        /*#createOrder .form-item label {*/
-            /*margin-bottom: 5px;*/
-            /*display: inline-block;*/
-            /*width: 100%;*/
-            /*color: var(--color-semidark);*/
-            /*font-weight: 700;*/
-        /*}*/
-
-        /*#createOrder .form-item input {*/
-            /*background-color: var(--color-grey);*/
-            /*color: var(--color-dark);*/
-            /*border: none;*/
-            /*border-radius: 3px;*/
-            /*padding: 10px 5px;*/
-            /*width: 100%;*/
-            /*outline: 0;*/
-        /*}*/
-        label {
-            display: inline-block;
-            margin-bottom: 5px;
-            width: 200px;
-            margin-left: 50px;
-        }
-
-        .form-item{
-            margin-top: 20px;
-            padding-bottom: 10px;
-            position: relative;
-        }
-
-        .form-item input {
-            border: 2px solid #f0f0f0;
-            border-radius: 4px;
-            font-size: 14px;
-            padding: 10px;
-        }
-
-        .form-item input:focus {
-            outline: 0;
-            border-color: #777;
-        }
-
-        #createOrder button {
-            background-color: rgba(68, 160, 179, .5);
-            border: 2px solid rgba(68, 160, 179, .5);
-            border-radius: 4px;
-            color: #fff;
-            display: block;
-            font-family: inherit;
-            font-size: 16px;
-            padding: 10px;
-            margin-top: 20px;
-            width: 50%;
-        }
-    </style>
+    <link href="css/createOrder.css" rel="stylesheet">
+    <link href="css/popup.css" rel="stylesheet">
+    <script src="js/util.js"></script>
+    <script src="js/popup.js"></script>
+    <script src="js/createOrder.js"></script>
 </head>
 <body>
 <section id="sidebar">
@@ -123,26 +55,28 @@
             <div class="widget-content">
                 <form id="createOrder">
                     <div class="form-item">
-                        <label>订单号</label>
-                        <input id="serial" />
+                        <label for="serial">订单号*</label>
+                        <input id="serial" type="text" />
                         <small></small>
                     </div>
                     <div class="form-item">
-                        <label>订单的生成流程ID</label>
-                        <input id="workId" />
+                        <label for="workId">订单的生成流程ID*</label>
+                        <input id="workId" type="number" />
                         <small></small>
                     </div>
                     <div class="form-item">
-                        <label>需求时间</label>
-                        <input  id="endTime" />
+                        <label for="endTime">需求时间*</label>
+                        <!--<input  id="endTime" />-->
+                        <input type="date" id="endTime" />
                         <small></small>
                     </div>
                     <div class="form-item">
-                        <label>备注</label>
+                        <label for="comment">备注</label>
                         <input  id="comment" />
+                        <!--<textarea id="comment" style="height: 20px;"></textarea>-->
                     </div>
 
-                    <button type="button">创建订单</button>
+                    <button type="button" onclick="createOrder()">创建订单</button>
                 </form>
             </div>
         </div>

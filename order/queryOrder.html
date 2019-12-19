@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/home.css" rel="stylesheet">
+    <link href="css/queryOrder.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/popup.css" rel="stylesheet">
+    <script src="js/popup.js"></script>
+    <script src="js/sortTable.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/queryOrder.js"></script>
+</head>
+<body>
+<section id="sidebar">
+    <div class="white-label">
+        <p>订单管理系统</p>
+    </div>
+    <div id="sidebar-nav">
+        <ul>
+            <li class="active"><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+            <li><a href="#"><i class="fa fa-desktop"></i> 工序管理</a></li>
+            <li><a href="#"><i class="fa fa-usd"></i> 生产流程管理</a></li>
+            <li><a href="#"><i class="fa fa-pencil-square-o"></i> 流程工序配置</a></li>
+            <li><a href="#"><i class="fa fa-sitemap"></i> 创建订单</a></li>
+            <li><a href="#"><i class="fa fa-line-chart"></i> 订单查看</a></li>
+        </ul>
+    </div>
+</section>
+<section id="content">
+    <div id="header">
+        <div class="header-nav">
+            <div class="menu-button">
+                <i class="fa fa-navicon"></i>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li class="nav-profile">
+                        <div class="nav-profile-image">
+                            <div class="nav-profile-name">admin<i class="fa fa-caret-down"></i></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+
+        <div class="widget-box sample-widget" style="margin-top: 10px;">
+            <!--<button id="con">测试</button>-->
+            <div class="widget-header">
+                <h2>订单信息查询</h2>
+            </div>
+            <div class="widget-content" style="overflow-y: auto;height:78vh">
+                <div id="container">
+                    <div style="margin-top: 10px;">
+                        <button class="tag tag-light" onclick="loadOrder()">所有</button>
+                        <button class="tag tag-success el-tag--light" onclick="queryOrder('progress')">未完成</button>
+                        <button class="tag tag-info el-tag--light" onclick="sortOrder('todayCreate')">今天创建</button>
+                        <button class="tag tag-warning el-tag--light" onclick="sortOrder('accordEnd?accord=0')">今天出货</button>
+                        <button class="tag tag-danger el-tag--light" onclick="sortOrder('accordEnd?accord=1')">明天出货</button>
+                        <button class="tag tag-light" onclick="sortOrder('accordEnd?accord=2')">后天出货</button>
+                    </div>
+                    <form id="queryForm">
+                        <input type="text" id="id" value="" placeholder="序号" />
+                        <input type="text" id="serial" value="" placeholder="订单号" />
+                        <input type="date" id="createTime" value="" placeholder="创建时间" />
+                        <input type="date" id="endTime" value="" placeholder="出货时间" />
+                        <button type="button" onclick="queryOrder()">查询</button>
+                    </form>
+                    <table id="table"  cellpadding="0" cellspacing="0">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+</body>
+<!--<script>-->
+    <!--var ex1 = new tableSort('table',1,2,999,'up','down','hov');-->
+<!--</script>-->
+</html>
