@@ -1,7 +1,9 @@
 var Popup = new Popup()
 var nowPage = 1
 var findWorkId = 0
+var findWorkName = null
 var findProcessId = 0
+var findProcessName = null
 
 const workProcessField = [
     'workId', 'workName',
@@ -15,6 +17,8 @@ function loadWorkProcess(pageNumber) {
     nowPage = pageNumber
     const url = '/api/workProcess/find'
     let data = {
+        work: {},
+        process: {},
         'pageNumber': pageNumber - 1
     }
     const headers = {
@@ -22,16 +26,22 @@ function loadWorkProcess(pageNumber) {
         'content-type': 'application/json;charset=UTF-8'
     }
 
+    console.log(findProcessName)
+
     if (findWorkId !== 0) {
-        data.work = {
-            id: findWorkId
-        }
+        data.work.id = findWorkId
+    }
+
+    if (findWorkName !== null) {
+        data.work.name = findWorkName
     }
 
     if (findProcessId !== 0) {
-        data.process = {
-            id: findProcessId
-        }
+        data.process.id = findProcessId
+    }
+
+    if (findProcessName !== null) {
+        data.process.name = findProcessName
     }
 
     fetch(url, {
@@ -43,7 +53,7 @@ function loadWorkProcess(pageNumber) {
         .then(function (json) {
             Popup.toast(json.message)
             if (json.status === 1) {
-                dealWithPageSelect(json.data.total)
+                // dealWithPageSelect(json.data.total)
                 loadWorkProcesses(json.data.workProcesses)
             }
         })
@@ -100,7 +110,7 @@ function dealWithPageSelect(totalNumber) {
 
 function createAction() {
     const title = '创建流程工序'
-    const text = '<div class="create-box">' +
+    const text = '<div class="confirm-box">' +
         '<label for="workId">生产流程Id：</label>' +
         '<div class="show-box">' +
         '<input type="number" name="workId" id="workId" onchange="javascript:loadWorkName()">' +
@@ -177,7 +187,7 @@ function createWorkProcess() {
 
 function updateWorkProcessAction(data) {
     const title = '修改流程工序'
-    const text = '<div class="create-box">' +
+    const text = '<div class="confirm-box">' +
         '<label for="workId">生产流程Id：</label>' +
         '<div class="show-box">' +
         '<input type="number" name="workId" id="workId" disabled="true" value="' + data.workId + '">' +
@@ -394,11 +404,16 @@ function loadWorkProcesses(data) {
             deleteWorkProcessAction(element)
         }
     });
+
+    new tableSort('workProcessTable', 1, 2, 999, 'up', 'down', 'hov');
 }
 
 function query() {
     let workId = document.getElementById('findWorkId').value
+    let workName = document.getElementById('findWorkName').value
     let processId = document.getElementById('findProcessId').value
+    let processName = document.getElementById('findProcessName').value
+
 
     if (workId.length !== 0) {
         findWorkId = workId
@@ -406,10 +421,22 @@ function query() {
         findWorkId = 0
     }
 
+    if (workName !== null && workName !== undefined && workName.length !== 0) {
+        findWorkName = workName
+    } else {
+        findWorkName = null
+    }
+
     if (processId.length !== 0) {
         findProcessId = processId
     } else {
         findProcessId = 0
+    }
+
+    if (processName !== null && processName !== undefined && processName.length !== 0) {
+        findProcessName = processName
+    } else {
+        findProcessName = null
     }
 
     loadWorkProcess(1)

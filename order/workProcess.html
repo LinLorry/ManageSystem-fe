@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/table.css">
     <script src="js/popup.js"></script>
     <script src="js/workProcess.js"></script>
+    <script src="js/sortTable.js"></script>
     <style>
 
     </style>
@@ -49,10 +50,6 @@
             </div>
         </div>
         <div class="content">
-            <div class="content-header">
-                <h1>流程工序配置</h1>
-            </div>
-
             <div class="widget-box sample-widget">
                 <div class="widget-header">
                     <h2>流程工序</h2>
@@ -60,12 +57,14 @@
                 <div class="widget-content">
                     <div class="button-box">
                         <input type="number" placeholder="生产流程Id" name="workId" id="findWorkId">
+                        <input type="text" placeholder="生产流程名字" name="workName" id="findWorkName">
                         <input type="number" placeholder="工序Id" name="processId" id="findProcessId">
+                        <input type="text" placeholder="工序名字" name="processName" id="findProcessName">
                         <button onclick="query()">查询</button>
-                        <button id="create-button" onclick="createAction()">创建</button>
+                        <button onclick="createAction()">创建</button>
                     </div>
                     <div>
-                        <table>
+                        <table id="workProcessTable">
                             <thead>
                                 <tr>
                                     <th>生产流程编号</th>
@@ -82,9 +81,6 @@
 
                             </tbody>
                         </table>
-                    </div>
-                    <div class="pageSelectBox">
-
                     </div>
                 </div>
             </div>
