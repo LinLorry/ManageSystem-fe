@@ -7,6 +7,7 @@
     <link href="css/popup.css" rel="stylesheet" >
     <link href="css/home.css" rel="stylesheet">
     <link href="css/findWork.css" rel="stylesheet" >
+    <link href="css/table.css" rel="stylesheet" >
 
     <script src="js/findWork.js"></script>
 
@@ -58,10 +59,12 @@
                     生产流程ID<input type="text" name="id">
                     生产流程名称<input type="text" name="name">
                     生产流程备注<input type="text" name="comment">
-                    页码<input type="text" name="pageNumber">
+                    <!--页码<input type="text" name="pageNumber">-->
                     <input class="find-button" type="button" value="查询" onclick="query()"/>
+                    <input class="find-button" type="button" value="新建" onclick="create()"/>
+
                 </form>
-                <div class="query-result">
+                <div class="query-result" style="overflow-y: auto;height:65vh" >
                     <table class="meeting-table">
                         <thead>
                         <tr>
@@ -71,10 +74,11 @@
                             <th>创建时间</th>
                             <th>更新时间</th>
                             <th>编辑</th>
+                            <th>删除</th>
 
                         </tr>
                         </thead>
-                        <tbody id="query-result">
+                        <tbody id="query-result" >
 
                         </tbody>
 
@@ -88,11 +92,7 @@
 
             </div>
         </div>
-        <div class="widget-box sample-widget">
-            <div class="widget-header">
-                <a class="create-link" href="createWork.html">新建生产流程</a>
-            </div>
-        </div>
+
     </div>
 </section>
 </body>

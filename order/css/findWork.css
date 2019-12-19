@@ -7,18 +7,25 @@
     display: inline-block;
 }
 
-.find-button { /* 按钮美化 */
-    width: 70px; /* 宽度 */
-    height: 30px; /* 高度 */
-    border-width: 0px; /* 边框宽度 */
-    border-radius: 3px; /* 边框半径 */
-    background: #1E90FF; /* 背景颜色 */
-    cursor: pointer; /* 鼠标移入按钮范围时出现手势 */
-    outline: none; /* 不显示轮廓线 */
-    font-family: Microsoft YaHei; /* 设置字体 */
-    color: white; /* 字体颜色 */
-    font-size: 17px; /* 字体大小 */
+.find-button {
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    color: #fff;
+    background-color: #409eff;
+    border: 1px solid #409eff;
+    text-align: center;
+    box-sizing: border-box;
+    outline: none;
+    margin: 0;
+    padding: 6px 10px;
+    font-size: 14px;
+    border-radius: 4px;
 }
-.find-button:hover { /* 鼠标移入按钮范围时改变颜色 */
-    background: #5599FF;
+
+.find-button:focus, button:hover {
+    color: #409eff;
+    border-color: #c6e2ff;
+    background-color: #ecf5ff;
 }

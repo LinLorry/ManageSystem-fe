@@ -38,23 +38,41 @@ function updateWork(work_id) {
     Popup.confirm(title,text,editWork);
 
 }
+function deleteWork(work_id){
+    var data={
+        "id": work_id
+
+    };
+    url="/api/work/delete?id="+work_id;
+    var headers;
+    if (token != null && token != '') {
+        headers = {
+            'Authorization': 'manage ' + token,
+            'content-type': 'application/json'
+        };
+    }
+    fetch(url,{
+        body: JSON.stringify(data),
+        headers: headers,
+        method: "DELETE"
+    })
+        .then(response => response.json())
+        .then(function(json) {
+            if(json.status ==1){
+                window.location.href = "/findWork.html";
+            }else {
+                var hint = document.getElementById("hint");
+                hint.style.display = "block";
+                hint.innerHTML = data.message;
+            }
+
+        });
+}
 function disposeHint(message) {
     var hint = document.getElementById('hint');
     hint.textContent = message;
     hint.style.display = 'block';
 }
-function parseDate(time) {
-    let re = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/;
-    let result = re.exec(time);
-
-    return result[1] + '年'
-        + result[2] + '月'
-        + result[3] + '日'
-        + result[4] + '点'
-        + result[5] + '分';
-}
-
-
 
 window.onload=function f() {
     url="/api/work/find";
@@ -88,10 +106,10 @@ window.onload=function f() {
                     comment.innerHTML=element.comment;
                     tr.appendChild(comment);
                     var createTime=document.createElement('td');
-                    createTime.innerHTML=parseDate(element.createTime);
+                    createTime.innerHTML=new Date(element.createTime).toLocaleDateString();
                     tr.appendChild(createTime);
                     var updateTime=document.createElement('td');
-                    updateTime.innerHTML=parseDate(element.updateTime);
+                    updateTime.innerHTML=new Date(element.updateTime).toLocaleDateString();
                     tr.appendChild(updateTime);
 
                     var update=document.createElement('td');
@@ -102,6 +120,13 @@ window.onload=function f() {
                     tr.appendChild(update);
                     queryResult.appendChild(tr);
 
+                    var deleteButton=document.createElement('td');
+                    var button=document.createElement('button');
+                    button.innerHTML='删除';
+                    button.onclick=function () {deleteWork(element.id)};
+                    deleteButton.appendChild(button);
+                    tr.appendChild(deleteButton);
+                    queryResult.appendChild(tr);
                 })
             }
             else{
@@ -109,19 +134,24 @@ window.onload=function f() {
             }
         });
 }
+function create(){
+    window.location.href = "/createWork.html";
+}
 function query(){
     var id=queryBox.id.value;
     var name=queryBox.name.value;
     var comment=queryBox.comment.value;
-    var pageNumber_1=queryBox.pageNumber.value;
-    var pageNumber=pageNumber_1-1;
     console.log(id);
     console.log(name);
     console.log(comment);
-    console.log(pageNumber);
-
     var counter=0;
-    url="/api/work/find";
+   // url="/api/work/find";
+    let url = new URL('/api/work/find', 'http://' + document.domain + ':8080');
+    if (id !== '') url.searchParams.append('id', id);
+    if (name !== '') url.searchParams.append('name', name);
+    if (comment !== '') url.searchParams.append('comment', comment);
+    // if (pageNumber !== '') url.searchParams.append('pageNumber', pageNumber);
+/*
     var temp="";
     if(id!=='')
     {
@@ -144,16 +174,11 @@ function query(){
         }else counter=1;
         temp+="comment="+comment;
     }
-    if(pageNumber_1!==''){
-        if(counter!==0){
-            temp+="&"
-        }else counter=1;
-        temp+="pageNumber="+pageNumber;
-    }
+
     if(counter===1){
         url+="?";
         url+=temp;
-    }
+    }*/
    // url="/api/work/find?"+"id="+id+"&name="+name+"&comment="+comment+"&pageNumber="+pageNumber;
     var headers;
     if (token != null && token != '') {
@@ -185,18 +210,23 @@ function query(){
                     comment.innerHTML=element.comment;
                     tr.appendChild(comment);
                     var createTime=document.createElement('td');
-                    createTime.innerHTML=parseDate(element.createTime);
+                    createTime.innerHTML=new Date(element.createTime).toLocaleDateString();
                     tr.appendChild(createTime);
                     var updateTime=document.createElement('td');
-                    updateTime.innerHTML=parseDate(element.updateTime);
+                    updateTime.innerHTML=new Date(element.updateTime).toLocaleDateString();
                     tr.appendChild(updateTime);
-
                     var update=document.createElement('td');
                     var button=document.createElement('button');
                     button.innerHTML='编辑';
                     button.onclick=function(){updateWork(element.id)};
                     update.appendChild(button);
                     tr.appendChild(update);
+                    var deleteButton=document.createElement('td');
+                    var button=document.createElement('button');
+                    button.innerHTML='删除';
+                    button.onclick=function () {deletework(element.id)};
+                    deleteButton.appendChild(button);
+                    tr.appendChild(deleteButton);
 
                     queryResult.appendChild(tr);
 

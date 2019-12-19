@@ -24,7 +24,7 @@ if (token != null && token != '') {
 }*/
 function create() {
     var name=createWork.name.value;
-    var comment=document.getElementById("comment").value;
+    var comment=document.getElementById("comment1").value;
     console.log(name);
     console.log(comment);
     if (name.length === 0) {
