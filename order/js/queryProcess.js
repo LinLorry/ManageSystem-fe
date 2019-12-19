@@ -1,3 +1,10 @@
+var Popup = new Popup()
+var findProcessId = 0
+
+const workProcessField = [
+    'processName','processComment'
+]
+
 window.onload = function () {
     find();
 }
@@ -62,7 +69,8 @@ function find(){
                 var showButton = document.createElement('button');
                 showButton.innerHTML = "查看";
                 showButton.addEventListener("click",function(){
-                    window.location.href = '/process.html?id=' + element.id; 
+                    // window.location.href = '/process.html?id=' + element.id;
+                    showAction(element)
                 }); 
                 show.appendChild(showButton);
                 tr.appendChild(show);
@@ -71,7 +79,8 @@ function find(){
                 var updateButton = document.createElement('button');
                 updateButton.innerHTML = "修改";
                 updateButton.addEventListener("click",function(){
-                    window.location.href = '/updateProcess.html?id=' + element.id; 
+                    // window.location.href = '/updateProcess.html?id=' + element.id; 
+                    updateAction(element)
                 }); 
                 update.appendChild(updateButton);
                 tr.appendChild(update);
@@ -89,6 +98,145 @@ function find(){
             })
         }
     })
+}
+
+//弹窗式创建工序
+function createAction(){
+    const title = '创建工序'
+    const text = '<div class="confirm-box">' +
+        '<div class="show-box">' +
+        '<label>工序名称：</label>'+
+        '<input type="text" id="processName">' +
+        '</div><br>' +
+        '<div class="show-box">' +
+        '<label>工序内容：</label>' +
+        '<input type="text" id="processComment">' +
+        '</div><br>' +
+        // '<input type="button" value="创建" onclick="create()"></input>'
+        '</div>'
+
+    Popup.confirm(title, text, function () {
+        createProcess()
+    } );
+}
+
+function createProcess() {
+    let url = "/api/process/create";
+    let headers = {
+        'Authorization': 'manage ' + localStorage.getItem('token'),
+        'content-type': 'application/json;charset=UTF-8'
+    }
+
+    let name = document.getElementById('processName').value;
+    let comment = document.getElementById('processComment').value;
+
+    if (name.length === 0) {
+        disposeHint('工序名不能为空！');
+        return;
+    } else if (comment.length === 0) {
+        disposeHint('工序内容不能为空！');
+        return;
+    }
+
+    let data = JSON.stringify({
+        "name": name,
+        "comment": comment
+    });
+
+    fetch(url, {
+        body: data,
+        headers: headers,
+        method: "POST"
+    })
+    .then(response => response.json())
+    .then(function(json) {
+        if(json.status === 1){
+            disposeHint(json.message);
+            window.location.href = "/queryProcess.html";
+        }else{
+            disposeHint(json.message);
+        }
+    })
+}
+
+//查看工序
+function showAction(data){
+    const title = '查看工序'
+    const text = '<div class="confirm-box">' +
+        '<div class="show-box">' +
+        '<label>工序名称：</label>' +
+        '<input type="text" id="processName" disabled="true" value="' + data.name +'">' +
+        '</div><br>' +
+        '<div class="show-box">' +
+        '<label>工序内容：</label>' +
+        '<input type="text" id="processComment" disabled="true" value="' + data.comment +'">' +
+        '</div><br>' +
+        '</div>'
+
+    Popup.confirm(title, text, function (){
+        console.log("test")
+    });
+}
+
+//弹窗式修改工序
+function updateAction(data){
+    const title = '修改工序'
+    const text = '<div class="confirm-box">' +
+        '<div class="show-box">' +
+        '<label>工序名称：</label>' +
+        '<input type="text" id="processName" value="' + data.name +'">' +
+        '</div><br>' +
+        '<div class="show-box">' +
+        '<label>工序内容：</label>' +
+        '<input type="text" id="processComment" value="' + data.comment +'">' +
+        '</div><br>' +
+        // '<input type="button" value="修改" onclick="updateProcess()"></input>' +
+        '</div>'
+
+    Popup.confirm(title, text, function () {
+        updateProcess(data.id)
+    });
+}
+
+function updateProcess(ProcessId) {
+    let url = "/api/process/update";
+    let headers = {
+        'Authorization': 'manage ' + localStorage.getItem('token'),
+        'content-type': 'application/json;charset=UTF-8'
+    }
+
+    let name = document.getElementById('processName').value;
+    let comment = document.getElementById('processComment').value;
+
+    if (name.length === 0) {
+        disposeHint('工序名不能为空！');
+        return;
+    } else if (comment.length === 0) {
+        disposeHint('工序内容不能为空！');
+        return;
+    }
+    console.log(ProcessId);
+
+    let data = JSON.stringify({
+        "id": ProcessId,
+        "name": name,
+        "comment": comment
+    });
+
+    fetch(url, {
+        body: data,
+        headers: headers,
+        method: "POST"
+    })
+    .then(response => response.json())
+    .then(function(json) {
+        if(json.status === 1){
+            disposeHint(json.message);
+            window.location.href = "/queryProcess.html";
+        }else{
+            disposeHint(json.message);
+        }
+    });
 }
 
 function deleteProcess(id){
@@ -115,4 +263,8 @@ function deleteProcess(id){
             disposeHint(json.message);
         }
     })
+}
+
+function disposeHint(message){
+    alert(message);
 }
