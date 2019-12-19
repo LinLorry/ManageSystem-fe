@@ -43,15 +43,20 @@ function find(){
                 tr.appendChild(id);
 
                 let name = document.createElement('td');
-                // let a = document.createElement('a');
-                // a.href = '/process.html?id=' + element.id; 
                 name.innerHTML = element.name;
-                // name.appendChild(a);
                 tr.appendChild(name);
 
                 let comment = document.createElement('td');
                 comment.innerHTML = element.comment;
                 tr.appendChild(comment);
+
+                let createTime = document.createElement('td');
+                createTime.innerHTML = new Date(element.createTime).toLocaleDateString();
+                tr.appendChild(createTime);
+
+                let updateTime = document.createElement('td');
+                updateTime.innerHTML = new Date(element.updateTime).toLocaleDateString();
+                tr.appendChild(updateTime);
 
                 let show = document.createElement('td');
                 var showButton = document.createElement('button');
@@ -83,7 +88,6 @@ function find(){
                 queryResult.appendChild(tr);
             })
         }
-        // disposeHint(json.message);
     })
 }
 

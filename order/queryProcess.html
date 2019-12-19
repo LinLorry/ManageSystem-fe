@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>工序管理</title>
     <link href="css/home.css" rel="stylesheet">
+    <link href="css/queryOrder.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/popup.css" rel="stylesheet">
     <script src='js/queryProcess.js'></script>
     <script src="js/util.js"></script>
 </head>
@@ -46,54 +49,43 @@
     <div class="content">
         <div class="content-header">
             <h1>查找工序</h1>
-            <div>
-                <form id="searchForm">
-                    <div>
-                        <label>工序ID：</label>
-                        <input type="text" id="id">
-                    </div>
-                    <div>
-                        <label>工序名称：</label>
-                        <input type="text" id="name">
-                    </div>
-                    <div>
-                        <label>工序内容：</label>
-                        <input type="text" id="comment">
-                    </div>
-                    <div>
-                        <label>工序页码：</label>
-                        <input type="text" id="pageNumber">
-                    </div>
-                    <div>
-                        <input type="button" value="查询" onclick="find()">
-                    </div>
-                </form>
-            </div>
         </div>
 
-        <div class="widget-box sample-widget">            
-            <div class="">
-                <h1>工序列表</h1>
-            </div>
+        <div class="widget-box sample-widget">  
             <div>
-                <table>
-                    <thead>
-                        <tr>
-                        <th>工序ID</th>
-                        <th>工序名称</th>
-                        <th>工序内容</th>
-                    </tr>
-                    </thead>
-                    <tbody id="query-result">
-                        <!-- <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td><input type="button" value="查看" onclick="#"></td>
-                            <td><input type="button" value="修改" onclick="#"></td>
-                        </tr> -->
-                    </tbody>
-                </table>
+                <div style="margin-top: 10px;">
+                    <button class="tag tag-light" onclick="loadOrder()">所有</button>
+                    <button class="tag tag-success el-tag--light" onclick="queryOrder('progress')">未完成</button>
+                    <button class="tag tag-info el-tag--light" onclick="sortOrder('todayCreate')">今天创建</button>
+                    <button class="tag tag-warning el-tag--light" onclick="sortOrder('accordEnd?accord=0')">今天出货</button>
+                    <button class="tag tag-danger el-tag--light" onclick="sortOrder('accordEnd?accord=1')">明天出货</button>
+                    <button class="tag tag-light" onclick="sortOrder('accordEnd?accord=2')">后天出货</button>
+                </div>
+                <div style="padding: 10px;">
+                    <form>
+                            <input type="text" id="id" value="" placeholder="工序ID：">
+                            <input type="text" id="name" value="" placeholder="工序名称：">
+                            <input type="text" id="comment" value="" placeholder="工序内容：">
+                            <input type="text" id="pageNumber" value="" placeholder="工序页码：">
+                            <input type="button" value="查询" onclick="find()">
+                    </form>
+                </div>
+                <div class="widget-box sample-widget" style="overflow-y: auto;height:78vh">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">工序ID</th>
+                                <th style="text-align: center;">工序名称</th>
+                                <th style="text-align: center;">工序内容</th>
+                                <th style="text-align: center;">创建时间</th>
+                                <th style="text-align: center;">修改时间</th>
+                                <th colspan="3" style="text-align: center;">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="query-result">
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
