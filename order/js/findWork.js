@@ -2,8 +2,8 @@ var token = window.localStorage.token;
 var Popup =new Popup();
 function create(){
     function createWork() {
-        var name=createWork.name.value;
-        var comment=document.getElementById("comment1").value;
+        var name=document.getElementById("name").value;
+        var comment=document.getElementById("comment").value;
         if (name.length === 0) {
             disposeHint('生产流程名字不能为空！');
             return;
@@ -24,12 +24,14 @@ function create(){
             .then(response => response.json())
             .then(function(data) {
                 if (data.status == 1) {
+                    Popup.toast('新建生产流程成功');
                     // window.localStorage.token = data.token;
                     window.location.href = "/findWork.html";
                 } else {
-                    var hint = document.getElementById("hint");
+                    Popup.toast('新建生产流程失败');
+                   /* var hint = document.getElementById("hint");
                     hint.style.display = "block";
-                    hint.innerHTML = data.message;
+                    hint.innerHTML = data.message;*/
                 }
             });
     }
@@ -60,12 +62,14 @@ function updateWork(work_id) {
             .then(response => response.json())
             .then(function(data) {
                 if (data.status == 1) {
+                    Popup.toast('更新生产流程成功');
                     // window.localStorage.token = data.token;
                     window.location.href = "/findWork.html";
                 } else {
-                    var hint = document.getElementById("hint");
+                    Popup.toast('更新生产流程失败');
+                    /*var hint = document.getElementById("hint");
                     hint.style.display = "block";
-                    hint.innerHTML = data.message;
+                    hint.innerHTML = data.message;*/
                 }
             });
     }
@@ -98,8 +102,10 @@ function deleteWork(work_id){
         .then(response => response.json())
         .then(function(json) {
             if(json.status ==1){
+                Popup.toast('删除生产流程成功');
                 window.location.href = "/findWork.html";
             }else {
+                Popup.toast('删除生产流程失败');
                 var hint = document.getElementById("hint");
                 hint.style.display = "block";
                 hint.innerHTML = data.message;
@@ -107,71 +113,9 @@ function deleteWork(work_id){
 
         });
 }
-function disposeHint(message) {
-    var hint = document.getElementById('hint');
-    hint.textContent = message;
-    hint.style.display = 'block';
-}
 
-window.onload=function f() {
-    url="/api/work/find";
-    var headers;
-    if (token != null && token != '') {
-        headers = {
-            'Authorization': 'manage ' + token,
-            'content-type': 'application/json'
-        };
-    }
-    var queryResult = document.getElementById('query-result');
-    console.log(url);
-    fetch(url,{
-        headers: headers,
-        method: "GET"
-    })
-        .then(response => response.json())
-        .then(function(json) {
-            if (json.status == 1) {
-                queryResult.innerHTML = '';
-                json.data.works.forEach(element => {
-                    var tr = document.createElement('tr');
-                    tr.id = 'work-' + element.id;
-                    var id = document.createElement('td');
-                    id.innerHTML=element.id;
-                    tr.appendChild(id);
-                    var name = document.createElement('td');
-                    name.innerHTML=element.name;
-                    tr.appendChild(name);
-                    var comment=document.createElement('td');
-                    comment.innerHTML=element.comment;
-                    tr.appendChild(comment);
-                    var createTime=document.createElement('td');
-                    createTime.innerHTML=new Date(element.createTime).toLocaleDateString();
-                    tr.appendChild(createTime);
-                    var updateTime=document.createElement('td');
-                    updateTime.innerHTML=new Date(element.updateTime).toLocaleDateString();
-                    tr.appendChild(updateTime);
-
-                    var update=document.createElement('td');
-                    var button=document.createElement('button');
-                    button.innerHTML='编辑';
-                    button.onclick=function(){updateWork(element.id)};
-                    update.appendChild(button);
-                    tr.appendChild(update);
-                    queryResult.appendChild(tr);
-
-                    var deleteButton=document.createElement('td');
-                    var button=document.createElement('button');
-                    button.innerHTML='删除';
-                    button.onclick=function () {deleteWork(element.id)};
-                    deleteButton.appendChild(button);
-                    tr.appendChild(deleteButton);
-                    queryResult.appendChild(tr);
-                })
-            }
-            else{
-                disposeHint(json.message);
-            }
-        });
+window.onload=function(){
+    query()
 }
 
 function query(){
@@ -204,6 +148,7 @@ function query(){
         .then(response => response.json())
         .then(function(json) {
             if (json.status == 1) {
+                //Popup.toast(json.message)
                 queryResult.innerHTML = '';
                 json.data.works.forEach(element => {
                     var tr = document.createElement('tr');
@@ -232,15 +177,16 @@ function query(){
                     var deleteButton=document.createElement('td');
                     var button=document.createElement('button');
                     button.innerHTML='删除';
-                    button.onclick=function () {deletework(element.id)};
+                    button.onclick=function () {deleteWork(element.id)};
                     deleteButton.appendChild(button);
                     tr.appendChild(deleteButton);
                     queryResult.appendChild(tr);
 
                 })
+                var ex1 = new tableSort('table', 1, 2, 999, 'up', 'down', 'hov')
             }
             else{
-                disposeHint(json.message);
+                Popup.toast(json.message)
             }
 
         });

@@ -29,3 +29,7 @@
     border-color: #c6e2ff;
     background-color: #ecf5ff;
 }
+#create-button {
+    float: right;
+    margin-right: 30px;
+}

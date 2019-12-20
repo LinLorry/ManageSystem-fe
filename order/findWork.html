@@ -9,6 +9,7 @@
     <link href="css/findWork.css" rel="stylesheet" >
     <link href="css/table.css" rel="stylesheet" >
     <script src="js/findWork.js"></script>
+    <script src="js/sortTable.js"></script>
 
 
 </head>
@@ -60,11 +61,11 @@
                     生产流程备注<input type="text" name="comment">
                     <!--页码<input type="text" name="pageNumber">-->
                     <input class="find-button" type="button" value="查询" onclick="query()"/>
-                    <input class="find-button" type="button" value="新建" onclick="create()"/>
+                    <input id="create-button" class="find-button" type="button" value="新建" onclick="create()"/>
 
                 </form>
-                <div class="query-result" style="overflow-y: auto;height:65vh" >
-                    <table class="meeting-table">
+                <div class="query-result" >
+                    <table id="table">
                         <thead>
                         <tr>
                             <th>生产流程ID</th>
