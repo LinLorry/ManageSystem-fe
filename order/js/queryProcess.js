@@ -143,10 +143,10 @@ function createProcess() {
     let comment = document.getElementById('processComment').value;
 
     if (name.length === 0) {
-        disposeHint('工序名不能为空！');
+        Popup.alert('创建工序','工序名称不能为空！');
         return;
     } else if (comment.length === 0) {
-        disposeHint('工序内容不能为空！');
+        Popup.alert('创建工序','工序内容不能为空！');
         return;
     }
 
@@ -163,10 +163,9 @@ function createProcess() {
     .then(response => response.json())
     .then(function(json) {
         if(json.status === 1){
-            disposeHint(json.message);
-            window.location.href = "/queryProcess.html";
+            Popup.toast(json.message);
         }else{
-            disposeHint(json.message);
+            Popup.alert('创建工序失败',json.message);
         }
     })
 }
@@ -185,7 +184,7 @@ function showAction(data){
         '</div><br>' +
         '</div>'
 
-    Popup.confirm(title, text);
+    Popup.alert(title, text);
 }
 
 //弹窗式修改工序
@@ -219,10 +218,10 @@ function updateProcess(ProcessId) {
     let comment = document.getElementById('processComment').value;
 
     if (name.length === 0) {
-        disposeHint('工序名不能为空！');
+        Popup.alert('修改工序','工序名不能为空！');
         return;
     } else if (comment.length === 0) {
-        disposeHint('工序内容不能为空！');
+        Popup.alert('修改工序','工序内容不能为空！');
         return;
     }
     console.log(ProcessId);
@@ -241,10 +240,9 @@ function updateProcess(ProcessId) {
     .then(response => response.json())
     .then(function(json) {
         if(json.status === 1){
-            disposeHint(json.message);
-            window.location.href = "/queryProcess.html";
+            Popup.toast(json.message);
         }else{
-            disposeHint(json.message);
+            Popup.alert('修改工序失败',json.message);
         }
     });
 }
@@ -267,10 +265,10 @@ function deleteProcess(id){
     .then(response => response.json())
     .then(function(json) {
         if(json.status === 1){
-            disposeHint(json.message);
+            Popup.toast(json.message);
             find();
         }else{
-            disposeHint(json.message);
+            Popup.alert('删除失败',json.message);
         }
     })
 }
