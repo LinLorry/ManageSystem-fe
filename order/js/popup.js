@@ -9,6 +9,8 @@ function Popup () {
             var content = document.getElementById('alertContent');
             // content.innerText = text;
             content.innerHTML = text;
+            var a_title = document.getElementById('alertTitle');
+            a_title.innerHTML = title;
             model.style.display = 'block';
             return
         }
@@ -16,7 +18,7 @@ function Popup () {
         creatediv.className = 'model';  // 添加class
         creatediv.setAttribute('id','model'); // 添加ID
         var contentHtml = '<div class="model_popup" style="">'
-            +'<div class="popup-ts">'+title+'</div>'
+            +'<div class="popup-ts" id="alertTitle">'+title+'</div>'
             +'<div class="popup-text" id="alertContent">'+text+'</div>'
             +'<div class="popup-btn">'
             +'	<span class="sure alert_sure" id="sure-popup">确定</span>'
@@ -51,6 +53,14 @@ function Popup () {
             if (confirmModel) {
                 var content = document.getElementById('confirmContent');
                 content.innerHTML = text;
+                var c_title = document.getElementById('confirmTitle');
+                c_title.innerHTML = title;
+                document.getElementById('sure').addEventListener('click',function(){
+                    that.sureConfirm(fn);
+                })
+                document.getElementById('cancel').addEventListener('click',function(){
+                    that.cancelConfirm();
+                })
                 confirmModel.style.display = 'block';
                 return
             }
@@ -58,7 +68,7 @@ function Popup () {
             creatediv.className = 'model';  // 添加class
             creatediv.setAttribute('id','confirmModel'); // 添加ID
             var contentHtml = '<div class="model_popup" style="">'
-                +'<div class="popup-ts">'+title+'</div>'
+                +'<div class="popup-ts" id="confirmTitle">'+title+'</div>'
                 +'<div class="popup-text" id="confirmContent">'+text+'</div>'
                 +'<div class="popup-btn">'
                 +'	<span class="sure" id="sure">确定</span>'
