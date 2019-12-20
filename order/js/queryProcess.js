@@ -96,6 +96,7 @@ function find(){
 
                 queryResult.appendChild(tr);
             })
+            var ex1 = new tableSort('processTable', 1, 2, 999, 'up', 'down', 'hov')
         }
         // else{
         //     queryResult.innerHTML = '';

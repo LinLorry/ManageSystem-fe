@@ -8,6 +8,7 @@
     <link href="css/table.css" rel="stylesheet">
     <link href="css/popup.css" rel="stylesheet">
     <script src="js/popup.js"></script>
+    <script src="js/sortTable.js"></script>
     <script src='js/queryProcess.js'></script>
     <script src="js/util.js"></script>
 </head>
@@ -65,14 +66,39 @@
                     </form>
                 </div>
                 <div>
-                    <table>
+                    <table id="processTable">
                         <thead>
                             <tr>
-                                <th style="text-align: center;">工序ID</th>
-                                <th style="text-align: center;">工序名称</th>
-                                <th style="text-align: center;">工序内容</th>
-                                <th style="text-align: center;">创建时间</th>
-                                <th style="text-align: center;">修改时间</th>
+                                <th style="text-align: center;">工序ID
+                                    <span class="caret-wrapper">
+                                        <i class="sort-caret ascending"></i>
+                                        <i class="sort-caret descending"></i>
+                                    </span>
+                                </th>
+                                <th style="text-align: center;">工序名称
+                                    <span class="caret-wrapper">
+                                        <i class="sort-caret ascending"></i>
+                                        <i class="sort-caret descending"></i>
+                                    </span>
+                                </th>
+                                <th style="text-align: center;">工序内容
+                                    <span class="caret-wrapper">
+                                        <i class="sort-caret ascending"></i>
+                                        <i class="sort-caret descending"></i>
+                                    </span>
+                                </th>
+                                <th style="text-align: center;">创建时间
+                                    <span class="caret-wrapper">
+                                        <i class="sort-caret ascending"></i>
+                                        <i class="sort-caret descending"></i>
+                                    </span>
+                                </th>
+                                <th style="text-align: center;">修改时间
+                                    <span class="caret-wrapper">
+                                        <i class="sort-caret ascending"></i>
+                                        <i class="sort-caret descending"></i>
+                                    </span>
+                                </th>
                                 <th colspan="3" style="text-align: center;">操作</th>
                             </tr>
                         </thead>
