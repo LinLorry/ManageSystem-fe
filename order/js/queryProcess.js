@@ -164,6 +164,7 @@ function createProcess() {
     .then(function(json) {
         if(json.status === 1){
             Popup.toast(json.message);
+            find();
         }else{
             Popup.alert('创建工序失败',json.message);
         }
@@ -241,6 +242,7 @@ function updateProcess(ProcessId) {
     .then(function(json) {
         if(json.status === 1){
             Popup.toast(json.message);
+            find();
         }else{
             Popup.alert('修改工序失败',json.message);
         }
