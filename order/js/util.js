@@ -12,41 +12,20 @@ function getProfile() {
     }
 
     fetch(url, {
-        method: 'GET',
-        headers: headers
-    }).then(res => res.json())
-    .then(function(json) {
-        if (json.status === 1) {
-            window.localStorage.setItem('profile',JSON.stringify(json.data))
-        }
-    })
-}
-
-function isAdmin() {
-    let url = '/api/user/isAdmin'
-    let headers = {
-        'content-type': 'application/json;charset=UTF-8',
-        'Authorization': 'manage ' + localStorage.getItem('token')
-    }
-
-    let status = false
-
-    fetch(url, {
-        method: 'GET',
-        headers: headers
-    }).then(res => res.json())
-    .then(function(json) {
-        if (json.status === 1) {
-            status = json.data
-        }
-    })
-    return status
+            method: 'GET',
+            headers: headers
+        }).then(res => res.json())
+        .then(function (json) {
+            if (json.status === 1) {
+                window.localStorage.setItem('profile', JSON.stringify(json.data))
+            }
+        })
 }
 
 function getTime(time) {
     var date = new Date(time)
     var year = date.getFullYear()
-    var month = date.getMonth()+ 1
+    var month = date.getMonth() + 1
     var day = date.getDate()
     var hour = date.getHours()
     var minute = date.getMinutes()
