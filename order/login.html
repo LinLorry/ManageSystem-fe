@@ -1,45 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>登录</title>
-    <link href="css/login.css" rel="stylesheet" >
     <script src="js/login.js"></script>
-    <script src="js/util.js"></script>
+    <link rel="stylesheet" href="css/login.css">
 </head>
+
 <body>
-<div class="login">
-    <div class="login-brand">
-        <img src="images/logo.jpg" alt="logo">
-    </div>
-
-    <div class="login-wrapper">
-        <div class="login-box login-login">
-            <div class="login-box-inner">
-                <form>
-                    <p>登录</p>
-                    <div class="login-group">
-                        <label>用户名</label>
-                        <input type="text" name="username" id="username" class="login-input">
-                        <small></small>
-                    </div>
-                    <div class="login-group">
-                        <label>密码</label>
-                        <input type="password" name="password" id="password" class="login-input">
-                        <small></small>
-                    </div>
-                    <button class="login-btn login-btn" type="button" onclick="login()">
-                        登录
-                    </button>
-
-                    <div class="text-foot">
-                        没有帐户? <a href="./register.html" class="register-link">注册</a>
-                    </div>
-                </form>
-            </div>
+    <div id="loginBox">
+        <h3>订单管理系统</h3>
+        <form action="">
+            <ul>
+                <li>
+                    <input type="text" name="" id="username" placeholder="请输入用户名">
+                    <a href="#" class="icon8 star"> </a>
+                    <div class="clear"></div>
+                </li>
+                <li>
+                    <input type="password" id="password" placeholder="请输入密码">
+                    <a href="#" class="icon8 star"> </a>
+                    <div class="clear"></div>
+                </li>
+                <input type="button" onclick="login()" value="登录">
+            </ul>
+        </form>
+        <div class="text-foot">
+            没有账户? <a href="./register.html" class="login-link">注册</a>
         </div>
     </div>
-
-</div>
 </body>
+
 </html>

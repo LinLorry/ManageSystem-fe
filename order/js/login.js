@@ -31,7 +31,7 @@ function login() {
         return
     }
 
-    var data = {
+    const data = {
         username: username.value,
         password: password.value
     };

@@ -1,52 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>注册</title>
-    <link href="css/login.css" rel="stylesheet" >
+    <script src="js/popup.js"></script>
     <script src="js/register.js"></script>
-    <script src="js/util.js"></script>
+    <link rel="stylesheet" href="css/popup.css">
+    <link rel="stylesheet" href="css/login.css">
 </head>
+
 <body>
-<div class="login">
-    <div class="login-brand">
-        <img src="images/logo.jpg" alt="logo">
-    </div>
-
-    <div class="login-wrapper">
-
-        <div class="login-box login-register">
-            <div class="login-box-inner">
-                <form id="registerForm">
-                    <p>让我们创建您的帐户</p>
-                    <div class="login-group">
-                        <label>用户名</label>
-                        <input type="text" name="nickname" id="username" class="login-input">
-                        <small></small>
-                    </div>
-                    <div class="login-group">
-                        <label>姓名</label>
-                        <input type="text" name="username" id="realname" class="login-input">
-                        <small></small>
-                    </div>
-                    <div class="login-group">
-                        <label>密码</label>
-                        <input type="password" name="password" id="password" class="login-input">
-                        <small></small>
-                    </div>
-                    <button class="login-btn" type="button" onclick="register()">
-                        提交
-                    </button>
-
-                    <div class="text-foot">
-                        已经有账户了? <a href="./login.html" class="login-link">登录</a>
-                    </div>
-                    <div id="hint"></div>
-                </form>
-            </div>
+    <div id="registryBox">
+        <h3>注册</h3>
+        <form action="">
+            <ul>
+                <li>
+                    <input type="text" name="" id="username" placeholder="请输入用户名">
+                    <a href="#" class="icon8 star"> </a>
+                    <div class="clear"></div>
+                </li>
+                <li>
+                    <input type="text" name="" id="realname" placeholder="请输入姓名">
+                    <a href="#" class="icon8 star"> </a>
+                    <div class="clear"></div>
+                </li>
+                <li>
+                    <input type="password" id="password" placeholder="请输入密码">
+                    <a href="#" class="icon8 star"> </a>
+                    <div class="clear"></div>
+                </li>
+                <input type="button" value="注册" onclick="register()">
+            </ul>
+        </form>
+        <div class="text-foot">
+            已经有账户了? <a href="./login.html" class="login-link">登录</a>
         </div>
     </div>
-
-</div>
 </body>
+
 </html>

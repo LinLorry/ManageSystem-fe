@@ -1,9 +1,3 @@
-function setErrorFor(input, message) {
-    const formItem = input.parentElement;
-    const small = formItem.querySelector('small');
-    small.innerText = message;
-}
-
 function getProfile() {
     let url = '/api/user/profile'
     let headers = {
