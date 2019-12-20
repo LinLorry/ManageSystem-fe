@@ -56,37 +56,52 @@
                 </div>
                 <div class="widget-content">
                     <div id="container">
-                        <div style="margin-top: 10px;">
+                        <div class="top-btn" style="margin-top: 10px;">
                             <button class="tag tag-light" onclick="loadOrder()">所有</button>
-                            <button class="tag tag-success el-tag--light" onclick="queryOrder('progress')">未完成</button>
                             <button class="tag tag-info el-tag--light" onclick="sortOrder('todayCreate')">今天创建</button>
                             <button class="tag tag-warning el-tag--light"
                                 onclick="sortOrder('accordEnd?accord=0')">今天出货</button>
                             <button class="tag tag-danger el-tag--light"
                                 onclick="sortOrder('accordEnd?accord=1')">明天出货</button>
-                            <button class="tag tag-light" onclick="sortOrder('accordEnd?accord=2')">后天出货</button>
+                            <button class="tag tag-success el-tag--light" onclick="sortOrder('accordEnd?accord=2')">后天出货</button>
+
+                            <button style="float: right" onclick="createAction()">创建订单</button>
                         </div>
                         <form id="queryForm">
                             <input type="text" id="id" value="" placeholder="序号" />
                             <input type="text" id="serial" value="" placeholder="订单号" />
-                            <input type="date" id="createTime" value="" placeholder="创建时间" />
-                            <input type="date" id="endTime" value="" placeholder="出货时间" />
                             <button type="button" onclick="queryOrder()">查询</button>
                         </form>
                         <table id="table" cellpadding="0" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>序号</th>
-                                    <th>订单号</th>
-                                    <th>创建时间</th>
-                                    <th>生成流程</th>
-                                    <th>出货时间</th>
-                                    <th>查看</th>
-                                    <th>编辑</th>
-                                    <th>完成</th>
+                                    <th style="width:8%">序号
+                                        <span class="caret-wrapper">
+                                            <i class="sort-caret ascending"></i>
+                                            <i class="sort-caret descending"></i>
+                                        </span>
+                                    </th>
+                                    <th style="width:10%">订单号
+                                        <span class="caret-wrapper">
+                                            <i class="sort-caret ascending"></i>
+                                            <i class="sort-caret descending"></i>
+                                        </span>
+                                    </th>
+                                    <th style="width:12%">生成流程
+                                        <span class="caret-wrapper">
+                                            <i class="sort-caret ascending"></i>
+                                            <i class="sort-caret descending"></i>
+                                        </span>
+                                    </th>
+                                    <th style="width:12%">创建时间</th>
+                                    <th style="width:12%">出货时间</th>
+                                    <th style="width:10%">查看</th>
+                                    <th style="width:10%">编辑</th>
+                                    <th>状态</th>
+                                    <th style="width:10%">删除</th>
                                 </tr>
                             </thead>
-                            <tbody id="orderTbody">
+                            <tbody id="orderTbody" style="height: 70vh">
 
                             </tbody>
                         </table>
