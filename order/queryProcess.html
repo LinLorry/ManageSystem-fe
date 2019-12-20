@@ -44,35 +44,27 @@
             </div>
         </div>
     </div>
-    <div>
-        <!-- <a href="createProcess.html">创建工序</a> -->
-        <button class="tag" onclick="createAction()">创建工序</button>
-    </div>
-    <div class="content">
-        <div class="content-header">
-            <h1>查找工序</h1>
-        </div>
 
-        <div class="widget-box sample-widget">  
-            <div>
-                <div style="margin-top: 10px;">
-                    <button class="tag tag-light" onclick="loadOrder()">所有</button>
-                    <button class="tag tag-success el-tag--light" onclick="queryOrder('progress')">未完成</button>
-                    <button class="tag tag-info el-tag--light" onclick="sortOrder('todayCreate')">今天创建</button>
-                    <button class="tag tag-warning el-tag--light" onclick="sortOrder('accordEnd?accord=0')">今天出货</button>
-                    <button class="tag tag-danger el-tag--light" onclick="sortOrder('accordEnd?accord=1')">明天出货</button>
-                    <button class="tag tag-light" onclick="sortOrder('accordEnd?accord=2')">后天出货</button>
-                </div>
+    <div class="content">
+        <!-- <div class="content-header">
+            <h1>查找工序</h1>
+        </div> -->
+        <div class="widget-box sample-widget">
+            <div class="widget-header">
+                <h2>工序查询</h2>
+            </div>
+            <div class="widget-content">
                 <div style="padding: 10px;">
                     <form>
-                            <input type="text" id="id" value="" placeholder="工序ID：">
-                            <input type="text" id="name" value="" placeholder="工序名称：">
-                            <input type="text" id="comment" value="" placeholder="工序内容：">
-                            <input type="text" id="pageNumber" value="" placeholder="工序页码：">
-                            <input type="button" value="查询" onclick="find()">
+                        <input type="text" id="id" value="" placeholder="工序ID：">
+                        <input type="text" id="name" value="" placeholder="工序名称：">
+                        <input type="text" id="comment" value="" placeholder="工序内容：">
+                        <!-- <input type="text" id="pageNumber" value="" placeholder="工序页码："> -->
+                        <button type="button" onclick="find()">查询</button>
+                        <button type="button" onclick="createAction()" class="createButton">创建工序</button>
                     </form>
                 </div>
-                <div class="widget-box sample-widget" style="overflow-y: auto;height:78vh">
+                <div>
                     <table>
                         <thead>
                             <tr>

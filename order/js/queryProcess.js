@@ -15,7 +15,7 @@ function find(){
     let id = document.getElementById('id').value;
     let name = document.getElementById('name').value;
     let comment = document.getElementById('comment').value;
-    let pageNumber = document.getElementById('pageNumber').value;
+    // let pageNumber = document.getElementById('pageNumber').value;
 
     let token = window.localStorage.token;
     let headers;
@@ -97,6 +97,17 @@ function find(){
                 queryResult.appendChild(tr);
             })
         }
+        // else{
+        //     queryResult.innerHTML = '';
+
+        //     let tr = document.createElement('tr');
+
+        //     let td = document.createElement('td');
+        //     td.innerHTML = "暂无数据";
+        //     tr.appendChild(td);
+
+        //     queryResult.appendChild(tr);
+        // }
     })
 }
 
@@ -104,13 +115,14 @@ function find(){
 function createAction(){
     const title = '创建工序'
     const text = '<div class="confirm-box">' +
-        '<div class="show-box">' +
         '<label>工序名称：</label>'+
+        '<div class="show-box">' +
         '<input type="text" id="processName">' +
         '</div><br>' +
-        '<div class="show-box">' +
         '<label>工序内容：</label>' +
+        '<div class="show-box">' +
         '<input type="text" id="processComment">' +
+        // '<textarea type="text" id="processComment"></textarea>'
         '</div><br>' +
         // '<input type="button" value="创建" onclick="create()"></input>'
         '</div>'
@@ -163,31 +175,29 @@ function createProcess() {
 function showAction(data){
     const title = '查看工序'
     const text = '<div class="confirm-box">' +
-        '<div class="show-box">' +
         '<label>工序名称：</label>' +
+        '<div class="show-box">' +
         '<input type="text" id="processName" disabled="true" value="' + data.name +'">' +
         '</div><br>' +
-        '<div class="show-box">' +
         '<label>工序内容：</label>' +
+        '<div class="show-box">' +
         '<input type="text" id="processComment" disabled="true" value="' + data.comment +'">' +
         '</div><br>' +
         '</div>'
 
-    Popup.confirm(title, text, function (){
-        console.log("test")
-    });
+    Popup.confirm(title, text);
 }
 
 //弹窗式修改工序
 function updateAction(data){
     const title = '修改工序'
     const text = '<div class="confirm-box">' +
-        '<div class="show-box">' +
         '<label>工序名称：</label>' +
+        '<div class="show-box">' +
         '<input type="text" id="processName" value="' + data.name +'">' +
         '</div><br>' +
-        '<div class="show-box">' +
         '<label>工序内容：</label>' +
+        '<div class="show-box">' +
         '<input type="text" id="processComment" value="' + data.comment +'">' +
         '</div><br>' +
         // '<input type="button" value="修改" onclick="updateProcess()"></input>' +
