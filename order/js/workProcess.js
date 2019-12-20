@@ -366,14 +366,14 @@ function loadProcessName() {
 }
 
 function loadWorkProcesses(data) {
-    let workPorcessTbody = document.getElementById('workPorcessTbody')
-    workPorcessTbody.innerHTML = ''
+    let workProcessTbody = document.getElementById('workProcessTbody')
+    workProcessTbody.innerHTML = ''
     data.forEach(element => {
         let tr = document.createElement('tr')
         tr.id = 'work-' + element.workId + '-process-' + element.processId
-        workPorcessTbody.appendChild(tr)
+        workProcessTbody.appendChild(tr)
 
-        for (key of workProcessField) {
+        for (const key of workProcessField) {
             let td = document.createElement('td')
             tr.appendChild(td)
             td.textContent = element[key]
