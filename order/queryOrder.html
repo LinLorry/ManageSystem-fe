@@ -21,12 +21,11 @@
         </div>
         <div id="sidebar-nav">
             <ul>
-                <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="#"><i class="fa fa-desktop"></i> 工序管理</a></li>
-                <li><a href="#"><i class="fa fa-usd"></i> 生产流程管理</a></li>
-                <li><a href="#"><i class="fa fa-pencil-square-o"></i> 流程工序配置</a></li>
-                <li><a href="#"><i class="fa fa-sitemap"></i> 创建订单</a></li>
-                <li class="active"><a href="#"><i class="fa fa-line-chart"></i> 订单查看</a></li>
+                <li><a href="home.html"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="queryProcess.html"><i class="fa fa-desktop"></i> 工序管理</a></li>
+                <li><a href="work.html"><i class="fa fa-usd"></i> 生产流程管理</a></li>
+                <li><a href="workProcess.html"><i class="fa fa-pencil-square-o"></i> 流程工序配置</a></li>
+                <li class="active"><a href="queryOrder.html"><i class="fa fa-line-chart"></i> 订单管理</a></li>
             </ul>
         </div>
     </section>
@@ -63,7 +62,8 @@
                                 onclick="sortOrder('accordEnd?accord=0')">今天出货</button>
                             <button class="tag tag-danger el-tag--light"
                                 onclick="sortOrder('accordEnd?accord=1')">明天出货</button>
-                            <button class="tag tag-success el-tag--light" onclick="sortOrder('accordEnd?accord=2')">后天出货</button>
+                            <button class="tag tag-success el-tag--light"
+                                onclick="sortOrder('accordEnd?accord=2')">后天出货</button>
 
                             <button style="float: right" onclick="createAction()">创建订单</button>
                         </div>
