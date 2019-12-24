@@ -3,17 +3,18 @@ var Popup = new Popup();
 
 function create() {
     function createWork() {
-        var name = document.getElementById("name").value;
-        var comment = document.getElementById("comment").value;
-        if (name.length === 0) {
-            disposeHint('生产流程名字不能为空！');
+        const url = "/api/work/create";
+        const name = document.getElementById("name").value;
+        const comment = document.getElementById("comment").value;
+        if (name === null || name === undefined || name.length === 0) {
+            Popup.toast('生产流程名字不能为空！', 10);
             return;
         }
-        var data = {
+
+        const data = {
             "name": name,
             "comment": comment
         };
-        url = "/api/work/create";
         fetch(url, {
                 body: JSON.stringify(data),
                 headers: {
@@ -24,26 +25,36 @@ function create() {
             })
             .then(response => response.json())
             .then(function (data) {
-                if (data.status == 1) {
-                    Popup.toast('新建生产流程成功');
-                    window.location.href = "/findWork.html";
-                } else {
-                    Popup.toast('新建生产流程失败');
+                Popup.alert('创建生产流程', data.message);
+
+                if (data.status === 1) {
+                    query();
                 }
             });
     }
     var title = '新建生产流程管理',
         text = '<div class="confirm-box"><form id="updateForm">' +
-        '<label>生产流程名称</label><input type="text" id="name"><br>' +
-        '<label>生产流程备注</label><input type="text" id="comment"></form></div>';
+        '<label>生产流程名称</label>' +
+        '<div class="show-box">' +
+        '<input type="text" id="name"><br>' +
+        '</div>' +
+        '<label>生产流程备注</label>' +
+        '<div class="show-box">' +
+        '<input type="text" id="comment"></form></div>' +
+        '</div>';
     Popup.confirm(title, text, createWork);
 }
 
 function updateWork(work_id) {
     function editWork() {
-        url = "/api/work/update";
-        var name = updateForm.name.value;
+        const url = "/api/work/update";
+        const name = updateForm.name.value;
         var comment = updateForm.comment.value;
+        if (name === null || name === undefined || name.length === 0) {
+            Popup.toast('生产流程名字不能为空！', 10);
+            return;
+        }
+
         var data = {
             "id": work_id,
             "name": name,
@@ -59,29 +70,31 @@ function updateWork(work_id) {
             })
             .then(response => response.json())
             .then(function (data) {
+                Popup.alert('编辑生产流程', data.message);
                 if (data.status == 1) {
-                    Popup.toast('更新生产流程成功');
-                    window.location.href = "/findWork.html";
-                } else {
-                    Popup.toast('更新生产流程失败');
+                    query();
                 }
             });
     }
 
     var title = '编辑生产流程管理',
         text = '<div class="confirm-box"><form id="updateForm">' +
-        '<label>生产流程名称</label><input type="text" id="name"><br>' +
-        '<label>生产流程备注</label><input type="text" id="comment"></form></div>';
+        '<label>生产流程名称</label>' +
+        '<div class="show-box">' +
+        '<input type="text" id="name"><br>' +
+        '</div>' +
+        '<label>生产流程备注</label>' +
+        '<div class="show-box">' +
+        '<input type="text" id="comment"></form></div>' +
+        '</div>';
     Popup.confirm(title, text, editWork);
-
 }
 
 function deleteWork(work_id) {
-    var data = {
+    const url = "/api/work/delete";
+    const data = {
         "id": work_id
-
     };
-    url = "/api/work/delete?id=" + work_id;
     var headers;
     if (token != null && token != '') {
         headers = {
@@ -96,16 +109,11 @@ function deleteWork(work_id) {
         })
         .then(response => response.json())
         .then(function (json) {
-            if (json.status == 1) {
-                Popup.toast('删除生产流程成功');
-                window.location.href = "/findWork.html";
-            } else {
-                Popup.toast('删除生产流程失败');
-                var hint = document.getElementById("hint");
-                hint.style.display = "block";
-                hint.innerHTML = data.message;
-            }
+            Popup.alert('删除生产流程', json.message)
 
+            if (json.status == 1) {
+                query();
+            }
         });
 }
 
@@ -117,10 +125,6 @@ function query() {
     var id = queryBox.id.value;
     var name = queryBox.name.value;
     var comment = queryBox.comment.value;
-
-    console.log(id);
-    console.log(name);
-    console.log(comment);
 
     let url = new URL('/api/work/find', 'http://' + location.host);
     if (id !== '') url.searchParams.append('id', id);
