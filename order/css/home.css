@@ -139,7 +139,7 @@ a {
     background: #2A2D33;
 }
 #sidebar-nav {
-    width: 106%;
+    width: 108%;
     height: calc(100% - 95px);
     padding: 0;
     background: #2A2D33;
@@ -281,4 +281,11 @@ a {
 }
 .nav-profile:hover .dropdown-content {
     display: block;
+}
+
+.bg-image {
+    background: url(../images/bg2.jpg) no-repeat;
+    top: 0;
+    left: 0;
+    background-size: cover;
 }

@@ -189,6 +189,7 @@ function createTable_(data) {
 
         let btnFinish = document.createElement("button");
         td.appendChild(btnFinish);
+        td.style.width = "16%"
 
         if (elem.status === 'finish') {
             btnFinish.appendChild(document.createTextNode("已完成"));
@@ -216,98 +217,6 @@ function createTable_(data) {
         td.appendChild(btnDelete);
         tr.appendChild(td);
     })
-
-}
-
-function createTable(id, jsonData, header, check, edit, finish) {
-    var tr, td, th
-
-    tr = document.createElement("tr")
-
-    if (jsonData.length === 0) {
-        tr = document.createElement("tr")
-        td = document.createElement("td")
-        td.appendChild(document.createTextNode('暂无数据'))
-        td.colSpan = header.length + 2
-        tr.appendChild(td)
-        document.getElementById(id).appendChild(tr)
-        return
-    }
-
-    for (j in jsonData) {
-        const obj = jsonData[j]
-        const order_id = jsonData[j].id
-        const order_status = jsonData[j].status
-        tr = document.createElement("tr")
-        for (i in header) {
-            td = document.createElement("td")
-            if (i == 'createTime' || i == 'endTime') {
-                td.appendChild(document.createTextNode(getTime(jsonData[j][i])))
-            } else {
-                td.appendChild(document.createTextNode(jsonData[j][i]))
-            }
-            tr.appendChild(td)
-        }
-        //创建查看按钮
-        if (check === true) {
-            td = document.createElement("td")
-            var btnCheck = document.createElement("button")
-            btnCheck.appendChild(document.createTextNode("查看"))
-            btnCheck.addEventListener('click', function () {
-                localStorage.setItem('order_id', order_id)
-                let text = '<div class="check-order" style="text-align: left;margin-left:20px;"><div>序号:' + obj.id + '</div>' +
-                    '<div>订单号:' + obj.serial + '</div>' +
-                    '<div>生产流程Id:' + obj.workId + '</div>' +
-                    '<div>生产流程名:' + obj.workName + '</div>' +
-                    '<div>创建时间:' + getTime(obj.createTime) + '</div></div>'
-                Popup.confirm('查看订单详情', text)
-                // setFinish(id)
-            })
-            td.appendChild(btnCheck)
-            tr.appendChild(td)
-        }
-        //创建编辑按钮
-        if (edit === true) {
-            td = document.createElement("td");
-            var btnEdit = document.createElement("button");
-            btnEdit.appendChild(document.createTextNode("编辑"));
-            btnEdit.addEventListener('click', function () {
-                localStorage.setItem('order_id', order_id)
-                let text = '<label for="id">生产流程Id</label><input id="id" type="number" />' +
-                    '<label for="serial">生产流程Id</label><input id="serial" type="number" />' +
-                    '<label for="workId">生产流程Id</label><input id="workId" type="number" />' +
-                    '<label for="endTime">生产流程Id</label><input id="endTime" type="datetime-local" />'
-                Popup.confirm('修改订单信息', text, setEdit)
-                // setFinish(id)
-            })
-            td.appendChild(btnEdit);
-            tr.appendChild(td);
-        }
-        //创建设置订单完成按钮
-        if (finish === true) {
-            td = document.createElement("td");
-            var btnFinish = document.createElement("button");
-            if (order_status === 'finish') {
-                btnFinish.appendChild(document.createTextNode("已完成"));
-                btnFinish.className = 'tag tag-success'
-            } else {
-                var btnStatus = document.createElement("button");
-                btnStatus.appendChild(document.createTextNode("进行中"));
-                btnStatus.className = 'tag tag-warning'
-                td.appendChild(btnStatus);
-                btnFinish.appendChild(document.createTextNode("完成"));
-                btnFinish.addEventListener('click', function () {
-                    localStorage.setItem('order_id', order_id)
-                    Popup.confirm('设置订单状态', '确定将该订单状态设为完成吗', setFinish)
-                    // setFinish(id)
-                })
-            }
-
-            td.appendChild(btnFinish);
-            tr.appendChild(td);
-        }
-        document.getElementById(id).appendChild(tr)
-    }
 }
 
 function loadOrder() {
@@ -327,8 +236,9 @@ function loadOrder() {
                 createTable_(json.data.products)
                 // createTable("orderTbody", test, header, true, true, true)
                 var ex1 = new tableSort('table', 1, 2, 999, 'up', 'down', 'hov');
+                Popup.toast(json.message)
             } else {
-                console.log(json.message)
+                Popup.alert('错误',json.message)
             }
         })
 }
