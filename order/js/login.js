@@ -18,6 +18,24 @@ function isAdmin() {
         })
 }
 
+function getProfile() {
+    let url = '/api/user/profile'
+    let headers = {
+        'content-type': 'application/json;charset=UTF-8',
+        'Authorization': 'manage ' + localStorage.getItem('token')
+    }
+
+    fetch(url, {
+        method: 'GET',
+        headers: headers
+    }).then(res => res.json())
+        .then(function (json) {
+            if (json.status === 1) {
+                window.localStorage.setItem('profile', JSON.stringify(json.data))
+            }
+        })
+}
+
 function login() {
     let url = '/api/user/token'
     let username = document.getElementById('username');
@@ -48,7 +66,8 @@ function login() {
             if (json.status === 1) {
                 window.location.href = './home.html'
                 window.localStorage.setItem('token', json.token)
-                isAdmin()
+                // isAdmin()
+                // getProfile()
             } else {
                 console.log(json)
             }

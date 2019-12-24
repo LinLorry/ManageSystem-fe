@@ -1,4 +1,6 @@
-function getProfile() {
+getProfile()
+
+function getProfile(){
     let url = '/api/user/profile'
     let headers = {
         'content-type': 'application/json;charset=UTF-8',
@@ -27,6 +29,7 @@ function getTime(time) {
 
     return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + seconds
 }
-// var token = window.localStorage.getItem('token')
-// console.log('token')
-// console.log(token)
+
+function loginOut() {
+    localStorage.clear()
+}
