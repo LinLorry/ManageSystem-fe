@@ -26,13 +26,9 @@ function create() {
             .then(function (data) {
                 if (data.status == 1) {
                     Popup.toast('新建生产流程成功');
-                    // window.localStorage.token = data.token;
                     window.location.href = "/findWork.html";
                 } else {
                     Popup.toast('新建生产流程失败');
-                    /* var hint = document.getElementById("hint");
-                     hint.style.display = "block";
-                     hint.innerHTML = data.message;*/
                 }
             });
     }
