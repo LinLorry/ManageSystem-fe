@@ -231,8 +231,8 @@ a {
     border: 1px solid #E0E0E0;
     float: left;
     width: 100%;
-    margin: 0 0 10px 10px;
     border-radius: 5px;
+    margin: 10px;
 }
 .widget-header {
     background: #279be48a;
@@ -247,4 +247,8 @@ a {
 }
 .sample-widget {
     max-width: 96%;
+}
+
+.top-btn{
+    padding: 10px;
 }
