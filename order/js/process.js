@@ -1,26 +1,18 @@
 var Popup = new Popup()
-var findProcessId = 0
 
-const workProcessField = [
-    'processName', 'processComment'
-]
-
-window.onload = function () {
-    find();
-}
+window.onload = find
 
 function find() {
-    let url = new URL('/api/process/find', 'http://' + location.host);
+    const url = new URL('/api/process/find', 'http://' + location.host);
 
-    let id = document.getElementById('id').value;
-    let name = document.getElementById('name').value;
-    let comment = document.getElementById('comment').value;
-    // let pageNumber = document.getElementById('pageNumber').value;
+    const id = document.getElementById('id').value;
+    const name = document.getElementById('name').value;
+    const comment = document.getElementById('comment').value;
 
-    let token = window.localStorage.token;
+    const token = window.localStorage.token;
     let headers;
 
-    if (token != null && token != '') {
+    if (token !== null && token !== undefined && token.length !== 0) {
         headers = {
             'Authorization': 'manage ' + localStorage.getItem('token'),
             'content-type': 'application/json;charset=UTF-8'
@@ -30,7 +22,6 @@ function find() {
     if (id !== '') url.searchParams.append('id', id);
     if (name !== '') url.searchParams.append('name', name);
     if (comment !== '') url.searchParams.append('comment', comment);
-    // if (pageNumber !== '') url.searchParams.append('pageNumber', pageNumber);
 
     let queryResult = document.getElementById('query-result');
 
@@ -40,13 +31,14 @@ function find() {
         })
         .then(response => response.json())
         .then(function (json) {
-            if (json.status == 1) {
+            if (json.status === 1) {
                 queryResult.innerHTML = '';
                 json.data.processes.forEach(element => {
                     let tr = document.createElement('tr');
+                    tr.id = 'process-' + element.id
 
                     let id = document.createElement('td');
-                    id.innerHTML = 'process-' + element.id;
+                    id.textContent = element.id;
                     tr.appendChild(id);
 
                     let name = document.createElement('td');
@@ -96,19 +88,8 @@ function find() {
 
                     queryResult.appendChild(tr);
                 })
-                var ex1 = new tableSort('processTable', 1, 2, 999, 'up', 'down', 'hov')
+                new tableSort('processTable', 1, 2, 999, 'up', 'down', 'hov')
             }
-            // else{
-            //     queryResult.innerHTML = '';
-
-            //     let tr = document.createElement('tr');
-
-            //     let td = document.createElement('td');
-            //     td.innerHTML = "暂无数据";
-            //     tr.appendChild(td);
-
-            //     queryResult.appendChild(tr);
-            // }
         })
 }
 
@@ -123,9 +104,7 @@ function createAction() {
         '<label>工序内容：</label>' +
         '<div class="show-box">' +
         '<input type="text" id="processComment">' +
-        // '<textarea type="text" id="processComment"></textarea>'
         '</div><br>' +
-        // '<input type="button" value="创建" onclick="create()"></input>'
         '</div>'
 
     Popup.confirm(title, text, function () {
@@ -134,14 +113,14 @@ function createAction() {
 }
 
 function createProcess() {
-    let url = "/api/process/create";
-    let headers = {
+    const url = "/api/process/create";
+    const headers = {
         'Authorization': 'manage ' + localStorage.getItem('token'),
         'content-type': 'application/json;charset=UTF-8'
     }
 
-    let name = document.getElementById('processName').value;
-    let comment = document.getElementById('processComment').value;
+    const name = document.getElementById('processName').value;
+    const comment = document.getElementById('processComment').value;
 
     if (name.length === 0) {
         Popup.alert('创建工序', '工序名称不能为空！');
@@ -201,7 +180,6 @@ function updateAction(data) {
         '<div class="show-box">' +
         '<input type="text" id="processComment" value="' + data.comment + '">' +
         '</div><br>' +
-        // '<input type="button" value="修改" onclick="updateProcess()"></input>' +
         '</div>'
 
     Popup.confirm(title, text, function () {
@@ -210,14 +188,14 @@ function updateAction(data) {
 }
 
 function updateProcess(ProcessId) {
-    let url = "/api/process/update";
-    let headers = {
+    const url = "/api/process/update";
+    const headers = {
         'Authorization': 'manage ' + localStorage.getItem('token'),
         'content-type': 'application/json;charset=UTF-8'
     }
 
-    let name = document.getElementById('processName').value;
-    let comment = document.getElementById('processComment').value;
+    const name = document.getElementById('processName').value;
+    const comment = document.getElementById('processComment').value;
 
     if (name.length === 0) {
         Popup.alert('修改工序', '工序名不能为空！');
@@ -228,7 +206,7 @@ function updateProcess(ProcessId) {
     }
     console.log(ProcessId);
 
-    let data = JSON.stringify({
+    const data = JSON.stringify({
         "id": ProcessId,
         "name": name,
         "comment": comment
@@ -251,12 +229,12 @@ function updateProcess(ProcessId) {
 }
 
 function deleteProcess(id) {
-    let url = "/api/process/delete";
-    let headers = {
+    const url = "/api/process/delete";
+    const headers = {
         'Authorization': 'manage ' + localStorage.getItem('token'),
         'content-type': 'application/json;charset=UTF-8'
     }
-    let data = JSON.stringify({
+    const data = JSON.stringify({
         "id": id
     });
 
@@ -274,8 +252,4 @@ function deleteProcess(id) {
                 Popup.alert('删除失败', json.message);
             }
         })
-}
-
-function disposeHint(message) {
-    alert(message);
 }
