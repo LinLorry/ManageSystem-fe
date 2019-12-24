@@ -3,17 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>流程工序配置</title>
-    <link href="css/home.css" rel="stylesheet">
-    <link href="css/popup.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/workProcess.css">
-    <link rel="stylesheet" href="css/table.css">
+    <title>Title</title>
     <script src="js/popup.js"></script>
-    <script src="js/workProcess.js"></script>
+    <link href="css/popup.css" rel="stylesheet">
+    <link href="css/home.css" rel="stylesheet">
+    <link href="css/work.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <script src="js/work.js"></script>
     <script src="js/sortTable.js"></script>
-    <style>
-
-    </style>
 </head>
 
 <body>
@@ -23,10 +20,10 @@
         </div>
         <div id="sidebar-nav">
             <ul>
-                <li><a href="home.html"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
                 <li><a href="#"><i class="fa fa-desktop"></i> 工序管理</a></li>
-                <li><a href="#"><i class="fa fa-usd"></i> 生产流程管理</a></li>
-                <li class="active"><a href="wordProcess.html"><i class="fa fa-pencil-square-o"></i> 流程工序配置</a></li>
+                <li class="active"><a href="#"><i class="fa fa-usd"></i> 生产流程管理</a></li>
+                <li><a href="#"><i class="fa fa-pencil-square-o"></i> 流程工序配置</a></li>
                 <li><a href="#"><i class="fa fa-sitemap"></i> 创建订单</a></li>
                 <li><a href="#"><i class="fa fa-line-chart"></i> 订单查看</a></li>
             </ul>
@@ -50,40 +47,51 @@
             </div>
         </div>
         <div class="content">
+            <div class="content-header">
+                <h1>首页</h1>
+            </div>
             <div class="widget-box sample-widget">
                 <div class="widget-header">
-                    <h2>流程工序配置</h2>
+                    <h2>查询生产流程</h2>
                 </div>
-                <div class="widget-content">
-                    <div class="button-box">
-                        <input type="number" placeholder="生产流程Id" name="workId" id="findWorkId">
-                        <input type="text" placeholder="生产流程名字" name="workName" id="findWorkName">
-                        <input type="number" placeholder="工序Id" name="processId" id="findProcessId">
-                        <input type="text" placeholder="工序名字" name="processName" id="findProcessName">
-                        <button onclick="query()">查询</button>
-                        <button onclick="createAction()">创建</button>
-                    </div>
-                    <div>
-                        <table id="workProcessTable">
+                <div class="query-work">
+                    <form id="queryBox">
+                        生产流程ID<input type="text" name="id">
+                        生产流程名称<input type="text" name="name">
+                        生产流程备注<input type="text" name="comment">
+                        <input class="find-button" type="button" value="查询" onclick="query()" />
+                        <input id="create-button" class="find-button" type="button" value="新建" onclick="create()" />
+
+                    </form>
+                    <div class="query-result">
+                        <table id="table">
                             <thead>
                                 <tr>
-                                    <th>生产流程编号</th>
+                                    <th>生产流程ID</th>
                                     <th>生产流程名称</th>
-                                    <th>工序编号</th>
-                                    <th>工序名称</th>
-                                    <th>工序顺序</th>
-                                    <th>更新时间</th>
+                                    <th>生产流程备注</th>
                                     <th>创建时间</th>
-                                    <th>操作</th>
+                                    <th>更新时间</th>
+                                    <th>编辑</th>
+                                    <th>删除</th>
+
                                 </tr>
                             </thead>
-                            <tbody id="workProcessTbody">
+                            <tbody id="query-result" style="height: 65vh;">
 
                             </tbody>
+
                         </table>
+                        <div class="flu">
+                            <p id="hint"></p>
+                        </div>
+
                     </div>
+
+
                 </div>
             </div>
+
         </div>
     </section>
 </body>
