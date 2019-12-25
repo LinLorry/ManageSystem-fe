@@ -49,21 +49,6 @@ function Popup () {
          * confirm弹窗title、text必传 fn可选
          */
         this.confirm = function (title,text,fn) {
-            var confirmModel = document.getElementById('confirmModel');
-            if (confirmModel) {
-                var content = document.getElementById('confirmContent');
-                content.innerHTML = text;
-                var c_title = document.getElementById('confirmTitle');
-                c_title.innerHTML = title;
-                document.getElementById('sure').addEventListener('click',function(){
-                    that.sureConfirm(fn);
-                })
-                document.getElementById('cancel').addEventListener('click',function(){
-                    that.cancelConfirm();
-                })
-                confirmModel.style.display = 'block';
-                return
-            }
             var creatediv = document.createElement('div'); // 创建div
             creatediv.className = 'model';  // 添加class
             creatediv.setAttribute('id','confirmModel'); // 添加ID
@@ -88,20 +73,20 @@ function Popup () {
          * 确定按钮 有回调执行回调
          */
         this.sureConfirm = function (fn) {
-            var confirmModel = document.getElementById('confirmModel');
-            confirmModel.style.display = 'none';
             if (typeof fn === 'function') {
                 fn.apply();
             }else{
                 console.log(fn);
             }
+            var confirmModel = document.getElementById('confirmModel')
+            document.body.removeChild(confirmModel)
         },
         /*
          * 关闭confirm
          */
         this.cancelConfirm = function () {
             var confirmModel = document.getElementById('confirmModel');
-            confirmModel.style.display = 'none';
+            document.body.removeChild(confirmModel)
         },
         /*
          * 可以传入图片的confirm 弹窗title、text、img 必传，fn可选

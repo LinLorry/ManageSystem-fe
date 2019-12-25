@@ -1,37 +1,38 @@
 var token = window.localStorage.token;
 var Popup = new Popup();
 
-function create() {
-    function createWork() {
-        const url = "/api/work/create";
-        const name = document.getElementById("name").value;
-        const comment = document.getElementById("comment").value;
-        if (name === null || name === undefined || name.length === 0) {
-            Popup.toast('生产流程名字不能为空！', 10);
-            return;
-        }
-
-        const data = {
-            "name": name,
-            "comment": comment
-        };
-        fetch(url, {
-                body: JSON.stringify(data),
-                headers: {
-                    'Authorization': 'manage ' + token,
-                    'content-type': 'application/json;charset=UTF-8'
-                },
-                method: "POST"
-            })
-            .then(response => response.json())
-            .then(function (data) {
-                Popup.alert('创建生产流程', data.message);
-
-                if (data.status === 1) {
-                    query();
-                }
-            });
+function createWork() {
+    const url = "/api/work/create";
+    const name = document.getElementById("name").value;
+    const comment = document.getElementById("comment").value;
+    if (name === null || name === undefined || name.length === 0) {
+        Popup.toast('生产流程名字不能为空！', 10);
+        return;
     }
+
+    const data = {
+        "name": name,
+        "comment": comment
+    };
+    fetch(url, {
+        body: JSON.stringify(data),
+        headers: {
+            'Authorization': 'manage ' + token,
+            'content-type': 'application/json;charset=UTF-8'
+        },
+        method: "POST"
+    })
+        .then(response => response.json())
+        .then(function (data) {
+            Popup.alert('创建生产流程', data.message);
+
+            if (data.status === 1) {
+                query();
+            }
+        });
+}
+
+function create() {
     var title = '新建生产流程管理',
         text = '<div class="confirm-box"><form id="updateForm">' +
         '<label>生产流程名称</label>' +
@@ -139,7 +140,7 @@ function query() {
         };
     }
     var queryResult = document.getElementById('query-result');
-    console.log(url);
+    // console.log(url);
     fetch(url, {
             headers: headers,
             method: "GET"
