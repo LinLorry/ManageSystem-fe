@@ -10,7 +10,7 @@ const header = {
 };
 
 const orderField = [
-    "id", "serial","workName", "createTime", "endTime"
+    "id", "serial", "workName", "createTime", "endTime"
 ]
 
 function setFinish(id) {
@@ -33,54 +33,58 @@ function setFinish(id) {
         })
 }
 
-function setEdit() {
+function setEdit(data) {
     let title = '编辑'
-    console.log(title)
     const text = '<div class="confirm-box">' +
-        '<label for="serial">订单号*</label>' +
+        '<label for="id">订单ID：</label>' +
         '<div class="show-box">' +
-        '<input id="serial" type="text" />' +
+        '<input id="id" type="number" value="' + data.id + '" disabled="true" />' +
+        '</div><br>' +
+        '<label for="serial">订单号*：</label>' +
+        '<div class="show-box">' +
+        '<input id="serial" type="text" value="' + data.serial + '" />' +
         '</div><br>' +
         '<label for="workId">生产流程Id：</label>' +
         '<div class="show-box">' +
-        '<input type="number" name="workId" id="workId" onchange="javascript:loadWorkName()">' +
+        '<input type="number" name="workId" id="workId" onchange="javascript:loadWorkName()" value="' + data.workId + '">' +
         '</div><br>' +
         '<label for="workName">生产流程名称：</label>' +
         '<div class="show-box">' +
-        '<input type="text" name="workName" id="workName" disabled="true">' +
+        '<input type="text" name="workName" id="workName" value="' + data.workName + '" disabled="true">' +
         '<img id="work-img-load" src="images/load.png" title="加载中" style="display: none;">' +
         '<img id="work-img-tick" src="images/tick.png" title="id正确" style="display: none;">' +
         '<img id="work-img-cross" src="images/cross.png" title="id错误" style="display: none;">' +
         '</div><br>' +
         '<label for="endTime">需求时间*</label>' +
         '<div class="show-box">' +
-        '<input id="endTime" type="date" />' +
+        '<input id="endTime" type="date" value="' + data.endTime.split(' ')[0] + '"/>' +
         '</div><br>' +
         '</div>';
 
-    Popup.confirm('编辑', text, editAction);
+    Popup.confirm('编辑', text, function () {
+        editAction(data.id)
+    });
 }
 
-function editAction() {
+function editAction(id) {
     let url = '/api/product/update'
     let serial = document.getElementById('serial')
     let workId = document.getElementById('workId')
     let endTime = document.getElementById('endTime')
-    let id = document.getElementById('id')
     let data = {
         serial: serial.value,
         workId: workId.value,
         endTime: endTime.value,
-        id: id.value
+        id: id
     }
     fetch(url, {
-        body: JSON.stringify(data),
-        headers: {
-            'content-type': 'application/json;charset=UTF-8',
-            'Authorization': 'manage ' + localStorage.getItem('token')
-        },
-        method: 'POST'
-    })
+            body: JSON.stringify(data),
+            headers: {
+                'content-type': 'application/json;charset=UTF-8',
+                'Authorization': 'manage ' + localStorage.getItem('token')
+            },
+            method: 'POST'
+        })
         .then(res => res.json())
         .then(function (json) {
             if (json.status === 1) {
@@ -92,7 +96,7 @@ function editAction() {
         })
 }
 
-function setCheck (obj) {
+function setCheck(obj) {
     console.log(obj)
     let text = '<div class="check-order" style="text-align: left;margin-left:20px;">' +
         '<div>序号:' + obj.id + '</div>' +
@@ -106,19 +110,19 @@ function setCheck (obj) {
 function setDelete(id) {
     let url = '/api/product/delete?id=' + id
     fetch(url, {
-        headers: {
-            'content-type': 'application/json;charset=UTF-8',
-            'Authorization': 'manage ' + localStorage.getItem('token')
-        },
-        method: 'DELETE'
-    })
+            headers: {
+                'content-type': 'application/json;charset=UTF-8',
+                'Authorization': 'manage ' + localStorage.getItem('token')
+            },
+            method: 'DELETE'
+        })
         .then(res => res.json())
-        .then(function(json) {
+        .then(function (json) {
             if (json.status === 1) {
                 loadOrder()
-                Popup.toast('删除成功',2)
+                Popup.toast('删除成功', 2)
             } else {
-                Popup.alert('删除失败',json.message)
+                Popup.alert('删除失败', json.message)
             }
         })
 }
@@ -148,15 +152,20 @@ function createTable_(data) {
                 td.appendChild(document.createTextNode(elem[field]))
             }
             switch (field) {
-                case "id": td.style.width = "8%"
+                case "id":
+                    td.style.width = "8%"
                     break
-                case "serial": td.style.width = "10%"
+                case "serial":
+                    td.style.width = "10%"
                     break
-                case "workName": td.style.width = "12%"
+                case "workName":
+                    td.style.width = "12%"
                     break
-                case "createTime": td.style.width = "12%"
+                case "createTime":
+                    td.style.width = "12%"
                     break
-                case "endTime": td.style.width = "12%"
+                case "endTime":
+                    td.style.width = "12%"
                     break
             }
             tr.appendChild(td)
@@ -181,7 +190,7 @@ function createTable_(data) {
 
         btnEdit.appendChild(document.createTextNode("编辑"));
         btnEdit.addEventListener('click', function () {
-            setEdit()
+            setEdit(elem)
         })
         tr.appendChild(td)
 
@@ -210,7 +219,7 @@ function createTable_(data) {
         td.style.width = "10%"
         let btnDelete = document.createElement("button");
         btnDelete.appendChild(document.createTextNode("删除"));
-        btnDelete.addEventListener('click',function () {
+        btnDelete.addEventListener('click', function () {
             setDelete(elem.id)
             setDelete(elem.id)
         })
@@ -238,19 +247,16 @@ function loadOrder() {
                 var ex1 = new tableSort('table', 1, 2, 999, 'up', 'down', 'hov');
                 Popup.toast(json.message)
             } else {
-                Popup.alert('错误',json.message)
+                Popup.alert('错误', json.message)
             }
         })
 }
 
 function queryOrder(status = '') {
-    let url = new URL('/api/product/find', 'http://' + document.domain + ":8080");
+    let url = new URL('/api/product/find', 'http://' + location.host);
 
-    let id = document.getElementById('id').value
-    let serial = document.getElementById('serial').value;
-
-    console.log(id)
-    console.log(serial)
+    let id = document.getElementById('findId').value
+    let serial = document.getElementById('findSerial').value;
 
     if (id !== '' && id !== undefined && id !== null) url.searchParams.append('id', id);
     if (serial !== '') url.searchParams.append('serial', serial);
@@ -307,9 +313,9 @@ function sortOrder(sort) {
 function createAction() {
     let title = '创建订单'
     const text = '<div class="confirm-box">' +
-        '<label for="serial2">订单号*</label>' +
+        '<label for="serial">订单号*</label>' +
         '<div class="show-box">' +
-        '<input id="serial2" type="text" />' +
+        '<input id="serial" type="text" />' +
         '</div><br>' +
         '<label for="workId">生产流程Id：</label>' +
         '<div class="show-box">' +
@@ -336,12 +342,12 @@ function createAction() {
 }
 
 function createOrder() {
-    let serial = document.getElementById('serial2');
+    let serial = document.getElementById('serial');
     let workId = document.getElementById('workId');
     let endTime = document.getElementById('endTime');
     let comment = document.getElementById('comment');
 
-    console.log(serial.value)
+    console.log(endTime.value)
 
     if (serial.length === 0) {
         Popup.alert('订单创建', '订单号生产流程Id不能为空')
@@ -369,10 +375,10 @@ function createOrder() {
     }
 
     fetch(url, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(data)
-    })
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data)
+        })
         .then(response => response.json())
         .then(function (json) {
             if (json.status === 1) {
@@ -380,7 +386,7 @@ function createOrder() {
                 console.log(json.data)
                 Popup.toast('创建订单成功');
             } else {
-                Popup.alert('创建订单失败',json.message);
+                Popup.alert('创建订单失败', json.message);
             }
         })
 }
@@ -406,9 +412,9 @@ function loadWorkName() {
 
     load.style.display = 'inline'
     fetch(url, {
-        method: 'GET',
-        headers: headers
-    })
+            method: 'GET',
+            headers: headers
+        })
         .then(response => {
             load.style.display = 'none'
             return response.json()
