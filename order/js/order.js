@@ -34,7 +34,6 @@ function setFinish(id) {
 }
 
 function setEdit(data) {
-    let title = '编辑'
     const text = '<div class="confirm-box">' +
         '<label for="id">订单ID：</label>' +
         '<div class="show-box">' +
@@ -127,7 +126,7 @@ function setDelete(id) {
         })
 }
 
-function createTable_(data) {
+function createTable(data) {
     let tbody = document.getElementById('orderTbody')
 
     if (data.length === 0) {
@@ -242,8 +241,7 @@ function loadOrder() {
         .then(function (json) {
             if (json.status === 1) {
                 document.getElementById('orderTbody').innerHTML = "";
-                createTable_(json.data.products)
-                // createTable("orderTbody", test, header, true, true, true)
+                createTable(json.data.products)
                 var ex1 = new tableSort('table', 1, 2, 999, 'up', 'down', 'hov');
                 Popup.toast(json.message)
             } else {
@@ -274,7 +272,7 @@ function queryOrder(status = '') {
             if (json.status === 1) {
                 console.log(json.data.products)
                 document.getElementById('orderTbody').innerHTML = "";
-                createTable_(json.data.products)
+                createTable(json.data.products)
                 // createTable("table", json.data.products, header, true, true, true)
                 var ex1 = new tableSort('table', 1, 2, 999, 'up', 'down', 'hov')
             } else {
@@ -301,7 +299,7 @@ function sortOrder(sort) {
                 // var test = JSON.parse(localStorage.getItem('products'))
                 // console.log(test)
                 document.getElementById('orderTbody').innerHTML = "";
-                createTable_(json.data.products)
+                createTable(json.data.products)
                 // createTable("table", test, header, true, true, true)
                 var ex1 = new tableSort('table', 1, 2, 999, 'up', 'down', 'hov');
             } else {
