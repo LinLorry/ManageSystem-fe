@@ -1,7 +1,7 @@
 getProfile()
-window.onload = function() {
-    setName()
-}
+// window.onload = function() {
+//     setName()
+// }
 function setName() {
     var profile = JSON.parse(localStorage.getItem('profile'))
     document.getElementById('profile-name').innerHTML = profile.username
@@ -21,6 +21,7 @@ function getProfile(){
         .then(function (json) {
             if (json.status === 1) {
                 window.localStorage.setItem('profile', JSON.stringify(json.data))
+                setName()
             }
         })
 }

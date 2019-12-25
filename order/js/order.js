@@ -1,14 +1,5 @@
 var Popup = new Popup();
 
-const header = {
-    "id": "序号",
-    "serial": "订单号",
-    "workName": "生成流程",
-    "createTime": "创建时间",
-    "endTime": "出货时间"
-    // "status": "状态"
-};
-
 const orderField = [
     "id", "serial", "workName", "createTime", "endTime"
 ]
@@ -58,11 +49,11 @@ function setEdit(data) {
         '<div class="show-box">' +
         '<input id="endTime" type="date" value="' + data.endTime.split(' ')[0] + '"/>' +
         '</div><br>' +
-        '</div>';
+        '</div>'
 
     Popup.confirm('编辑', text, function () {
         editAction(data.id)
-    });
+    })
 }
 
 function editAction(id) {
@@ -146,7 +137,7 @@ function createTable(data) {
             let td = document.createElement('td')
 
             if (field === 'createTime' || field === 'endTime') {
-                td.appendChild(document.createTextNode(getTime(elem[field])))
+                td.appendChild(document.createTextNode(new Date(elem[field]).toLocaleDateString()))
             } else {
                 td.appendChild(document.createTextNode(elem[field]))
             }
@@ -173,21 +164,21 @@ function createTable(data) {
         let td = document.createElement('td')
         td.style.width = "10%"
 
-        let btnCheck = document.createElement("button");
-        td.appendChild(btnCheck);
+        let btnCheck = document.createElement("button")
+        td.appendChild(btnCheck)
 
-        btnCheck.appendChild(document.createTextNode("查看"));
+        btnCheck.appendChild(document.createTextNode("查看"))
         btnCheck.addEventListener('click', function () {
             setCheck(elem)
-        });
+        })
         tr.appendChild(td)
 
         td = document.createElement('td')
         td.style.width = "10%"
-        let btnEdit = document.createElement("button");
-        td.appendChild(btnEdit);
+        let btnEdit = document.createElement("button")
+        td.appendChild(btnEdit)
 
-        btnEdit.appendChild(document.createTextNode("编辑"));
+        btnEdit.appendChild(document.createTextNode("编辑"))
         btnEdit.addEventListener('click', function () {
             setEdit(elem)
         })
@@ -195,35 +186,35 @@ function createTable(data) {
 
         td = document.createElement("td")
 
-        let btnFinish = document.createElement("button");
-        td.appendChild(btnFinish);
+        let btnFinish = document.createElement("button")
+        td.appendChild(btnFinish)
         td.style.width = "16%"
 
         if (elem.status === 'finish') {
-            btnFinish.appendChild(document.createTextNode("已完成"));
+            btnFinish.appendChild(document.createTextNode("已完成"))
             btnFinish.className = 'tag tag-success'
         } else {
-            var btnStatus = document.createElement("button");
-            btnStatus.appendChild(document.createTextNode("进行中"));
+            var btnStatus = document.createElement("button")
+            btnStatus.appendChild(document.createTextNode("进行中"))
             btnStatus.className = 'tag tag-warning'
-            td.appendChild(btnStatus);
-            btnFinish.appendChild(document.createTextNode("完成"));
+            td.appendChild(btnStatus)
+            btnFinish.appendChild(document.createTextNode("完成"))
             btnFinish.addEventListener('click', function () {
                 setFinish(elem.id)
             })
         }
-        tr.appendChild(td);
+        tr.appendChild(td)
 
         td = document.createElement("td")
         td.style.width = "10%"
-        let btnDelete = document.createElement("button");
-        btnDelete.appendChild(document.createTextNode("删除"));
+        let btnDelete = document.createElement("button")
+        btnDelete.appendChild(document.createTextNode("删除"))
         btnDelete.addEventListener('click', function () {
             setDelete(elem.id)
             setDelete(elem.id)
         })
-        td.appendChild(btnDelete);
-        tr.appendChild(td);
+        td.appendChild(btnDelete)
+        tr.appendChild(td)
     })
 }
 
@@ -240,9 +231,9 @@ function loadOrder() {
         .then(res => res.json())
         .then(function (json) {
             if (json.status === 1) {
-                document.getElementById('orderTbody').innerHTML = "";
+                document.getElementById('orderTbody').innerHTML = ""
                 createTable(json.data.products)
-                var ex1 = new tableSort('table', 1, 2, 999, 'up', 'down', 'hov');
+                var ex1 = new tableSort('table', 1, 2, 999, 'up', 'down', 'hov')
                 Popup.toast(json.message)
             } else {
                 Popup.alert('错误', json.message)
@@ -251,14 +242,14 @@ function loadOrder() {
 }
 
 function queryOrder(status = '') {
-    let url = new URL('/api/product/find', 'http://' + location.host);
+    let url = new URL('/api/product/find', 'http://' + location.host)
 
     let id = document.getElementById('findId').value
-    let serial = document.getElementById('findSerial').value;
+    let serial = document.getElementById('findSerial').value
 
-    if (id !== '' && id !== undefined && id !== null) url.searchParams.append('id', id);
-    if (serial !== '') url.searchParams.append('serial', serial);
-    if (status !== '') url.searchParams.append('status', status);
+    if (id !== '' && id !== undefined && id !== null) url.searchParams.append('id', id)
+    if (serial !== '') url.searchParams.append('serial', serial)
+    if (status !== '') url.searchParams.append('status', status)
 
     fetch(url, {
             headers: {
@@ -271,9 +262,8 @@ function queryOrder(status = '') {
         .then(function (json) {
             if (json.status === 1) {
                 console.log(json.data.products)
-                document.getElementById('orderTbody').innerHTML = "";
+                document.getElementById('orderTbody').innerHTML = ""
                 createTable(json.data.products)
-                // createTable("table", json.data.products, header, true, true, true)
                 var ex1 = new tableSort('table', 1, 2, 999, 'up', 'down', 'hov')
             } else {
                 console.log(json.message)
@@ -294,14 +284,10 @@ function sortOrder(sort) {
         .then(res => res.json())
         .then(function (json) {
             if (json.status === 1) {
-                document.getElementById('orderTbody').innerHTML = "";
-                // localStorage.setItem('products', JSON.stringify(json.data.products))
-                // var test = JSON.parse(localStorage.getItem('products'))
-                // console.log(test)
-                document.getElementById('orderTbody').innerHTML = "";
+                document.getElementById('orderTbody').innerHTML = ""
+                document.getElementById('orderTbody').innerHTML = ""
                 createTable(json.data.products)
-                // createTable("table", test, header, true, true, true)
-                var ex1 = new tableSort('table', 1, 2, 999, 'up', 'down', 'hov');
+                var ex1 = new tableSort('table', 1, 2, 999, 'up', 'down', 'hov')
             } else {
                 console.log(json.message)
             }
@@ -336,14 +322,14 @@ function createAction() {
         '</div><br>' +
         '</div>'
     console.log(title)
-    Popup.confirm('创建订单', text, createOrder);
+    Popup.confirm('创建订单', text, createOrder)
 }
 
 function createOrder() {
-    let serial = document.getElementById('serial');
-    let workId = document.getElementById('workId');
-    let endTime = document.getElementById('endTime');
-    let comment = document.getElementById('comment');
+    let serial = document.getElementById('serial')
+    let workId = document.getElementById('workId')
+    let endTime = document.getElementById('endTime')
+    let comment = document.getElementById('comment')
 
     console.log(endTime.value)
 
@@ -385,7 +371,7 @@ function createOrder() {
                 Popup.toast('创建订单成功');
                 loadOrder()
             } else {
-                Popup.alert('创建订单失败', json.message);
+                Popup.alert('创建订单失败', json.message)
             }
         })
 }
@@ -416,7 +402,7 @@ function loadWorkName() {
         })
         .then(function (json) {
             if (json.status === 1 && json.data.works.length !== 0) {
-                workName.value = json.data.works[0].name;
+                workName.value = json.data.works[0].name
                 tick.style.display = 'inline'
             } else {
                 cross.style.display = 'inline'
@@ -426,8 +412,4 @@ function loadWorkName() {
             cross.style.display = 'inline'
         })
 }
-
-window.onload = function (ev) {
-    loadOrder()
-    setName()
-}
+window.onload = loadOrder
