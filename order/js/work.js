@@ -117,6 +117,20 @@ function deleteWork(work_id) {
             }
         });
 }
+function showAction(data) {
+    const title = '查看生产流程'
+    const  text = '<div class="confirm-box"><form id="updateForm">' +
+        '<label>生产流程名称</label>' +
+        '<div class="show-box">' +
+        '<input type="text" id="name" disabled="true" value="' + data.name + '"><br>' +
+        '</div>' +
+        '<label>生产流程备注</label>' +
+        '<div class="show-box">' +
+        '<input type="text" id="comment" disabled="true" value="' + data.comment + '"></form></div>' +
+        '</div>';
+
+    Popup.alert(title, text);
+}
 
 window.onload = function () {
     query()
@@ -175,6 +189,20 @@ function query() {
                     td = document.createElement('td');
                     td.textContent = new Date(element.updateTime).toLocaleDateString();
                     tr.appendChild(td);
+
+                    let show = document.createElement('td');
+                    var showButton = document.createElement('button');
+                    /*showButton.innerHTML = "查看";
+                    showButton.addEventListener("click", function () {
+                        // window.location.href = '/process.html?id=' + element.id;
+                        showAction(element)
+                    });*/
+                    showButton.innerHTML='查看';
+                    showButton.onclick=function(){
+                        showAction(element);
+                    }
+                    show.appendChild(showButton);
+                    tr.appendChild(show);
 
                     td = document.createElement('td');
                     let button = document.createElement('button');
