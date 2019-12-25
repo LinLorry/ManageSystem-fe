@@ -383,6 +383,7 @@ function createOrder() {
                 // window.location.href = './login.html'
                 console.log(json.data)
                 Popup.toast('创建订单成功');
+                loadOrder()
             } else {
                 Popup.alert('创建订单失败', json.message);
             }
