@@ -211,7 +211,6 @@ function createTable(data) {
         btnDelete.appendChild(document.createTextNode("删除"))
         btnDelete.addEventListener('click', function () {
             setDelete(elem.id)
-            setDelete(elem.id)
         })
         td.appendChild(btnDelete)
         tr.appendChild(td)
