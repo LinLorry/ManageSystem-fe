@@ -390,10 +390,6 @@ function createOrder() {
         })
 }
 
-window.onload = function (ev) {
-    loadOrder()
-}
-
 function loadWorkName() {
     let load = document.getElementById('work-img-load')
     let tick = document.getElementById('work-img-tick')
@@ -429,4 +425,9 @@ function loadWorkName() {
         .catch(() => {
             cross.style.display = 'inline'
         })
+}
+
+window.onload = function (ev) {
+    loadOrder()
+    setName()
 }
