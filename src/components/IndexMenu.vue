@@ -42,7 +42,7 @@ export default {
   },
   created() {
     let _this = this
-    this.axios.get('api/menu').then(res => {
+    this.axios.get('/api/menu').then(res => {
       _this.sortMenu(res.data.data)
       _this.menus = res.data.data
     })
