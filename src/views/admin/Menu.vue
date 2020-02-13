@@ -6,6 +6,9 @@
       <el-breadcrumb-item>菜单管理</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="content">
+      <el-button @click="createParentDialogFormVisible = true"
+        >新建父菜单</el-button
+      >
       <el-tree :data="menus">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <el-button type="text" size="mini">
@@ -14,14 +17,28 @@
         </span>
       </el-tree>
     </div>
+    <div>
+      <ParentCreater
+        :show="createParentDialogFormVisible"
+        :parentMenus="menus"
+        v-on:close="createParentDialogFormVisible = false"
+        v-on:success="createParent($event)"
+      ></ParentCreater>
+    </div>
   </div>
 </template>
 
 <script>
+import ParentCreater from './childComp/ParentMenuCreater'
+
 export default {
   name: 'roleManage',
+  components: {
+    ParentCreater
+  },
   data() {
     return {
+      createParentDialogFormVisible: false,
       menus: []
     }
   },
@@ -63,6 +80,16 @@ export default {
       menus.sort((first, second) => {
         return first.location - second.location
       })
+    },
+    createParent(data) {
+      this.menus.splice(
+        0,
+        0,
+        Object.assign(data, {
+          label: data.name,
+          isChild: false
+        })
+      )
     }
   }
 }
