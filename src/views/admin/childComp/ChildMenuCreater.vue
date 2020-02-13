@@ -35,7 +35,6 @@
             :label="item.id"
             :key="item.id"
             :disabled="item.id === 1"
-            :checked="item.id === 1"
             >{{ item.name }}</el-checkbox
           >
         </el-checkbox-group>
@@ -100,7 +99,7 @@ export default {
         name: '',
         url: '',
         parentId: '',
-        roles: []
+        roles: [1]
       },
       roles: [],
       rules: {
@@ -156,7 +155,7 @@ export default {
               name: '',
               url: '',
               parentId: '',
-              roles: []
+              roles: [1]
             }
           })
         } else {
