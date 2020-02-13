@@ -13,7 +13,7 @@
         >新建子菜单</el-button
       >
       <el-tree :data="menus">
-        <span class="custom-tree-node" slot-scope="{ node, data }">
+        <span slot-scope="{ node, data }">
           <el-button type="text" size="mini" @click="() => edit(data)">
             {{ data.label }}
           </el-button>
@@ -32,17 +32,26 @@
         :show="editParentDialogFormVisible"
         :data="tmp"
         :parentMenus="menus"
-        v-on:close="editParentDialogFormVisible = false"
-        v-on:success="editParent($event)"
+        @close="editParentDialogFormVisible = false"
+        @success="editParent($event)"
       >
       </ParentEditer>
 
       <ChildCreater
         :show="createChildDialogFormVisible"
         :parentMenus="menus"
-        v-on:close="createChildDialogFormVisible = false"
-        v-on:success="createChild($event)"
+        @close="createChildDialogFormVisible = false"
+        @success="createChild($event)"
       ></ChildCreater>
+
+      <ChildEditer
+        :show="editChildDialogFormVisible"
+        :data="tmp"
+        :parentMenus="menus"
+        @close="editChildDialogFormVisible = false"
+        @success="editChild($event)"
+      >
+      </ChildEditer>
     </div>
   </div>
 </template>
@@ -51,13 +60,15 @@
 import ParentCreater from './childComp/ParentMenuCreater'
 import ParentEditer from './childComp/ParentMenuEditer'
 import ChildCreater from './childComp/ChildMenuCreater'
+import ChildEditer from './childComp/ChildMenuEditer'
 
 export default {
   name: 'roleManage',
   components: {
     ParentCreater,
     ParentEditer,
-    ChildCreater
+    ChildCreater,
+    ChildEditer
   },
   data() {
     return {
@@ -92,7 +103,8 @@ export default {
 
           Object.assign(child, {
             label: child.name,
-            isChild: true
+            isChild: true,
+            parentId: parent.id
           })
         }
       }
@@ -127,7 +139,8 @@ export default {
           0,
           Object.assign(data, {
             label: data.name,
-            isChild: true
+            isChild: true,
+            parentId: parent.id
           })
         )
     },
@@ -145,18 +158,29 @@ export default {
       parent.label = data.name
       parent.name = data.name
       parent.icon = data.icon
+    },
+    editChild(data) {
+      let oldParent = this.menus.find(one => one.id === data.oldParentId)
+
+      oldParent.children.splice(
+        oldParent.children.findIndex(one => one.id === data.id),
+        1
+      )
+
+      let parent = this.menus.find(one => one.id === data.parentId)
+
+      parent.children.splice(
+        0,
+        0,
+        Object.assign(data, {
+          label: data.name,
+          isChild: true,
+          parentId: parent.id
+        })
+      )
     }
   }
 }
 </script>
 
-<style>
-.custom-tree-node {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  padding-right: 8px;
-}
-</style>
+<style></style>
