@@ -121,14 +121,6 @@ export default {
 </script>
 
 <style>
-.content {
-  margin: 10px 0;
-  background-color: aliceblue;
-  border-radius: 2px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  padding: 30px 30px 30px;
-}
-
 .custom-tree-node {
   flex: 1;
   display: flex;
