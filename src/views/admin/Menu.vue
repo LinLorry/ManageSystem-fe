@@ -127,7 +127,8 @@ export default {
         0,
         Object.assign(data, {
           label: data.name,
-          isChild: false
+          isChild: false,
+          children: []
         })
       )
     },
@@ -139,8 +140,7 @@ export default {
           0,
           Object.assign(data, {
             label: data.name,
-            isChild: true,
-            parentId: parent.id
+            isChild: true
           })
         )
     },
