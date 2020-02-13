@@ -5,6 +5,7 @@ const Login = () => import('@/views/Login.vue')
 const Inedx = () => import('@/views/Index.vue')
 const Home = () => import('@/views/Home.vue')
 const Role = () => import('@/views/admin/Role.vue')
+const Menu = () => import('@/views/admin/Menu.vue')
 
 Vue.use(VueRouter)
 
@@ -30,6 +31,11 @@ export default new VueRouter({
           path: '/roleManage',
           name: 'role',
           component: Role
+        },
+        {
+          path: '/menuManage',
+          name: 'menu',
+          component: Menu
         }
       ]
     },
