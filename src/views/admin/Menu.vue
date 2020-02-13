@@ -14,7 +14,7 @@
       >
       <el-tree :data="menus">
         <span class="custom-tree-node" slot-scope="{ node, data }">
-          <el-button type="text" size="mini">
+          <el-button type="text" size="mini" @click="() => edit(data)">
             {{ data.label }}
           </el-button>
         </span>
@@ -24,9 +24,18 @@
       <ParentCreater
         :show="createParentDialogFormVisible"
         :parentMenus="menus"
-        v-on:close="createParentDialogFormVisible = false"
-        v-on:success="createParent($event)"
+        @close="createParentDialogFormVisible = false"
+        @success="createParent($event)"
       ></ParentCreater>
+
+      <ParentEditer
+        :show="editParentDialogFormVisible"
+        :data="tmp"
+        :parentMenus="menus"
+        v-on:close="editParentDialogFormVisible = false"
+        v-on:success="editParent($event)"
+      >
+      </ParentEditer>
 
       <ChildCreater
         :show="createChildDialogFormVisible"
@@ -40,19 +49,25 @@
 
 <script>
 import ParentCreater from './childComp/ParentMenuCreater'
+import ParentEditer from './childComp/ParentMenuEditer'
 import ChildCreater from './childComp/ChildMenuCreater'
 
 export default {
   name: 'roleManage',
   components: {
     ParentCreater,
+    ParentEditer,
     ChildCreater
   },
   data() {
     return {
       createParentDialogFormVisible: false,
+      editParentDialogFormVisible: false,
       createChildDialogFormVisible: false,
-      menus: []
+      editChildDialogFormVisible: false,
+
+      menus: [],
+      tmp: {}
     }
   },
   created() {
@@ -115,6 +130,21 @@ export default {
             isChild: true
           })
         )
+    },
+    edit(data) {
+      if (data.isChild) {
+        this.editChildDialogFormVisible = true
+      } else {
+        this.editParentDialogFormVisible = true
+      }
+      this.tmp = data
+    },
+    editParent(data) {
+      let parent = this.menus.find(one => one.id === data.id)
+
+      parent.label = data.name
+      parent.name = data.name
+      parent.icon = data.icon
     }
   }
 }
