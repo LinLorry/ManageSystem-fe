@@ -9,6 +9,9 @@
       <el-button @click="createParentDialogFormVisible = true"
         >新建父菜单</el-button
       >
+      <el-button @click="createChildDialogFormVisible = true"
+        >新建子菜单</el-button
+      >
       <el-tree :data="menus">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <el-button type="text" size="mini">
@@ -24,21 +27,31 @@
         v-on:close="createParentDialogFormVisible = false"
         v-on:success="createParent($event)"
       ></ParentCreater>
+
+      <ChildCreater
+        :show="createChildDialogFormVisible"
+        :parentMenus="menus"
+        v-on:close="createChildDialogFormVisible = false"
+        v-on:success="createChild($event)"
+      ></ChildCreater>
     </div>
   </div>
 </template>
 
 <script>
 import ParentCreater from './childComp/ParentMenuCreater'
+import ChildCreater from './childComp/ChildMenuCreater'
 
 export default {
   name: 'roleManage',
   components: {
-    ParentCreater
+    ParentCreater,
+    ChildCreater
   },
   data() {
     return {
       createParentDialogFormVisible: false,
+      createChildDialogFormVisible: false,
       menus: []
     }
   },
@@ -90,6 +103,18 @@ export default {
           isChild: false
         })
       )
+    },
+    createChild(data) {
+      this.menus
+        .find(one => one.id === data.parentId)
+        .children.splice(
+          0,
+          0,
+          Object.assign(data, {
+            label: data.name,
+            isChild: true
+          })
+        )
     }
   }
 }
