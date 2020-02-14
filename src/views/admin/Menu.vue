@@ -15,10 +15,13 @@
       <el-tree
         draggable
         highlight-current
-        node-key="id"
         ref="tree"
+        node-key="id"
         :data="menus"
         :allow-drop="allowDrop"
+        @node-drag-start="handleDragStart"
+        @node-drag-end="handleDragEnd"
+        @node-drop="handleDrag"
       >
         <span slot-scope="{ node, data }">
           <el-button type="text" size="mini" @click="() => edit(data)">
@@ -87,7 +90,14 @@ export default {
       editChildDialogFormVisible: false,
 
       menus: [],
-      tmp: {}
+      tmp: {},
+      deleteNode: {
+        id: 'delete',
+        label: '删除',
+        isDelete: true,
+        children: []
+      },
+      deleteAdmin: false
     }
   },
   created() {
@@ -229,6 +239,19 @@ export default {
         })
     },
     allowDrop(draggingNode, dropNode, type) {
+      if (dropNode.data.isDelete) {
+        if (type === 'next') return false
+        const id = draggingNode.data.id
+        const isChild = draggingNode.data.isChild
+
+        if (id === 1 || (isChild && id === 2)) {
+          this.deleteAdmin = true
+          return false
+        }
+
+        return true
+      }
+
       if (draggingNode.data.isChild) {
         if (dropNode.data.isChild) {
           if (type !== 'inner') {
@@ -246,6 +269,43 @@ export default {
       }
 
       return false
+    },
+    handleDragStart() {
+      this.$refs.tree.append(this.deleteNode)
+    },
+    handleDragEnd() {
+      if (this.deleteAdmin) {
+        this.deleteAdmin = false
+        this.$message({
+          message: '不能删除这个菜单',
+          type: 'error',
+          showClose: true,
+          center: true
+        })
+      }
+      this.$refs.tree.remove(this.deleteNode)
+    },
+    handleDrag(draggingNode, dropNode, type) {
+      if (dropNode.data.isDelete && type !== 'before') {
+        let url
+        const data = draggingNode.data
+        if (data.isChild) {
+          url = '/api/menu/child?id='
+        } else {
+          url = '/api/menu/parent?id='
+        }
+        url += data.id
+        const _this = this
+        this.axios.delete(url).then(res => {
+          _this.$message({
+            message: res.data.message,
+            type: 'success',
+            showClose: true,
+            center: true
+          })
+          _this.deleteNode.children.splice(0, this.deleteNode.children.length)
+        })
+      }
     }
   }
 }
