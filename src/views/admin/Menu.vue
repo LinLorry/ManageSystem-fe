@@ -26,6 +26,8 @@
           </el-button>
         </span>
       </el-tree>
+
+      <el-button @click="updateLocation">更新菜单排序</el-button>
     </div>
     <div>
       <ParentCreater
@@ -185,6 +187,46 @@ export default {
           parentId: parent.id
         })
       )
+    },
+    updateLocation() {
+      let location = 0
+      let childLocation = 0
+      let parentIdLocationMap = []
+      let childIdLocationMap = []
+
+      for (const parentMenu of this.menus) {
+        parentIdLocationMap.push({
+          id: parentMenu.id,
+          location
+        })
+        location++
+        childLocation = 0
+
+        for (const childMenu of parentMenu.children) {
+          childIdLocationMap.push({
+            id: childMenu.id,
+            location: childLocation
+          })
+          childLocation++
+        }
+      }
+
+      // TODO 优化更新，判断修改
+      const _this = this
+      this.axios
+        .post('/api/menu/parent/location', parentIdLocationMap)
+        .then(() => {
+          _this.axios
+            .post('/api/menu/child/location', childIdLocationMap)
+            .then(() => {
+              _this.$message({
+                message: '更新菜单成功',
+                type: 'success',
+                showClose: true,
+                center: true
+              })
+            })
+        })
     },
     allowDrop(draggingNode, dropNode, type) {
       if (draggingNode.data.isChild) {
