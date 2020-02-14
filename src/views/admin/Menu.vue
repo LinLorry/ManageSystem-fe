@@ -12,7 +12,14 @@
       <el-button @click="createChildDialogFormVisible = true"
         >新建子菜单</el-button
       >
-      <el-tree :data="menus">
+      <el-tree
+        draggable
+        highlight-current
+        node-key="id"
+        ref="tree"
+        :data="menus"
+        :allow-drop="allowDrop"
+      >
         <span slot-scope="{ node, data }">
           <el-button type="text" size="mini" @click="() => edit(data)">
             {{ data.label }}
@@ -178,6 +185,25 @@ export default {
           parentId: parent.id
         })
       )
+    },
+    allowDrop(draggingNode, dropNode, type) {
+      if (draggingNode.data.isChild) {
+        if (dropNode.data.isChild) {
+          if (type !== 'inner') {
+            return true
+          }
+        } else {
+          if (type === 'inner') {
+            return true
+          }
+        }
+      } else {
+        if (!dropNode.data.isChild && type !== 'inner') {
+          return true
+        }
+      }
+
+      return false
     }
   }
 }
