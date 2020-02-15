@@ -204,6 +204,8 @@ export default {
       let parentIdLocationMap = []
       let childIdLocationMap = []
 
+      let childParentChangeMap = []
+
       for (const parentMenu of this.menus) {
         parentIdLocationMap.push({
           id: parentMenu.id,
@@ -218,24 +220,43 @@ export default {
             location: childLocation
           })
           childLocation++
+
+          if (childMenu.parentId !== parentMenu.id) {
+            childParentChangeMap.push({
+              id: childMenu.id,
+              parentId: parentMenu.id
+            })
+          }
         }
       }
 
-      // TODO 优化更新，判断修改
+      let successSize = 2 + childParentChangeMap.length
+
       const _this = this
+      let callback = () => {
+        if (--successSize === 0) {
+          _this.$message({
+            message: '更新菜单成功',
+            type: 'success',
+            showClose: true,
+            center: true
+          })
+          _this.$router.go(0)
+        }
+        console.log(successSize)
+      }
+
+      // TODO 优化更新，判断修改
       this.axios
         .post('/api/menu/parent/location', parentIdLocationMap)
+        .then(callback)
+      this.axios
+        .post('/api/menu/child/location', childIdLocationMap)
         .then(() => {
-          _this.axios
-            .post('/api/menu/child/location', childIdLocationMap)
-            .then(() => {
-              _this.$message({
-                message: '更新菜单成功',
-                type: 'success',
-                showClose: true,
-                center: true
-              })
-            })
+          callback()
+          for (const one of childParentChangeMap) {
+            this.axios.post('/api/menu/child', one).then(callback)
+          }
         })
     },
     allowDrop(draggingNode, dropNode, type) {
