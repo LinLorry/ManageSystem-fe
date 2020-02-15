@@ -21,7 +21,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <!-- <el-form-item label="可访问的权限" prop="roles">
+      <el-form-item label="可访问的权限" prop="roles">
         <el-checkbox-group v-model="menu.roles">
           <el-checkbox
             style="display:block"
@@ -29,11 +29,10 @@
             :label="item.id"
             :key="item.id"
             :disabled="item.id === 1"
-            :checked="item.id === 1"
             >{{ item.name }}</el-checkbox
           >
         </el-checkbox-group>
-      </el-form-item> -->
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="$emit('close')">取 消</el-button>
@@ -157,9 +156,16 @@ export default {
   },
   watch: {
     data(newV) {
+      const _this = this
       this.oldParentId = newV.parentId
-
       Object.assign(this.menu, newV)
+      this.menu.roles.splice(0, this.menu.roles.length)
+
+      this.axios('/api/menu/child?id=' + newV.id).then(res => {
+        for (const role of res.data.data.roles) {
+          _this.menu.roles.push(role.id)
+        }
+      })
     }
   }
 }
