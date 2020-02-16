@@ -39,22 +39,27 @@ _axios.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          var message
-          if (localStorage.getItem('token')) {
-            message = '登陆信息过期，请重新登陆'
+          if (localStorage.getItem('platform') === 'wechat') {
+            localStorage.clear()
+            router.push({ path: '/wechat/login' })
           } else {
-            message = '请登陆'
+            var message
+            if (localStorage.getItem('token')) {
+              message = '登陆信息过期，请重新登陆'
+            } else {
+              message = '请登陆'
+            }
+
+            Vue.prototype.$message({
+              type: 'error',
+              message: message,
+              showClose: true,
+              center: true
+            })
+            localStorage.clear()
+            router.push({ path: '/login' })
           }
 
-          Vue.prototype.$message({
-            type: 'error',
-            message: message,
-            showClose: true,
-            center: true
-          })
-          localStorage.clear()
-
-          router.push({ path: '/login' })
           break
         default:
           Vue.prototype.$message({

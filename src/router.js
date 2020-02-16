@@ -7,6 +7,8 @@ const Home = () => import('@/views/Home.vue')
 const Role = () => import('@/views/admin/Role.vue')
 const Menu = () => import('@/views/admin/Menu.vue')
 
+const WechatLogin = () => import('@/views/wechat/Login.vue')
+
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -16,6 +18,10 @@ export default new VueRouter({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/wechat/login',
+      component: WechatLogin
     },
     {
       path: '/',
