@@ -6,6 +6,7 @@ const Inedx = () => import('@/views/Index.vue')
 const Home = () => import('@/views/Home.vue')
 const Role = () => import('@/views/admin/Role.vue')
 const Menu = () => import('@/views/admin/Menu.vue')
+const WechatManage = () => import('@/views/admin/Wechat.vue')
 
 const WechatLogin = () => import('@/views/wechat/Login.vue')
 
@@ -42,6 +43,11 @@ export default new VueRouter({
           path: '/menuManage',
           name: 'menu',
           component: Menu
+        },
+        {
+          path: '/wechatManage',
+          name: 'wechat',
+          component: WechatManage
         }
       ]
     },
