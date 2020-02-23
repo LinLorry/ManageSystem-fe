@@ -1,12 +1,15 @@
 <template>
   <el-container class="loginContainer">
-    <el-main>
+    <el-main class="loginMain">
       <div class="loginBox">
         <el-form
-          label-width="auto"
+          hide-required-asterisk
+          label-position="right"
+          label-width="50px"
           ref="loginForm"
           :rules="rules"
           :model="loginForm"
+          @submit.native.prevent
         >
           <el-form-item label="账号" prop="username">
             <el-input
@@ -25,7 +28,10 @@
             >
             </el-input>
           </el-form-item>
-          <el-button type="primary" @click="submitForm('loginForm')"
+          <el-button
+            type="primary"
+            native-type="submit"
+            @click="submitForm('loginForm')"
             >登陆</el-button
           >
         </el-form>
@@ -39,21 +45,6 @@
 export default {
   name: 'login',
   data() {
-    var checkUsername = (rule, value, callback) => {
-      if (value === '') {
-        return callback(new Error('账号不能为空'));
-      } else {
-        callback();
-      }
-    };
-
-    var checkPassWord = (rule, value, callback) => {
-      if (value === '') {
-        return callback(new Error('密码不能为空'));
-      } else {
-        callback();
-      }
-    };
     return {
       loginForm: {
         username: '',
@@ -62,14 +53,14 @@ export default {
       rules: {
         username: [
           {
-            validator: checkUsername,
-            trigger: 'blur'
+            required: true,
+            message: '账号不能为空'
           }
         ],
         password: [
           {
-            validator: checkPassWord,
-            trigger: 'blur'
+            required: true,
+            message: '密码不能为空'
           }
         ]
       }
@@ -115,14 +106,16 @@ export default {
   background-color: #14b9d6;
 }
 
-.loginBox .el-form {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.loginMain {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginBox {
   border-radius: 2px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  padding: 50px 50px 30px;
+  padding: 50px 30px 30px;
   text-align: center;
   background: #f7f7f7;
 }
