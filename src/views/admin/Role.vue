@@ -115,8 +115,8 @@
 </template>
 
 <script>
-import RoleCreater from './childComp/RoleCreater'
-import RoleEditer from './childComp/RoleEditer'
+import RoleCreater from './childComp/RoleCreater';
+import RoleEditer from './childComp/RoleEditer';
 
 export default {
   name: 'roleManage',
@@ -136,22 +136,22 @@ export default {
       editDialogFormVisible: false,
       editIndex: 0,
       tmp: {}
-    }
+    };
   },
   created() {
-    const _this = this
+    const _this = this;
     this.axios.get('/api/role').then(res => {
-      _this.roles = res.data.data
-    })
+      _this.roles = res.data.data;
+    });
   },
   methods: {
     handleEdit(index) {
-      this.editIndex = index
-      this.tmp = this.roles[index]
-      this.editDialogFormVisible = true
+      this.editIndex = index;
+      this.tmp = this.roles[index];
+      this.editDialogFormVisible = true;
     },
     handleDelete(index) {
-      let _this = this
+      let _this = this;
       this.$confirm('此操作将永久删除该权限, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -166,31 +166,28 @@ export default {
                 type: 'success',
                 showClose: true,
                 center: true
-              })
-              _this.roles.splice(index, 1)
-            })
+              });
+              _this.roles.splice(index, 1);
+            });
         })
         .catch(() => {
           _this.$message({
             type: 'info',
             message: '已取消删除'
-          })
-        })
+          });
+        });
     },
     editSuccess(data) {
-      let role = this.roles[this.editIndex]
+      let role = this.roles[this.editIndex];
       for (const i in role) {
-        role[i] = data[i]
+        role[i] = data[i];
       }
     },
     timeFormatter(row, column, cellValue) {
-      return new Date(cellValue).toLocaleDateString()
-    },
-    onSubmit() {
-      console.log('query')
+      return new Date(cellValue).toLocaleDateString();
     }
   }
-}
+};
 </script>
 
 <style>

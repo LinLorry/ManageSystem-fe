@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import IndexMenu from '@/components/IndexMenu.vue'
+import IndexMenu from '@/components/IndexMenu.vue';
 
 export default {
   name: 'index',
@@ -35,34 +35,34 @@ export default {
     IndexMenu
   },
   data() {
-    this.getProfile()
+    this.getProfile();
     return {
       userInfo: {}
-    }
+    };
   },
   methods: {
     getProfile() {
-      const _this = this
+      const _this = this;
       this.axios.get('/api/user/profile').then(res => {
-        localStorage.setItem('userInfo', JSON.stringify(res.data.data))
-        _this.userInfo = res.data.data
-      })
+        localStorage.setItem('userInfo', JSON.stringify(res.data.data));
+        _this.userInfo = res.data.data;
+      });
     },
     dropDownCommand(command) {
       switch (command) {
         case 'logout':
-          localStorage.clear()
+          localStorage.clear();
           this.$message({
             type: 'info',
             message: '退出登陆成功',
             showClose: true,
             center: true
-          })
-          this.$router.replace('/login')
+          });
+          this.$router.replace('/login');
       }
     }
   }
-}
+};
 </script>
 
 <style>

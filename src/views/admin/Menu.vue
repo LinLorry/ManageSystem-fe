@@ -69,10 +69,10 @@
 </template>
 
 <script>
-import ParentCreater from './childComp/ParentMenuCreater'
-import ParentEditer from './childComp/ParentMenuEditer'
-import ChildCreater from './childComp/ChildMenuCreater'
-import ChildEditer from './childComp/ChildMenuEditer'
+import ParentCreater from './childComp/ParentMenuCreater';
+import ParentEditer from './childComp/ParentMenuEditer';
+import ChildCreater from './childComp/ChildMenuCreater';
+import ChildEditer from './childComp/ChildMenuEditer';
 
 export default {
   name: 'roleManage',
@@ -98,47 +98,47 @@ export default {
         children: []
       },
       deleteAdmin: false
-    }
+    };
   },
   created() {
-    const _this = this
+    const _this = this;
     this.axios.get('/api/menu/parent').then(res => {
-      let data = res.data.data
-      _this.sortMenu(data)
-      let menus = _this.menus
+      let data = res.data.data;
+      _this.sortMenu(data);
+      let menus = _this.menus;
 
       for (const parentIndex in data) {
-        let parent = data[parentIndex]
+        let parent = data[parentIndex];
 
         menus.push(
           Object.assign(parent, {
             label: parent.name,
             isChild: false
           })
-        )
+        );
 
         for (const childIndex in parent.children) {
-          let child = parent.children[childIndex]
+          let child = parent.children[childIndex];
 
           Object.assign(child, {
             label: child.name,
             isChild: true,
             parentId: parent.id
-          })
+          });
         }
       }
-    })
+    });
   },
   methods: {
     sortMenu(menus) {
       for (const i in menus) {
         menus[i].children.sort((first, second) => {
-          return first.location - second.location
-        })
+          return first.location - second.location;
+        });
       }
       menus.sort((first, second) => {
-        return first.location - second.location
-      })
+        return first.location - second.location;
+      });
     },
     createParent(data) {
       this.menus.splice(
@@ -149,7 +149,7 @@ export default {
           isChild: false,
           children: []
         })
-      )
+      );
     },
     createChild(data) {
       this.menus
@@ -161,32 +161,32 @@ export default {
             label: data.name,
             isChild: true
           })
-        )
+        );
     },
     edit(data) {
       if (data.isChild) {
-        this.editChildDialogFormVisible = true
+        this.editChildDialogFormVisible = true;
       } else {
-        this.editParentDialogFormVisible = true
+        this.editParentDialogFormVisible = true;
       }
-      this.tmp = data
+      this.tmp = data;
     },
     editParent(data) {
-      let parent = this.menus.find(one => one.id === data.id)
+      let parent = this.menus.find(one => one.id === data.id);
 
-      parent.label = data.name
-      parent.name = data.name
-      parent.icon = data.icon
+      parent.label = data.name;
+      parent.name = data.name;
+      parent.icon = data.icon;
     },
     editChild(data) {
-      let oldParent = this.menus.find(one => one.id === data.oldParentId)
+      let oldParent = this.menus.find(one => one.id === data.oldParentId);
 
       oldParent.children.splice(
         oldParent.children.findIndex(one => one.id === data.id),
         1
-      )
+      );
 
-      let parent = this.menus.find(one => one.id === data.parentId)
+      let parent = this.menus.find(one => one.id === data.parentId);
 
       parent.children.splice(
         0,
@@ -196,43 +196,43 @@ export default {
           isChild: true,
           parentId: parent.id
         })
-      )
+      );
     },
     updateLocation() {
-      let location = 0
-      let childLocation = 0
-      let parentIdLocationMap = []
-      let childIdLocationMap = []
+      let location = 0;
+      let childLocation = 0;
+      let parentIdLocationMap = [];
+      let childIdLocationMap = [];
 
-      let childParentChangeMap = []
+      let childParentChangeMap = [];
 
       for (const parentMenu of this.menus) {
         parentIdLocationMap.push({
           id: parentMenu.id,
           location
-        })
-        location++
-        childLocation = 0
+        });
+        location++;
+        childLocation = 0;
 
         for (const childMenu of parentMenu.children) {
           childIdLocationMap.push({
             id: childMenu.id,
             location: childLocation
-          })
-          childLocation++
+          });
+          childLocation++;
 
           if (childMenu.parentId !== parentMenu.id) {
             childParentChangeMap.push({
               id: childMenu.id,
               parentId: parentMenu.id
-            })
+            });
           }
         }
       }
 
-      let successSize = 2 + childParentChangeMap.length
+      let successSize = 2 + childParentChangeMap.length;
 
-      const _this = this
+      const _this = this;
       let callback = () => {
         if (--successSize === 0) {
           _this.$message({
@@ -240,96 +240,95 @@ export default {
             type: 'success',
             showClose: true,
             center: true
-          })
-          _this.$router.go(0)
+          });
+          _this.$router.go(0);
         }
-        console.log(successSize)
-      }
+      };
 
       // TODO 优化更新，判断修改
       this.axios
         .post('/api/menu/parent/location', parentIdLocationMap)
-        .then(callback)
+        .then(callback);
       this.axios
         .post('/api/menu/child/location', childIdLocationMap)
         .then(() => {
-          callback()
+          callback();
           for (const one of childParentChangeMap) {
-            this.axios.post('/api/menu/child', one).then(callback)
+            this.axios.post('/api/menu/child', one).then(callback);
           }
-        })
+        });
     },
     allowDrop(draggingNode, dropNode, type) {
       if (dropNode.data.isDelete) {
-        if (type === 'next') return false
-        const id = draggingNode.data.id
-        const isChild = draggingNode.data.isChild
+        if (type === 'next') return false;
+        const id = draggingNode.data.id;
+        const isChild = draggingNode.data.isChild;
 
         if (id === 1 || (isChild && id === 2)) {
-          this.deleteAdmin = true
-          return false
+          this.deleteAdmin = true;
+          return false;
         }
 
-        return true
+        return true;
       }
 
       if (draggingNode.data.isChild) {
         if (dropNode.data.isChild) {
           if (type !== 'inner') {
-            return true
+            return true;
           }
         } else {
           if (type === 'inner') {
-            return true
+            return true;
           }
         }
       } else {
         if (!dropNode.data.isChild && type !== 'inner') {
-          return true
+          return true;
         }
       }
 
-      return false
+      return false;
     },
     handleDragStart() {
-      this.$refs.tree.append(this.deleteNode)
+      this.$refs.tree.append(this.deleteNode);
     },
     handleDragEnd() {
       if (this.deleteAdmin) {
-        this.deleteAdmin = false
+        this.deleteAdmin = false;
         this.$message({
           message: '不能删除这个菜单',
           type: 'error',
           showClose: true,
           center: true
-        })
+        });
       }
-      this.$refs.tree.remove(this.deleteNode)
+      this.$refs.tree.remove(this.deleteNode);
     },
     handleDrag(draggingNode, dropNode, type) {
       if (dropNode.data.isDelete && type !== 'before') {
-        let url
-        const data = draggingNode.data
+        let url;
+        const data = draggingNode.data;
         if (data.isChild) {
-          url = '/api/menu/child?id='
+          url = '/api/menu/child?id=';
         } else {
-          url = '/api/menu/parent?id='
+          url = '/api/menu/parent?id=';
         }
-        url += data.id
-        const _this = this
+        url += data.id;
+        const _this = this;
         this.axios.delete(url).then(res => {
           _this.$message({
             message: res.data.message,
             type: 'success',
             showClose: true,
             center: true
-          })
-          _this.deleteNode.children.splice(0, this.deleteNode.children.length)
-        })
+          });
+          _this.deleteNode.children.splice(0, this.deleteNode.children.length);
+        });
       }
     }
   }
-}
+};
 </script>
 
 <style></style>

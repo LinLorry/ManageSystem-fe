@@ -25,26 +25,26 @@ export default {
   data() {
     var checkName = (rule, value, callback) => {
       if (value === '') {
-        return callback(new Error('名字不能为空'))
+        return callback(new Error('名字不能为空'));
       } else {
-        const parentMenus = this.parentMenus
+        const parentMenus = this.parentMenus;
 
         for (const parentMenu of parentMenus) {
           if (this.menu.id !== parentMenu.id && value === parentMenu.label) {
-            return callback(new Error('该名字已被设置'))
+            return callback(new Error('该名字已被设置'));
           }
         }
-        callback()
+        callback();
       }
-    }
+    };
 
     var checkIcon = (rule, value, callback) => {
       if (value === '') {
-        return callback(new Error('图标不能为空'))
+        return callback(new Error('图标不能为空'));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
 
     return {
       menu: {
@@ -66,35 +66,35 @@ export default {
           }
         ]
       }
-    }
+    };
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$emit('close')
+          this.$emit('close');
 
-          const data = this.menu
-          let _this = this
+          const data = this.menu;
+          let _this = this;
           this.axios.post('/api/menu/parent', data).then(res => {
             _this.$message({
               message: res.data.message,
               type: 'success',
               showClose: true,
               center: true
-            })
-            _this.$emit('success', res.data.data)
-          })
+            });
+            _this.$emit('success', res.data.data);
+          });
         } else {
-          return false
+          return false;
         }
-      })
+      });
     }
   },
   watch: {
     data(newV) {
-      Object.assign(this.menu, newV)
+      Object.assign(this.menu, newV);
     }
   }
-}
+};
 </script>

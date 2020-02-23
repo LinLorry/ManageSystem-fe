@@ -38,28 +38,28 @@ export default {
   data() {
     return {
       menus: []
-    }
+    };
   },
   created() {
-    let _this = this
+    let _this = this;
     this.axios.get('/api/menu').then(res => {
-      _this.sortMenu(res.data.data)
-      _this.menus = res.data.data
-    })
+      _this.sortMenu(res.data.data);
+      _this.menus = res.data.data;
+    });
   },
   methods: {
     sortMenu(menus) {
       for (const i in menus) {
         menus[i].children.sort((first, second) => {
-          return first.location - second.location
-        })
+          return first.location - second.location;
+        });
       }
       menus.sort((first, second) => {
-        return first.location - second.location
-      })
+        return first.location - second.location;
+      });
     }
   }
-}
+};
 </script>
 
 <style>

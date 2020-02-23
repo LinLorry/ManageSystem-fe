@@ -54,45 +54,45 @@ export default {
   data: function() {
     var checkName = (rule, value, callback) => {
       if (value === '') {
-        return callback(new Error('名字不能为空'))
+        return callback(new Error('名字不能为空'));
       } else {
-        const parentMenus = this.parentMenus
+        const parentMenus = this.parentMenus;
 
         for (const parentMenu of parentMenus) {
           for (const childMenu of parentMenu.children) {
             if (value === childMenu.label) {
-              return callback(new Error('该名字已被设置'))
+              return callback(new Error('该名字已被设置'));
             }
           }
         }
-        callback()
+        callback();
       }
-    }
+    };
 
     var checkUrl = (rule, value, callback) => {
       if (value === '') {
-        return callback(new Error('路径不能为空'))
+        return callback(new Error('路径不能为空'));
       } else {
-        const parentMenus = this.parentMenus
+        const parentMenus = this.parentMenus;
 
         for (const parentMenu of parentMenus) {
           for (const childMenu of parentMenu.children) {
             if (value === childMenu.url) {
-              return callback(new Error('该Url已被设置'))
+              return callback(new Error('该Url已被设置'));
             }
           }
         }
-        callback()
+        callback();
       }
-    }
+    };
 
     var checkParent = (rule, value, callback) => {
       if (value === '') {
-        return callback(new Error('请选择父菜单'))
+        return callback(new Error('请选择父菜单'));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
 
     return {
       menu: {
@@ -122,25 +122,25 @@ export default {
           }
         ]
       }
-    }
+    };
   },
   created() {
-    const _this = this
+    const _this = this;
     this.axios('/api/role').then(res => {
       res.data.data.sort((first, second) => {
-        return first.id - second.id
-      })
-      _this.roles = res.data.data
-    })
+        return first.id - second.id;
+      });
+      _this.roles = res.data.data;
+    });
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$emit('close')
+          this.$emit('close');
 
-          const data = this.menu
-          let _this = this
+          const data = this.menu;
+          let _this = this;
 
           this.axios.post('/api/menu/child', data).then(res => {
             _this.$message({
@@ -148,21 +148,21 @@ export default {
               type: 'success',
               showClose: true,
               center: true
-            })
-            res.data.data.parentId = data.parentId
-            _this.$emit('success', res.data.data)
+            });
+            res.data.data.parentId = data.parentId;
+            _this.$emit('success', res.data.data);
             _this.menu = {
               name: '',
               url: '',
               parentId: '',
               roles: [1]
-            }
-          })
+            };
+          });
         } else {
-          return false
+          return false;
         }
-      })
+      });
     }
   }
-}
+};
 </script>

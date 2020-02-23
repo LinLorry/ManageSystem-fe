@@ -60,8 +60,8 @@ export default {
   data() {
     // TODO 后端查询用户接口尚未完成，等待完成后查询对应id用户是否存在
     var checkUserId = (rule, value, callback) => {
-      callback()
-    }
+      callback();
+    };
 
     return {
       wechatUser: {
@@ -90,42 +90,42 @@ export default {
           }
         ]
       }
-    }
+    };
   },
   created() {
-    const _this = this
+    const _this = this;
     this.axios('/api/role').then(res => {
       res.data.data.sort((first, second) => {
-        return first.id - second.id
-      })
-      _this.roles = res.data.data
-    })
+        return first.id - second.id;
+      });
+      _this.roles = res.data.data;
+    });
   },
   methods: {
     submitForm() {
       this.$refs.wechatUser.validate(valid => {
         if (valid) {
-          this.$emit('close')
+          this.$emit('close');
 
           let data = {
             id: this.wechatUser.id
-          }
+          };
 
           if (this.nullUser) {
             if (!this.createUser) {
-              data.userId = this.wechatUser.userId
+              data.userId = this.wechatUser.userId;
             }
-            data.roles = this.wechatUser.roles
+            data.roles = this.wechatUser.roles;
           } else {
             if (this.disable) {
-              data.disable = true
+              data.disable = true;
             } else {
-              data.userId = this.wechatUser.userId
-              data.roles = this.wechatUser.roles
+              data.userId = this.wechatUser.userId;
+              data.roles = this.wechatUser.roles;
             }
           }
 
-          let _this = this
+          let _this = this;
 
           this.axios.post('/api/wechat/user', data).then(res => {
             _this.$message({
@@ -133,43 +133,43 @@ export default {
               type: 'success',
               showClose: true,
               center: true
-            })
-            _this.$emit('success', res.data.data)
-          })
+            });
+            _this.$emit('success', res.data.data);
+          });
         } else {
-          return false
+          return false;
         }
-      })
+      });
     }
   },
   computed: {
     userInfo() {
       if (this.nullUser) {
-        return !this.createUser
+        return !this.createUser;
       } else {
-        return true
+        return true;
       }
     }
   },
   watch: {
     data(newV) {
-      this.wechatUser.id = newV.id
-      this.disable = false
+      this.wechatUser.id = newV.id;
+      this.disable = false;
 
       if (newV.user) {
         // TODO 用户权限查询接口开放后实时显示用户权限
-        this.nullUser = false
-        this.createUser = false
-        this.wechatUser.userId = newV.user.id
-        this.userName = newV.user.name
+        this.nullUser = false;
+        this.createUser = false;
+        this.wechatUser.userId = newV.user.id;
+        this.userName = newV.user.name;
       } else {
-        this.nullUser = true
-        this.createUser = true
-        this.wechatUser.roles.splice(0, this.wechatUser.roles.length)
-        this.wechatUser.userId = 0
-        this.userName = null
+        this.nullUser = true;
+        this.createUser = true;
+        this.wechatUser.roles.splice(0, this.wechatUser.roles.length);
+        this.wechatUser.userId = 0;
+        this.userName = null;
       }
     }
   }
-}
+};
 </script>

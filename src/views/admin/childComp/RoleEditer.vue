@@ -25,19 +25,19 @@ export default {
   data: function() {
     var checkName = (rule, value, callback) => {
       if (value === '') {
-        return callback(new Error('名字不能为空'))
+        return callback(new Error('名字不能为空'));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
 
     var checkRole = (rule, value, callback) => {
       if (value === '') {
-        return callback(new Error('权限控制不能为空'))
+        return callback(new Error('权限控制不能为空'));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
 
     return {
       role: {
@@ -59,37 +59,37 @@ export default {
           }
         ]
       }
-    }
+    };
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$emit('close')
+          this.$emit('close');
 
-          const data = this.role
-          let _this = this
+          const data = this.role;
+          let _this = this;
           this.axios.post('/api/role', data).then(res => {
             _this.$message({
               message: res.data.message,
               type: 'success',
               showClose: true,
               center: true
-            })
-            _this.$emit('success', res.data.data)
-          })
+            });
+            _this.$emit('success', res.data.data);
+          });
         } else {
-          return false
+          return false;
         }
-      })
+      });
     }
   },
   watch: {
     data(newV) {
-      this.role.id = newV.id
-      this.role.name = newV.name
-      this.role.role = newV.role
+      this.role.id = newV.id;
+      this.role.name = newV.name;
+      this.role.role = newV.role;
     }
   }
-}
+};
 </script>
