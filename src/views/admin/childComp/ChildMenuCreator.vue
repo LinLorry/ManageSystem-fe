@@ -49,7 +49,7 @@
 
 <script>
 export default {
-  name: 'childMenuCreater',
+  name: 'childMenuCreator',
   props: ['show', 'parentMenus'],
   data: function() {
     var checkName = (rule, value, callback) => {

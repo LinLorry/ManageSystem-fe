@@ -1,32 +1,27 @@
 <template>
-  <el-dialog title="新建权限" :visible.sync="show">
+  <el-dialog title="编辑权限" :visible.sync="show">
     <el-form :model="role" label-width="auto" ref="role" :rules="rules">
+      <el-form-item label="ID" prop="Id">
+        <el-input disabled v-model="role.id" autocomplete="off"></el-input>
+      </el-form-item>
       <el-form-item label="名称" prop="name">
-        <el-input
-          placeholder="请输入名称"
-          v-model="role.name"
-          autocomplete="off"
-        ></el-input>
+        <el-input v-model="role.name" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="权限控制" prop="role">
-        <el-input
-          placeholder="请输入权限控制"
-          v-model="role.role"
-          autocomplete="off"
-        ></el-input>
+        <el-input v-model="role.role" autocomplete="off"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="$emit('close')">取 消</el-button>
-      <el-button type="primary" @click="submitForm('role')">创建</el-button>
+      <el-button type="primary" @click="submitForm('role')">编辑</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
 export default {
-  name: 'roleCreater',
-  props: ['show'],
+  name: 'roleEditor',
+  props: ['show', 'data'],
   data: function() {
     var checkName = (rule, value, callback) => {
       if (value === '') {
@@ -43,8 +38,10 @@ export default {
         callback();
       }
     };
+
     return {
       role: {
+        id: 0,
         name: '',
         role: ''
       },
@@ -85,6 +82,13 @@ export default {
           return false;
         }
       });
+    }
+  },
+  watch: {
+    data(newV) {
+      this.role.id = newV.id;
+      this.role.name = newV.name;
+      this.role.role = newV.role;
     }
   }
 };

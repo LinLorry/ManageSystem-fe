@@ -33,54 +33,54 @@
       <el-button @click="updateLocation">更新菜单排序</el-button>
     </div>
     <div>
-      <ParentCreater
+      <ParentCreator
         :show="createParentDialogFormVisible"
         :parentMenus="menus"
         @close="createParentDialogFormVisible = false"
         @success="createParent($event)"
-      ></ParentCreater>
+      ></ParentCreator>
 
-      <ParentEditer
+      <ParentEditor
         :show="editParentDialogFormVisible"
         :data="tmp"
         :parentMenus="menus"
         @close="editParentDialogFormVisible = false"
         @success="editParent($event)"
       >
-      </ParentEditer>
+      </ParentEditor>
 
-      <ChildCreater
+      <ChildCreator
         :show="createChildDialogFormVisible"
         :parentMenus="menus"
         @close="createChildDialogFormVisible = false"
         @success="createChild($event)"
-      ></ChildCreater>
+      ></ChildCreator>
 
-      <ChildEditer
+      <ChildEditor
         :show="editChildDialogFormVisible"
         :data="tmp"
         :parentMenus="menus"
         @close="editChildDialogFormVisible = false"
         @success="editChild($event)"
       >
-      </ChildEditer>
+      </ChildEditor>
     </div>
   </div>
 </template>
 
 <script>
-import ParentCreater from './childComp/ParentMenuCreater';
-import ParentEditer from './childComp/ParentMenuEditer';
-import ChildCreater from './childComp/ChildMenuCreater';
-import ChildEditer from './childComp/ChildMenuEditer';
+import ParentCreator from './childComp/ParentMenuCreator';
+import ParentEditor from './childComp/ParentMenuEditor';
+import ChildCreator from './childComp/ChildMenuCreator';
+import ChildEditor from './childComp/ChildMenuEditor';
 
 export default {
   name: 'roleManage',
   components: {
-    ParentCreater,
-    ParentEditer,
-    ChildCreater,
-    ChildEditer
+    ParentCreator,
+    ParentEditor,
+    ChildCreator,
+    ChildEditor
   },
   data() {
     return {

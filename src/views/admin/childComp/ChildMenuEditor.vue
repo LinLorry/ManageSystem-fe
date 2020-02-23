@@ -43,7 +43,7 @@
 
 <script>
 export default {
-  name: 'menuEditer',
+  name: 'menuEditor',
   props: ['show', 'data', 'parentMenus'],
   data() {
     var checkName = (rule, value, callback) => {

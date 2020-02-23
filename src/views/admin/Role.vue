@@ -98,31 +98,32 @@
       </div>
     </div>
 
-    <RoleCreater
+    <RoleCreator
       :show="createDialogFormVisible"
       v-on:close="createDialogFormVisible = false"
       v-on:success="roles.push($event)"
-    ></RoleCreater>
-    <RoleEditer
+    ></RoleCreator>
+
+    <RoleEditor
       ref="editer"
       :show="editDialogFormVisible"
       :data="tmp"
       v-on:close="editDialogFormVisible = false"
       v-on:success="editSuccess($event)"
     >
-    </RoleEditer>
+    </RoleEditor>
   </div>
 </template>
 
 <script>
-import RoleCreater from './childComp/RoleCreater';
-import RoleEditer from './childComp/RoleEditer';
+import RoleCreator from './childComp/RoleCreator';
+import RoleEditor from './childComp/RoleEditor';
 
 export default {
   name: 'roleManage',
   components: {
-    RoleCreater,
-    RoleEditer
+    RoleCreator,
+    RoleEditor
   },
   data() {
     return {
