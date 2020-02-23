@@ -1,26 +1,26 @@
-'use strict'
+'use strict';
 
-import Vue from 'vue'
-import axios from 'axios'
-import router from './router'
+import Vue from 'vue';
+import axios from 'axios';
+import router from './router';
 
-axios.defaults.headers.post['Content-Type'] = 'application/json'
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-const _axios = axios.create()
+const _axios = axios.create();
 
 _axios.interceptors.request.use(
   function(config) {
-    let token = localStorage.getItem('token')
+    let token = localStorage.getItem('token');
     if (token) {
-      token = 'manage ' + token
-      config.headers['Authorization'] = token
+      token = 'manage ' + token;
+      config.headers['Authorization'] = token;
     }
-    return config
+    return config;
   },
   function(error) {
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);
 
 _axios.interceptors.response.use(
   function(response) {
@@ -30,24 +30,24 @@ _axios.interceptors.response.use(
         message: response.data.message,
         showClose: true,
         center: true
-      })
-      throw new Error()
+      });
+      throw new Error();
     }
-    return response
+    return response;
   },
   function(error) {
     if (error.response) {
       switch (error.response.status) {
         case 401:
           if (localStorage.getItem('platform') === 'wechat') {
-            localStorage.clear()
-            router.push({ path: '/wechat/login' })
+            localStorage.clear();
+            router.push({ path: '/wechat/login' });
           } else {
-            var message
+            let message;
             if (localStorage.getItem('token')) {
-              message = '登陆信息过期，请重新登陆'
+              message = '登陆信息过期，请重新登陆';
             } else {
-              message = '请登陆'
+              message = '请登陆';
             }
 
             Vue.prototype.$message({
@@ -55,42 +55,42 @@ _axios.interceptors.response.use(
               message: message,
               showClose: true,
               center: true
-            })
-            localStorage.clear()
-            router.push({ path: '/login' })
+            });
+            localStorage.clear();
+            router.push({ path: '/login' });
           }
 
-          break
+          break;
         default:
           Vue.prototype.$message({
             type: 'error',
             message: '出现错误',
             showClose: true,
             center: true
-          })
+          });
       }
     }
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);
 
 Plugin.install = function(Vue) {
-  Vue.axios = _axios
-  window.axios = _axios
+  Vue.axios = _axios;
+  window.axios = _axios;
   Object.defineProperties(Vue.prototype, {
     axios: {
       get() {
-        return _axios
+        return _axios;
       }
     },
     $axios: {
       get() {
-        return _axios
+        return _axios;
       }
     }
-  })
-}
+  });
+};
 
-Vue.use(Plugin)
+Vue.use(Plugin);
 
-export default Plugin
+export default Plugin;

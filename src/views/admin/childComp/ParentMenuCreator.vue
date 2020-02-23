@@ -36,31 +36,31 @@
 
 <script>
 export default {
-  name: 'parentMenuCreater',
+  name: 'parentMenuCreator',
   props: ['show', 'parentMenus'],
   data: function() {
     var checkName = (rule, value, callback) => {
       if (value === '') {
-        return callback(new Error('名字不能为空'))
+        return callback(new Error('名字不能为空'));
       } else {
-        const parentMenus = this.parentMenus
+        const parentMenus = this.parentMenus;
 
         for (const parentMenu of parentMenus) {
           if (value === parentMenu.label) {
-            return callback(new Error('该名字已被设置'))
+            return callback(new Error('该名字已被设置'));
           }
         }
-        callback()
+        callback();
       }
-    }
+    };
 
     var checkIcon = (rule, value, callback) => {
       if (value === '') {
-        return callback(new Error('图标不能为空'))
+        return callback(new Error('图标不能为空'));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
 
     return {
       menu: {
@@ -81,16 +81,16 @@ export default {
           }
         ]
       }
-    }
+    };
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$emit('close')
+          this.$emit('close');
 
-          const data = this.menu
-          let _this = this
+          const data = this.menu;
+          let _this = this;
 
           this.axios.post('/api/menu/parent', data).then(res => {
             _this.$message({
@@ -98,18 +98,18 @@ export default {
               type: 'success',
               showClose: true,
               center: true
-            })
-            _this.$emit('success', res.data.data)
+            });
+            _this.$emit('success', res.data.data);
             _this.menu = {
               name: '',
               icon: ''
-            }
-          })
+            };
+          });
         } else {
-          return false
+          return false;
         }
-      })
+      });
     }
   }
-}
+};
 </script>

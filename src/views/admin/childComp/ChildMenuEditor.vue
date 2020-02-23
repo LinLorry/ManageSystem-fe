@@ -1,21 +1,15 @@
 <template>
-  <el-dialog title="新建子菜单" :visible="show" v-on:close="$emit('close')">
+  <el-dialog title="编辑子菜单" :visible="show" v-on:close="$emit('close')">
     <el-form :model="menu" label-width="auto" ref="menu" :rules="rules">
+      <el-form-item label="ID" prop="Id">
+        <el-input disabled v-model="menu.id" autocomplete="off"></el-input>
+      </el-form-item>
       <el-form-item label="名称" prop="name">
-        <el-input
-          placeholder="请输入名称"
-          v-model="menu.name"
-          autocomplete="off"
-        ></el-input>
+        <el-input v-model="menu.name" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="路径" prop="url">
-        <el-input
-          placeholder="请输入路径"
-          v-model="menu.url"
-          autocomplete="off"
-        ></el-input>
+        <el-input v-model="menu.url" autocomplete="off"></el-input>
       </el-form-item>
-
       <el-form-item label="父级菜单" prop="parentId">
         <el-select v-model="menu.parentId" placeholder="请选择">
           <el-option
@@ -42,65 +36,67 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="$emit('close')">取 消</el-button>
-      <el-button type="primary" @click="submitForm('menu')">创建</el-button>
+      <el-button type="primary" @click="submitForm('menu')">编辑</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
 export default {
-  name: 'childMenuCreater',
-  props: ['show', 'parentMenus'],
-  data: function() {
+  name: 'menuEditor',
+  props: ['show', 'data', 'parentMenus'],
+  data() {
     var checkName = (rule, value, callback) => {
       if (value === '') {
-        return callback(new Error('名字不能为空'))
+        return callback(new Error('名字不能为空'));
       } else {
-        const parentMenus = this.parentMenus
+        const parentMenus = this.parentMenus;
 
         for (const parentMenu of parentMenus) {
           for (const childMenu of parentMenu.children) {
-            if (value === childMenu.label) {
-              return callback(new Error('该名字已被设置'))
+            if (this.menu.id !== childMenu.id && value === childMenu.label) {
+              return callback(new Error('该名字已被设置'));
             }
           }
         }
-        callback()
+        callback();
       }
-    }
+    };
 
     var checkUrl = (rule, value, callback) => {
       if (value === '') {
-        return callback(new Error('路径不能为空'))
+        return callback(new Error('路径不能为空'));
       } else {
-        const parentMenus = this.parentMenus
+        const parentMenus = this.parentMenus;
 
         for (const parentMenu of parentMenus) {
           for (const childMenu of parentMenu.children) {
-            if (value === childMenu.url) {
-              return callback(new Error('该Url已被设置'))
+            if (this.menu.id !== childMenu.id && value === childMenu.url) {
+              return callback(new Error('该Url已被设置'));
             }
           }
         }
-        callback()
+        callback();
       }
-    }
+    };
 
     var checkParent = (rule, value, callback) => {
       if (value === '') {
-        return callback(new Error('请选择父菜单'))
+        return callback(new Error('请选择父菜单'));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
 
     return {
       menu: {
+        id: 0,
         name: '',
         url: '',
         parentId: '',
-        roles: [1]
+        roles: []
       },
+      oldParentId: 0,
       roles: [],
       rules: {
         name: [
@@ -122,47 +118,55 @@ export default {
           }
         ]
       }
-    }
+    };
   },
   created() {
-    const _this = this
+    const _this = this;
     this.axios('/api/role').then(res => {
       res.data.data.sort((first, second) => {
-        return first.id - second.id
-      })
-      _this.roles = res.data.data
-    })
+        return first.id - second.id;
+      });
+      _this.roles = res.data.data;
+    });
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$emit('close')
+          this.$emit('close');
 
-          const data = this.menu
-          let _this = this
-
+          const data = this.menu;
+          let _this = this;
           this.axios.post('/api/menu/child', data).then(res => {
             _this.$message({
               message: res.data.message,
               type: 'success',
               showClose: true,
               center: true
-            })
-            res.data.data.parentId = data.parentId
-            _this.$emit('success', res.data.data)
-            _this.menu = {
-              name: '',
-              url: '',
-              parentId: '',
-              roles: [1]
-            }
-          })
+            });
+            res.data.data.oldParentId = _this.oldParentId;
+            res.data.data.parentId = data.parentId;
+            _this.$emit('success', res.data.data);
+          });
         } else {
-          return false
+          return false;
         }
-      })
+      });
+    }
+  },
+  watch: {
+    data(newV) {
+      const _this = this;
+      this.oldParentId = newV.parentId;
+      Object.assign(this.menu, newV);
+      this.menu.roles.splice(0, this.menu.roles.length);
+
+      this.axios('/api/menu/child?id=' + newV.id).then(res => {
+        for (const role of res.data.data.roles) {
+          _this.menu.roles.push(role.id);
+        }
+      });
     }
   }
-}
+};
 </script>

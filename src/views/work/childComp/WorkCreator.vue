@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: 'workCreater',
+  name: 'workCreator',
   props: ['show'],
   data: function() {
     return {
@@ -41,30 +41,30 @@ export default {
           }
         ]
       }
-    }
+    };
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$emit('close')
+          this.$emit('close');
 
-          const data = this.work
-          let _this = this
+          const data = this.work;
+          let _this = this;
           this.axios.post('/api/work', data).then(res => {
             _this.$message({
               message: res.data.message,
               type: 'success',
               showClose: true,
               center: true
-            })
-            _this.$emit('success', res.data.data)
-          })
+            });
+            _this.$emit('success', res.data.data);
+          });
         } else {
-          return false
+          return false;
         }
-      })
+      });
     }
   }
-}
+};
 </script>

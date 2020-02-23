@@ -116,7 +116,7 @@
         </el-pagination>
       </div>
     </div>
-    <WorkCreater
+    <WorkCreator
       :show="createDialogFormVisible"
       @close="createDialogFormVisible = false"
     />
@@ -124,20 +124,20 @@
 </template>
 
 <script>
-import WorkCreater from './childComp/WorkCreater'
+import WorkCreator from './childComp/WorkCreator';
 
 export default {
   name: 'workManage',
   components: {
-    WorkCreater
+    WorkCreator
   },
   data() {
     var checkId = (rule, value, callback) => {
       if (isNaN(Number(value))) {
-        return callback(new Error('id为数字，请输入数字'))
+        return callback(new Error('id为数字，请输入数字'));
       }
-      callback()
-    }
+      callback();
+    };
 
     return {
       queryForm: {
@@ -167,14 +167,14 @@ export default {
           }
         ]
       }
-    }
+    };
   },
   created() {
-    this.refreshData()
+    this.refreshData();
   },
   methods: {
     handleDelete(index) {
-      const _this = this
+      const _this = this;
 
       this.$confirm('此操作将永久删除该生产流程, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -190,89 +190,89 @@ export default {
                 type: 'success',
                 showClose: true,
                 center: true
-              })
-              _this.works.splice(index, 1)
-            })
+              });
+              _this.works.splice(index, 1);
+            });
         })
         .catch(() => {
           _this.$message({
             type: 'info',
             message: '已取消删除'
-          })
-        })
+          });
+        });
     },
     submitQuery(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          const data = this.queryForm
-          this.queryId = data.id
-          this.queryName = data.name
-          this.queryComment = data.comment
+          const data = this.queryForm;
+          this.queryId = data.id;
+          this.queryName = data.name;
+          this.queryComment = data.comment;
 
-          this.refreshData()
+          this.refreshData();
         } else {
-          return false
+          return false;
         }
-      })
+      });
     },
     handleSizeChange(pageSize) {
-      this.pageSize = pageSize
-      this.refreshData()
+      this.pageSize = pageSize;
+      this.refreshData();
     },
     handlePageNumberChange(pageNumber) {
-      this.pageNumber = pageNumber - 1
-      this.refreshData()
+      this.pageNumber = pageNumber - 1;
+      this.refreshData();
     },
     timeFormatter(row, column, cellValue) {
-      return new Date(cellValue).toLocaleDateString()
+      return new Date(cellValue).toLocaleDateString();
     },
     refreshData() {
-      const _this = this
+      const _this = this;
 
-      let id = this.queryId
+      let id = this.queryId;
 
       if (id !== undefined && id !== null && id.length !== 0) {
         this.axios.get('/api/work?id=' + id).then(res => {
-          const data = res.data.data
+          const data = res.data.data;
 
           if (data) {
-            _this.works = [data]
+            _this.works = [data];
           } else {
-            _this.works = []
+            _this.works = [];
           }
 
-          _this.total = 1
-        })
+          _this.total = 1;
+        });
       } else {
         let url =
           '/api/work?pageSize=' +
           this.pageSize +
           '&pageNumber=' +
-          this.pageNumber
+          this.pageNumber;
 
-        const name = this.queryName
+        const name = this.queryName;
 
         if (name !== undefined && name !== null && name.length !== 0) {
-          url += '&name=' + name
+          url += '&name=' + name;
         }
 
-        const comment = this.queryComment
+        const comment = this.queryComment;
 
         if (comment !== undefined && comment !== null && comment.length !== 0) {
-          url += '&comment=' + comment
+          url += '&comment=' + comment;
         }
 
         this.axios.get(url).then(res => {
-          const data = res.data.data
+          const data = res.data.data;
 
-          _this.pageSize = data.size
-          _this.total = data.total
-          _this.works = data.works
-        })
+          _this.pageSize = data.size;
+          _this.total = data.total;
+          _this.works = data.works;
+        });
       }
     }
   }
-}
+};
 </script>
 
 <style>

@@ -41,19 +41,19 @@ export default {
   data() {
     var checkUsername = (rule, value, callback) => {
       if (value === '') {
-        return callback(new Error('账号不能为空'))
+        return callback(new Error('账号不能为空'));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
 
     var checkPassWord = (rule, value, callback) => {
       if (value === '') {
-        return callback(new Error('密码不能为空'))
+        return callback(new Error('密码不能为空'));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     return {
       loginForm: {
         username: '',
@@ -73,21 +73,21 @@ export default {
           }
         ]
       }
-    }
+    };
   },
   created() {
-    const token = this.$route.query.token
+    const token = this.$route.query.token;
     if (token) {
-      localStorage.setItem('token', token)
-      this.$router.push('/')
+      localStorage.setItem('token', token);
+      this.$router.push('/');
     }
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          const data = this.loginForm
-          let _this = this
+          const data = this.loginForm;
+          let _this = this;
           if (data.username && data.password) {
             this.axios.post('/api/user/token', data).then(res => {
               _this.$message({
@@ -95,18 +95,18 @@ export default {
                 type: 'success',
                 showClose: true,
                 center: true
-              })
-              localStorage.setItem('token', res.data.token)
-              _this.$router.push('/')
-            })
+              });
+              localStorage.setItem('token', res.data.token);
+              _this.$router.push('/');
+            });
           }
         } else {
-          return false
+          return false;
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style>

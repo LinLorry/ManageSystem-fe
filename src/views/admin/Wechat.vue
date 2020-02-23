@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import WechatUserSetter from './childComp/WechatUserSetter'
+import WechatUserSetter from './childComp/WechatUserSetter';
 
 export default {
   name: 'wechatManage',
@@ -103,63 +103,60 @@ export default {
       setterDialogFormVisible: false,
       editIndex: 0,
       tmp: {}
-    }
+    };
   },
   created() {
-    this.refreshData()
+    this.refreshData();
   },
   methods: {
     handleSet(index) {
-      this.editIndex = index
-      this.tmp = this.wechatUsers[index]
-      this.setterDialogFormVisible = true
+      this.editIndex = index;
+      this.tmp = this.wechatUsers[index];
+      this.setterDialogFormVisible = true;
     },
     setSuccess(data) {
       this.wechatUsers.splice(
         this.wechatUsers.findIndex(one => one.id === data.id),
         1,
         data
-      )
+      );
     },
     sexFormatter(row, column, sex) {
       if (sex) {
         if (sex === 0) {
-          return '未知'
+          return '未知';
         } else if (sex === 1) {
-          return '男'
+          return '男';
         } else if (sex === 2) {
-          return '女'
+          return '女';
         }
       }
     },
-    onSubmit() {
-      console.log('query')
-    },
     handleSizeChange(pageSize) {
-      this.pageSize = pageSize
-      this.refreshData()
+      this.pageSize = pageSize;
+      this.refreshData();
     },
     handlePageNumberChange(pageNumber) {
-      this.pageNumber = pageNumber - 1
-      this.refreshData()
+      this.pageNumber = pageNumber - 1;
+      this.refreshData();
     },
     refreshData() {
-      const _this = this
+      const _this = this;
       const url =
         '/api/wechat/user?pageSize=' +
         this.pageSize +
         '&pageNumber=' +
-        this.pageNumber
+        this.pageNumber;
       this.axios.get(url).then(res => {
-        const data = res.data.data
+        const data = res.data.data;
 
-        _this.pageSize = data.size
-        _this.total = data.total
-        _this.wechatUsers = data.wechatUsers
-      })
+        _this.pageSize = data.size;
+        _this.total = data.total;
+        _this.wechatUsers = data.wechatUsers;
+      });
     }
   }
-}
+};
 </script>
 
 <style>
