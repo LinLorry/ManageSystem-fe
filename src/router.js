@@ -11,6 +11,7 @@ const WechatManage = () => import('@/views/admin/Wechat.vue');
 const WechatLogin = () => import('@/views/wechat/Login.vue');
 
 const Work = () => import('@/views/work/Work.vue');
+const Process = () => import('@/views/work/Process');
 
 Vue.use(VueRouter);
 
@@ -55,6 +56,11 @@ export default new VueRouter({
           path: '/workManage',
           name: 'work',
           component: Work
+        },
+        {
+          path: '/processManage',
+          name: 'process',
+          component: Process
         }
       ]
     },
