@@ -92,13 +92,7 @@
 
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="
-                  $router.push({
-                    path: '/process/' + processes[scope.$index].id
-                  })
-                "
+              <el-button size="mini" @click="handleEdit(scope.$index)"
                 >编辑</el-button
               >
               <el-button
@@ -127,16 +121,25 @@
       :show="createDialogFormVisible"
       @close="createDialogFormVisible = false"
     />
+
+    <ProcessEditor
+      :show="editDialogFormVisible"
+      :data="tmp"
+      @close="editDialogFormVisible = false"
+      @success="editSuccess($event)"
+    />
   </div>
 </template>
 
 <script>
 import ProcessCreator from '@/views/work/childComp/ProcessCreator';
+import ProcessEditor from '@/views/work/childComp/ProcessEditor';
 
 export default {
   name: 'processManage',
   components: {
-    ProcessCreator
+    ProcessCreator,
+    ProcessEditor
   },
   data() {
     let checkId = (rule, value, callback) => {
@@ -163,6 +166,7 @@ export default {
 
       processes: [],
       createDialogFormVisible: false,
+      editDialogFormVisible: false,
       editIndex: 0,
       tmp: {},
       rules: {
@@ -179,6 +183,17 @@ export default {
     this.refreshData();
   },
   methods: {
+    handleEdit(index) {
+      this.editDialogFormVisible = true;
+      this.tmp = this.processes[index];
+    },
+    editSuccess(data) {
+      const index = this.processes.findIndex(process => {
+        return process.id === data.id;
+      });
+
+      this.processes.splice(index, 0, data);
+    },
     handleDelete(index) {
       const _this = this;
 
