@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div style="height: 100%; background-color: #FFF">
     <el-menu
       class="index-menu"
       router

@@ -1,84 +1,92 @@
 <template>
-  <div>
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-      <el-breadcrumb-item>微信用户管理</el-breadcrumb-item>
-    </el-breadcrumb>
-    <div class="content">
-      <div class="query-box">
-        <el-form
-          label-width="auto"
-          ref="queryFrom"
-          :model="queryForm"
-          :inline="true"
-        >
-          <el-form-item>
-            <el-input placeholder="微信用户ID" v-model="queryForm.id" clearable>
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-input
-              type="text"
-              placeholder="名字"
-              v-model="queryForm.name"
-              clearable
-            >
-            </el-input>
-          </el-form-item>
-
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-
-      <div class="query-result">
-        <el-table
-          stripe
-          :data="wechatUsers"
-          style="width: 100%"
-          max-height="500px"
-        >
-          <el-table-column fixed sortable prop="id" label="ID" />
-
-          <el-table-column fixed sortable prop="name" label="名字" />
-          <el-table-column fixed sortable prop="nickname" label="微信名称" />
-          <el-table-column fixed sortable prop="city" label="城市" />
-          <el-table-column
-            fixed
-            sortable
-            prop="sex"
-            label="性别"
-            :formatter="sexFormatter"
-          />
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button size="mini" @click="handleSet(scope.$index)"
-                >编辑</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-pagination
-          background
-          :page-count="total"
-          :page-sizes="[10, 20, 30, 40]"
-          :page-size="pageSize"
-          layout="sizes, prev, pager, next"
-          @size-change="handleSizeChange"
-          @current-change="handlePageNumberChange"
-        >
-        </el-pagination>
-      </div>
+  <el-card>
+    <div slot="header">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+        <el-breadcrumb-item>微信用户管理</el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
-    <WechatUserSetter
-      :show="setterDialogFormVisible"
-      :data="tmp"
-      @close="setterDialogFormVisible = false"
-      @success="setSuccess($event)"
-    />
-  </div>
+    <div>
+      <div class="content">
+        <div class="query-box">
+          <el-form
+            label-width="auto"
+            ref="queryFrom"
+            :model="queryForm"
+            :inline="true"
+          >
+            <el-form-item>
+              <el-input
+                placeholder="微信用户ID"
+                v-model="queryForm.id"
+                clearable
+              >
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input
+                type="text"
+                placeholder="名字"
+                v-model="queryForm.name"
+                clearable
+              >
+              </el-input>
+            </el-form-item>
+
+            <el-form-item>
+              <el-button type="primary" @click="onSubmit">查询</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+
+        <div class="query-result">
+          <el-table
+            stripe
+            :data="wechatUsers"
+            style="width: 100%"
+            max-height="500px"
+          >
+            <el-table-column fixed sortable prop="id" label="ID" />
+
+            <el-table-column fixed sortable prop="name" label="名字" />
+            <el-table-column fixed sortable prop="nickname" label="微信名称" />
+            <el-table-column fixed sortable prop="city" label="城市" />
+            <el-table-column
+              fixed
+              sortable
+              prop="sex"
+              label="性别"
+              :formatter="sexFormatter"
+            />
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button size="mini" @click="handleSet(scope.$index)"
+                  >编辑</el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            background
+            :page-count="total"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="pageSize"
+            layout="sizes, prev, pager, next"
+            @size-change="handleSizeChange"
+            @current-change="handlePageNumberChange"
+          >
+          </el-pagination>
+        </div>
+      </div>
+      <WechatUserSetter
+        :show="setterDialogFormVisible"
+        :data="tmp"
+        @close="setterDialogFormVisible = false"
+        @success="setSuccess($event)"
+      />
+    </div>
+  </el-card>
 </template>
 
 <script>

@@ -1,7 +1,8 @@
 <template>
   <div class="index">
     <el-container style="height: 100% !important;border: 1px solid #eee">
-      <el-header style="text-align: right">
+      <el-header class="header">
+        <span>管理系统</span>
         <el-dropdown @command="dropDownCommand">
           <span style="color: white">
             <strong> {{ userInfo.username }} </strong>
@@ -16,12 +17,12 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
-      <el-container>
+      <el-main class="main">
         <IndexMenu />
-        <el-main>
-          <router-view />
-        </el-main>
-      </el-container>
+        <router-view
+          style="margin: 20px; flex-grow: 1;background-color: aliceblue;"
+        />
+      </el-main>
     </el-container>
   </div>
 </template>
@@ -70,20 +71,19 @@ export default {
   height: 100%;
 }
 
-.index .el-header {
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: white;
   background-color: #2a2f36;
   line-height: 60px;
 }
 
-.index .el-main {
+.main {
+  display: flex;
+  padding: 0;
   background-color: #97999c;
-}
-
-.content {
-  margin: 10px 0;
-  background-color: aliceblue;
-  border-radius: 2px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  padding: 30px 30px 30px;
 }
 </style>

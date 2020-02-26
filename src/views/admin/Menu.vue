@@ -1,71 +1,75 @@
 <template>
-  <div>
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-      <el-breadcrumb-item>菜单管理</el-breadcrumb-item>
-    </el-breadcrumb>
-    <div class="content">
-      <el-button @click="createParentDialogFormVisible = true"
-        >新建父菜单</el-button
-      >
-      <el-button @click="createChildDialogFormVisible = true"
-        >新建子菜单</el-button
-      >
-      <el-tree
-        draggable
-        highlight-current
-        ref="tree"
-        node-key="id"
-        :data="menus"
-        :allow-drop="allowDrop"
-        @node-drag-start="handleDragStart"
-        @node-drag-end="handleDragEnd"
-        @node-drop="handleDrag"
-      >
-        <span slot-scope="{ node, data }">
-          <el-button type="text" size="mini" @click="() => edit(data)">
-            {{ data.label }}
-          </el-button>
-        </span>
-      </el-tree>
-
-      <el-button @click="updateLocation">更新菜单排序</el-button>
+  <el-card>
+    <div slot="header">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+        <el-breadcrumb-item>菜单管理</el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
     <div>
-      <ParentCreator
-        :show="createParentDialogFormVisible"
-        :parentMenus="menus"
-        @close="createParentDialogFormVisible = false"
-        @success="createParent($event)"
-      ></ParentCreator>
+      <div class="content">
+        <el-button @click="createParentDialogFormVisible = true"
+          >新建父菜单</el-button
+        >
+        <el-button @click="createChildDialogFormVisible = true"
+          >新建子菜单</el-button
+        >
+        <el-tree
+          draggable
+          highlight-current
+          ref="tree"
+          node-key="id"
+          :data="menus"
+          :allow-drop="allowDrop"
+          @node-drag-start="handleDragStart"
+          @node-drag-end="handleDragEnd"
+          @node-drop="handleDrag"
+        >
+          <span slot-scope="{ node, data }">
+            <el-button type="text" size="mini" @click="() => edit(data)">
+              {{ data.label }}
+            </el-button>
+          </span>
+        </el-tree>
 
-      <ParentEditor
-        :show="editParentDialogFormVisible"
-        :data="tmp"
-        :parentMenus="menus"
-        @close="editParentDialogFormVisible = false"
-        @success="editParent($event)"
-      >
-      </ParentEditor>
+        <el-button @click="updateLocation">更新菜单排序</el-button>
+      </div>
+      <div>
+        <ParentCreator
+          :show="createParentDialogFormVisible"
+          :parentMenus="menus"
+          @close="createParentDialogFormVisible = false"
+          @success="createParent($event)"
+        ></ParentCreator>
 
-      <ChildCreator
-        :show="createChildDialogFormVisible"
-        :parentMenus="menus"
-        @close="createChildDialogFormVisible = false"
-        @success="createChild($event)"
-      ></ChildCreator>
+        <ParentEditor
+          :show="editParentDialogFormVisible"
+          :data="tmp"
+          :parentMenus="menus"
+          @close="editParentDialogFormVisible = false"
+          @success="editParent($event)"
+        >
+        </ParentEditor>
 
-      <ChildEditor
-        :show="editChildDialogFormVisible"
-        :data="tmp"
-        :parentMenus="menus"
-        @close="editChildDialogFormVisible = false"
-        @success="editChild($event)"
-      >
-      </ChildEditor>
+        <ChildCreator
+          :show="createChildDialogFormVisible"
+          :parentMenus="menus"
+          @close="createChildDialogFormVisible = false"
+          @success="createChild($event)"
+        ></ChildCreator>
+
+        <ChildEditor
+          :show="editChildDialogFormVisible"
+          :data="tmp"
+          :parentMenus="menus"
+          @close="editChildDialogFormVisible = false"
+          @success="editChild($event)"
+        >
+        </ChildEditor>
+      </div>
     </div>
-  </div>
+  </el-card>
 </template>
 
 <script>
