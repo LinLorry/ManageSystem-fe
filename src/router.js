@@ -10,6 +10,10 @@ const WechatManage = () => import('@/views/admin/Wechat.vue');
 
 const WechatLogin = () => import('@/views/wechat/Login.vue');
 
+const Work = () => import('@/views/work/Work.vue');
+const WorkDetail = () => import('@/views/work/WorkDetail');
+const Process = () => import('@/views/work/Process');
+
 Vue.use(VueRouter);
 
 export default new VueRouter({
@@ -48,6 +52,20 @@ export default new VueRouter({
           path: '/wechatManage',
           name: 'wechat',
           component: WechatManage
+        },
+        {
+          path: '/workManage',
+          name: 'work',
+          component: Work
+        },
+        {
+          path: '/work/:id',
+          component: WorkDetail
+        },
+        {
+          path: '/processManage',
+          name: 'process',
+          component: Process
         }
       ]
     },
