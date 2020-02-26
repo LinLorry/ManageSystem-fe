@@ -132,7 +132,7 @@ export default {
     WorkCreator
   },
   data() {
-    var checkId = (rule, value, callback) => {
+    let checkId = (rule, value, callback) => {
       if (isNaN(Number(value))) {
         return callback(new Error('id为数字，请输入数字'));
       }
@@ -156,7 +156,6 @@ export default {
 
       works: [],
       createDialogFormVisible: false,
-      editerDialogFormVisible: false,
       editIndex: 0,
       tmp: {},
       rules: {
