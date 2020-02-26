@@ -1,11 +1,12 @@
 <template>
-  <el-aside>
+  <div style="height: 100%">
     <el-menu
       class="index-menu"
       router
       unique-opened
       default-active="home"
-      active-text-color="#ffd04b"
+      active-text-color="#409EFF"
+      :collapse="isCollapse"
     >
       <el-menu-item index="home" route="/">
         <i class="el-icon-s-home"></i> <span slot="title">首页</span>
@@ -29,7 +30,10 @@
         </el-menu-item>
       </el-submenu>
     </el-menu>
-  </el-aside>
+    <div class="collapse" @click="isCollapse = !isCollapse">
+      <i class="el-icon-s-fold"></i>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -37,7 +41,8 @@ export default {
   name: 'indexMenu',
   data() {
     return {
-      menus: []
+      menus: [],
+      isCollapse: false
     };
   },
   created() {
@@ -49,8 +54,8 @@ export default {
   },
   methods: {
     sortMenu(menus) {
-      for (const i in menus) {
-        menus[i].children.sort((first, second) => {
+      for (let menu of menus) {
+        menu.children.sort((first, second) => {
           return first.location - second.location;
         });
       }
@@ -63,7 +68,21 @@ export default {
 </script>
 
 <style>
-.el-menu-item.is-active {
-  color: #409eff !important;
+.index-menu:not(.el-menu--collapse) {
+  width: 300px;
+}
+
+.collapse {
+  cursor: pointer;
+  padding: 0 20px;
+  line-height: 56px;
+}
+
+.collapse i {
+  width: 24px;
+  text-align: center;
+  font-size: 18px;
+  vertical-align: middle;
+  color: #909399;
 }
 </style>

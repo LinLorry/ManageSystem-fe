@@ -17,9 +17,9 @@
         </el-dropdown>
       </el-header>
       <el-container>
-        <IndexMenu></IndexMenu>
+        <IndexMenu />
         <el-main>
-          <router-view></router-view>
+          <router-view />
         </el-main>
       </el-container>
     </el-container>
