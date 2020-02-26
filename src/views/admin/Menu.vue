@@ -1,5 +1,13 @@
 <template>
-  <el-card>
+  <el-card
+    body-style="
+    display: flex;
+    flex-direction: column;
+    flex-grow:1;
+    margin-bottom: 20px"
+    style="display: flex;
+    flex-direction: column;"
+  >
     <div slot="header">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -8,67 +16,64 @@
       </el-breadcrumb>
     </div>
     <div>
-      <div class="content">
-        <el-button @click="createParentDialogFormVisible = true"
-          >新建父菜单</el-button
-        >
-        <el-button @click="createChildDialogFormVisible = true"
-          >新建子菜单</el-button
-        >
-        <el-tree
-          draggable
-          highlight-current
-          ref="tree"
-          node-key="id"
-          :data="menus"
-          :allow-drop="allowDrop"
-          @node-drag-start="handleDragStart"
-          @node-drag-end="handleDragEnd"
-          @node-drop="handleDrag"
-        >
-          <span slot-scope="{ node, data }">
-            <el-button type="text" size="mini" @click="() => edit(data)">
-              {{ data.label }}
-            </el-button>
-          </span>
-        </el-tree>
+      <el-button @click="createParentDialogFormVisible = true"
+        >新建父菜单</el-button
+      >
+      <el-button @click="createChildDialogFormVisible = true"
+        >新建子菜单</el-button
+      >
+      <el-tree
+        draggable
+        highlight-current
+        ref="tree"
+        node-key="id"
+        :data="menus"
+        :allow-drop="allowDrop"
+        @node-drag-start="handleDragStart"
+        @node-drag-end="handleDragEnd"
+        @node-drop="handleDrag"
+      >
+        <span slot-scope="{ node, data }">
+          <el-button type="text" size="mini" @click="() => edit(data)">
+            {{ data.label }}
+          </el-button>
+        </span>
+      </el-tree>
 
-        <el-button @click="updateLocation">更新菜单排序</el-button>
-      </div>
-      <div>
-        <ParentCreator
-          :show="createParentDialogFormVisible"
-          :parentMenus="menus"
-          @close="createParentDialogFormVisible = false"
-          @success="createParent($event)"
-        ></ParentCreator>
-
-        <ParentEditor
-          :show="editParentDialogFormVisible"
-          :data="tmp"
-          :parentMenus="menus"
-          @close="editParentDialogFormVisible = false"
-          @success="editParent($event)"
-        >
-        </ParentEditor>
-
-        <ChildCreator
-          :show="createChildDialogFormVisible"
-          :parentMenus="menus"
-          @close="createChildDialogFormVisible = false"
-          @success="createChild($event)"
-        ></ChildCreator>
-
-        <ChildEditor
-          :show="editChildDialogFormVisible"
-          :data="tmp"
-          :parentMenus="menus"
-          @close="editChildDialogFormVisible = false"
-          @success="editChild($event)"
-        >
-        </ChildEditor>
-      </div>
+      <el-button @click="updateLocation">更新菜单排序</el-button>
     </div>
+
+    <ParentCreator
+      :show="createParentDialogFormVisible"
+      :parentMenus="menus"
+      @close="createParentDialogFormVisible = false"
+      @success="createParent($event)"
+    ></ParentCreator>
+
+    <ParentEditor
+      :show="editParentDialogFormVisible"
+      :data="tmp"
+      :parentMenus="menus"
+      @close="editParentDialogFormVisible = false"
+      @success="editParent($event)"
+    >
+    </ParentEditor>
+
+    <ChildCreator
+      :show="createChildDialogFormVisible"
+      :parentMenus="menus"
+      @close="createChildDialogFormVisible = false"
+      @success="createChild($event)"
+    ></ChildCreator>
+
+    <ChildEditor
+      :show="editChildDialogFormVisible"
+      :data="tmp"
+      :parentMenus="menus"
+      @close="editChildDialogFormVisible = false"
+      @success="editChild($event)"
+    >
+    </ChildEditor>
   </el-card>
 </template>
 
