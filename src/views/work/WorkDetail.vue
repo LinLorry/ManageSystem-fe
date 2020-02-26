@@ -181,28 +181,35 @@ export default {
     loadProcesses() {
       if (this.processPageNumber > this.processPageTotal) return;
 
+      const pageNumber = this.processPageNumber;
+
       let _this = this;
-      this.axios(
-        '/api/process?pageSize=5&pageNumber=' + this.processPageNumber
-      ).then(res => {
-        if (res.data.data) {
-          let processes = res.data.data.processes;
+      this.axios('/api/process?pageSize=5&pageNumber=' + pageNumber).then(
+        res => {
+          if (res.data.data) {
+            let processes = res.data.data.processes;
 
-          for (let workProcess of _this.workProcesses) {
-            const index = processes.findIndex(process => {
-              return process.id === workProcess.id;
-            });
+            for (let workProcess of _this.workProcesses) {
+              const index = processes.findIndex(process => {
+                return process.id === workProcess.id;
+              });
 
-            if (index !== -1) {
-              processes.splice(index, 1);
+              if (index !== -1) {
+                processes.splice(index, 1);
+              }
             }
-          }
 
-          _this.processes.push.apply(_this.processes, processes);
-          _this.processPageTotal = res.data.data.total;
-          _this.processPageNumber++;
+            if (pageNumber === 0) {
+              _this.processes = processes;
+            } else {
+              _this.processes.push.apply(_this.processes, processes);
+            }
+
+            _this.processPageTotal = res.data.data.total;
+            _this.processPageNumber++;
+          }
         }
-      });
+      );
     },
     addWorkProcesses(index) {
       const process = this.processes.splice(index, 1)[0];
@@ -238,7 +245,6 @@ export default {
               return first.sequenceNumber - second.sequenceNumber;
             });
             _this.workProcesses = workProcesses;
-            _this.processes.splice(0, _this.processes.length);
             _this.processPageNumber = 0;
             _this.loadProcesses();
           }
