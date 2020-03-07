@@ -29,9 +29,14 @@
           {{ menu.name }}
         </el-menu-item>
       </el-submenu>
+      <el-menu-item index="logout" @click="logout">
+        <i class="el-icon-s-fold"></i> <span slot="title">退出系统</span>
+      </el-menu-item>
     </el-menu>
     <div class="collapse" @click="isCollapse = !isCollapse">
-      <i class="el-icon-s-fold"></i>
+      <i
+        :class="[isCollapse ? 'el-icon-arrow-right' : 'el-icon-arrow-left']"
+      ></i>
     </div>
   </div>
 </template>
@@ -62,6 +67,16 @@ export default {
       menus.sort((first, second) => {
         return first.location - second.location;
       });
+    },
+    logout() {
+      localStorage.clear();
+      this.$message({
+        type: 'info',
+        message: '退出登陆成功',
+        showClose: true,
+        center: true
+      });
+      this.$router.replace('/login');
     }
   }
 };
