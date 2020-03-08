@@ -4,6 +4,8 @@ import VueRouter from 'vue-router';
 const Login = () => import('@/views/Login.vue');
 const Index = () => import('@/views/Index.vue');
 const Home = () => import('@/views/Home.vue');
+
+const User = () => import('@/views/admin/User');
 const Role = () => import('@/views/admin/Role.vue');
 const Menu = () => import('@/views/admin/Menu.vue');
 const WechatManage = () => import('@/views/admin/Wechat.vue');
@@ -37,6 +39,11 @@ export default new VueRouter({
           path: '/',
           name: 'home',
           component: Home
+        },
+        {
+          path: '/userManage',
+          name: 'user',
+          component: User
         },
         {
           path: '/roleManage',
