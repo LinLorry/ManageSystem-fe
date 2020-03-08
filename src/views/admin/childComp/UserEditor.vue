@@ -10,6 +10,17 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="user.name" autocomplete="off" />
       </el-form-item>
+      <el-form-item label="设置组别" prop="roles">
+        <el-checkbox-group v-model="user.roles" @change="rolesChange = true">
+          <el-checkbox
+            style="display:block"
+            v-for="item in roles"
+            :label="item.id"
+            :key="item.id"
+            >{{ item.name }}</el-checkbox
+          >
+        </el-checkbox-group>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="$emit('close')">取 消</el-button>
@@ -27,12 +38,24 @@ export default {
       user: {
         id: 0,
         username: '',
-        name: ''
+        name: '',
+        roles: []
       },
+      rolesChange: false,
+      roles: [],
       rules: {
         username: [{ required: true, message: '用户名不能为空' }]
       }
     };
+  },
+  created() {
+    let _this = this;
+    this.axios('/api/role').then(res => {
+      res.data.data.sort((first, second) => {
+        return first.id - second.id;
+      });
+      _this.roles = res.data.data;
+    });
   },
   methods: {
     submitForm(formName) {
@@ -40,7 +63,16 @@ export default {
         if (valid) {
           this.$emit('close');
 
-          const data = this.user;
+          let data = {
+            id: this.user.id,
+            username: this.user.username,
+            name: this.user.name
+          };
+
+          if (this.rolesChange) {
+            data.roles = this.user.roles;
+          }
+
           let _this = this;
           this.axios.post('/api/user', data).then(res => {
             _this.$message({
@@ -60,6 +92,21 @@ export default {
   watch: {
     data(newV) {
       Object.assign(this.user, newV);
+
+      let _this = this;
+
+      this.user.roles.splice(0, this.user.roles.length);
+      this.rolesChange = false;
+
+      this.axios('/api/user/authority?id=' + newV.id).then(res => {
+        res.data.data.sort((first, second) => {
+          return first.id - second.id;
+        });
+
+        for (const one of res.data.data) {
+          _this.user.roles.push(one.id);
+        }
+      });
     }
   }
 };
