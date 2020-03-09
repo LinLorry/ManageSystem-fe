@@ -15,32 +15,22 @@
         <el-breadcrumb-item>微信用户管理</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <div class="query-box">
-      <el-form
-        label-width="auto"
-        ref="queryFrom"
-        :model="queryForm"
-        :inline="true"
-      >
-        <el-form-item>
-          <el-input placeholder="微信用户ID" v-model="queryForm.id" clearable>
-          </el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-input
-            type="text"
-            placeholder="名字"
-            v-model="queryForm.name"
-            clearable
-          >
-          </el-input>
-        </el-form-item>
+    <el-form inline ref="queryForm" :model="queryForm">
+      <el-form-item style="width: 150px" prop="id">
+        <el-input placeholder="微信用户ID" v-model="queryForm.id" clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item style="width: 150px" prop="name">
+        <el-input placeholder="名字" v-model="queryForm.name" clearable>
+        </el-input>
+      </el-form-item>
 
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit">查询</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
+      <el-form-item>
+        <el-button type="primary" @click="submitQuery('queryForm')"
+          >查询</el-button
+        >
+      </el-form-item>
+    </el-form>
 
     <el-table stripe :data="wechatUsers" style="flex-grow: 1" height="use">
       <el-table-column fixed sortable prop="id" label="ID" />
@@ -64,14 +54,14 @@
     </el-table>
     <el-pagination
       background
+      hide-on-single-page
       :page-count="total"
       :page-sizes="[10, 20, 30, 40]"
       :page-size="pageSize"
       layout="sizes, prev, pager, next"
       @size-change="handleSizeChange"
       @current-change="handlePageNumberChange"
-    >
-    </el-pagination>
+    />
     <WechatUserSetter
       :show="setterDialogFormVisible"
       :data="tmp"
@@ -95,6 +85,10 @@ export default {
         id: '',
         name: ''
       },
+
+      queryId: '',
+      queryName: '',
+
       pageSize: 20,
       total: 0,
       pageNumber: 0,
@@ -109,6 +103,19 @@ export default {
     this.refreshData();
   },
   methods: {
+    submitQuery(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          const data = this.queryForm;
+          this.queryId = data.id;
+          this.queryName = data.name;
+
+          this.refreshData();
+        } else {
+          return false;
+        }
+      });
+    },
     handleSet(index) {
       this.editIndex = index;
       this.tmp = this.wechatUsers[index];
@@ -142,31 +149,45 @@ export default {
     },
     refreshData() {
       const _this = this;
-      const url =
-        '/api/wechat/user?pageSize=' +
-        this.pageSize +
-        '&pageNumber=' +
-        this.pageNumber;
-      this.axios.get(url).then(res => {
-        const data = res.data.data;
 
-        _this.pageSize = data.size;
-        _this.total = data.total;
-        _this.wechatUsers = data.wechatUsers;
-      });
+      let id = this.queryId;
+
+      if (id !== undefined && id !== null && id.length !== 0) {
+        this.axios.get('/api/wechat/user?id=' + id).then(res => {
+          const data = res.data.data;
+
+          if (data) {
+            _this.wechatUsers = [data];
+          } else {
+            _this.wechatUsers = [];
+          }
+
+          _this.total = 1;
+        });
+      } else {
+        let url =
+          '/api/wechat/user?pageSize=' +
+          this.pageSize +
+          '&pageNumber=' +
+          this.pageNumber;
+
+        const name = this.queryName;
+
+        if (name !== undefined && name !== null && name.length !== 0) {
+          url += '&name=' + name;
+        }
+
+        this.axios.get(url).then(res => {
+          const data = res.data.data;
+
+          _this.pageSize = data.size;
+          _this.total = data.total;
+          _this.wechatUsers = data.wechatUsers;
+        });
+      }
     }
   }
 };
 </script>
 
-<style>
-.query-box {
-  display: block;
-  width: 700px;
-  /* clear: both; */
-}
-
-.query-box .el-form-item {
-  width: 150px;
-}
-</style>
+<style></style>
