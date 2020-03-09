@@ -1,41 +1,25 @@
 <template>
   <el-dialog title="编辑子菜单" :visible="show" @close="$emit('close')">
-    <el-form
-      ref="wechatUser"
-      label-width="auto"
-      :rules="rules"
-      :model="wechatUser"
-    >
+    <el-form ref="user" label-width="auto" :model="user">
       <el-form-item label="ID">
-        <el-input disabled :value="wechatUser.id" autocomplete="off" />
+        <el-input disabled :value="wechatUserId" autocomplete="off" />
       </el-form-item>
 
-      <el-form-item v-if="nullUser" label="设置用户方式">
-        <el-radio-group v-model="createUser" size="small">
-          <el-radio-button :label="true">新建用户</el-radio-button>
-          <el-radio-button :label="false">从已有用户中设置</el-radio-button>
-        </el-radio-group>
+      <el-form-item label="用户ID">
+        <el-input disabled="" :value="user.id" />
       </el-form-item>
-
-      <el-form-item v-else label="禁用该用户">
-        <el-checkbox v-model="disable"></el-checkbox>
+      <el-form-item label="用户名" prop="username">
+        <el-input
+          v-model="user.username"
+          placeholder="用户名"
+          autocomplete="off"
+        />
       </el-form-item>
-
-      <div v-if="userInfo">
-        <el-form-item label="设置用户ID" prop="userId">
-          <el-input-number
-            controls-position="right"
-            v-model="wechatUser.userId"
-            autocomplete="off"
-          />
-        </el-form-item>
-        <el-form-item label="用户姓名">
-          <span>{{ userName }}</span>
-        </el-form-item>
-      </div>
-
+      <el-form-item label="姓名" prop="name">
+        <el-input v-model="user.name" placeholder="姓名" autocomplete="off" />
+      </el-form-item>
       <el-form-item label="设置组别" prop="roles">
-        <el-checkbox-group v-model="wechatUser.roles">
+        <el-checkbox-group v-model="user.roles" @change="rolesChange = true">
           <el-checkbox
             style="display:block"
             v-for="item in roles"
@@ -48,6 +32,10 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="$emit('close')">取 消</el-button>
+      <el-button v-if="user.disable" type="success" @click="enable"
+        >启用该用户</el-button
+      >
+      <el-button v-else type="danger" @click="disable">禁用该用户</el-button>
       <el-button type="primary" @click="submitForm">编辑</el-button>
     </div>
   </el-dialog>
@@ -58,38 +46,19 @@ export default {
   name: 'wechatUserSetter',
   props: ['show', 'data'],
   data() {
-    // TODO 后端查询用户接口尚未完成，等待完成后查询对应id用户是否存在
-    var checkUserId = (rule, value, callback) => {
-      callback();
-    };
-
     return {
-      wechatUser: {
+      wechatUserId: '',
+      user: {
         id: 0,
-        userId: 0,
+        username: '',
+        name: '',
+        disable: true,
         roles: []
       },
 
-      nullUser: false,
-      createUser: true,
+      rolesChange: false,
 
-      disable: false,
-
-      userName: '',
-      roles: [],
-      rules: {
-        userId: [
-          {
-            required: !this.createUser,
-            message: '请输入用户ID',
-            trigger: 'blur'
-          },
-          {
-            validator: checkUserId,
-            trigger: 'blur'
-          }
-        ]
-      }
+      roles: []
     };
   },
   created() {
@@ -103,71 +72,89 @@ export default {
   },
   methods: {
     submitForm() {
-      this.$refs.wechatUser.validate(valid => {
-        if (valid) {
-          this.$emit('close');
+      this.$emit('close');
 
-          let data = {
-            id: this.wechatUser.id
-          };
+      let data = {
+        id: this.user.id,
+        username: this.user.username,
+        name: this.user.name
+      };
 
-          if (this.nullUser) {
-            if (!this.createUser) {
-              data.userId = this.wechatUser.userId;
-            }
-            data.roles = this.wechatUser.roles;
-          } else {
-            if (this.disable) {
-              data.disable = true;
-            } else {
-              data.userId = this.wechatUser.userId;
-              data.roles = this.wechatUser.roles;
-            }
-          }
-
-          let _this = this;
-
-          this.axios.post('/api/wechat/user', data).then(res => {
-            _this.$message({
-              message: res.data.message,
-              type: 'success',
-              showClose: true,
-              center: true
-            });
-            _this.$emit('success', res.data.data);
-          });
-        } else {
-          return false;
-        }
-      });
-    }
-  },
-  computed: {
-    userInfo() {
-      if (this.nullUser) {
-        return !this.createUser;
-      } else {
-        return true;
+      if (this.rolesChange) {
+        data.roles = this.user.roles;
       }
+
+      let _this = this;
+      this.axios.post('/api/user', data).then(res => {
+        _this.$message({
+          message: res.data.message,
+          type: 'success',
+          showClose: true,
+          center: true
+        });
+        _this.$emit('success', res.data.data);
+      });
+    },
+    enable() {
+      let data = this.user;
+      let _this = this;
+
+      _this.axios
+        .post('/api/user/disable', {
+          id: data.id,
+          operation: false
+        })
+        .then(res => {
+          _this.user.disable = false;
+          _this.$message({
+            message: res.data.message,
+            type: 'success',
+            showClose: true,
+            center: true
+          });
+        });
+    },
+    disable() {
+      let data = this.user;
+      let _this = this;
+
+      _this.axios
+        .post('/api/user/disable', {
+          id: data.id,
+          operation: true
+        })
+        .then(res => {
+          _this.user.disable = true;
+          _this.$message({
+            message: res.data.message,
+            type: 'success',
+            showClose: true,
+            center: true
+          });
+        });
     }
   },
   watch: {
     data(newV) {
-      this.wechatUser.id = newV.id;
-      this.disable = false;
+      this.wechatUserId = newV.id;
+
+      this.user.roles.splice(0, this.user.roles.length);
+      this.rolesChange = false;
 
       if (newV.user) {
-        // TODO 用户权限查询接口开放后实时显示用户权限
-        this.nullUser = false;
-        this.createUser = false;
-        this.wechatUser.userId = newV.user.id;
-        this.userName = newV.user.name;
-      } else {
-        this.nullUser = true;
-        this.createUser = true;
-        this.wechatUser.roles.splice(0, this.wechatUser.roles.length);
-        this.wechatUser.userId = 0;
-        this.userName = null;
+        const user = newV.user;
+        Object.assign(this.user, user);
+        let _this = this;
+
+        this.axios('/api/user/authority?id=' + user.id).then(res => {
+          res.data.data.sort((first, second) => {
+            return first.id - second.id;
+          });
+
+          for (const one of res.data.data) {
+            _this.user.roles.push(one.id);
+          }
+        });
       }
     }
   }

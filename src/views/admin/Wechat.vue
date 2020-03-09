@@ -46,8 +46,18 @@
       />
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleSet(scope.$index)"
+          <el-button
+            v-if="wechatUsers[scope.$index].user"
+            size="mini"
+            @click="handleSet(scope.$index)"
             >编辑</el-button
+          >
+          <el-button
+            v-else
+            type="info"
+            size="mini"
+            @click="createUser(scope.$index)"
+            >启用</el-button
           >
         </template>
       </el-table-column>
@@ -114,6 +124,19 @@ export default {
         } else {
           return false;
         }
+      });
+    },
+    createUser(index) {
+      const data = this.wechatUsers[index];
+      let _this = this;
+      this.axios.post('/api/wechat/user/enable', { id: data.id }).then(res => {
+        _this.$message({
+          message: res.data.message,
+          type: 'success',
+          showClose: true,
+          center: true
+        });
+        Object.assign(_this.wechatUsers[index], res.data.data);
       });
     },
     handleSet(index) {
