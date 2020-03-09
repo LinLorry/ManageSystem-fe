@@ -44,23 +44,31 @@
       <el-table-column fixed sortable prop="name" label="名字" />
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index)"
-            >编辑</el-button
-          >
-          <el-button
-            size="mini"
-            v-if="users[scope.$index].disable"
-            type="success"
-            @click="enable(scope.$index)"
-            >启用</el-button
-          >
-          <el-button
-            size="mini"
-            v-else
-            type="danger"
-            @click="disable(scope.$index)"
-            >禁用</el-button
-          >
+          <el-button-group>
+            <el-button size="mini" @click="handleEdit(scope.$index)"
+              >编辑</el-button
+            >
+            <el-button
+              size="mini"
+              v-if="users[scope.$index].disable"
+              type="success"
+              @click="enable(scope.$index)"
+              >启用</el-button
+            >
+            <el-button
+              size="mini"
+              v-else
+              type="danger"
+              @click="disable(scope.$index)"
+              >禁用</el-button
+            >
+            <el-button
+              type="info"
+              size="mini"
+              @click="resetPassword(scope.$index)"
+              >重置密码</el-button
+            >
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
@@ -84,6 +92,33 @@
       @close="editDialogFormVisible = false"
       @success="editSuccess($event)"
     />
+
+    <el-dialog
+      title="重置用户密码"
+      :visible.sync="resetPasswordDialogVisible"
+      width="450px"
+    >
+      <el-form
+        hide-required-asterisk
+        ref="resetPasswordInfo"
+        :model="resetPasswordInfo"
+        :rules="resetPasswordRules"
+      >
+        <el-form-item label="用户ID：">
+          <el-input disabled="" v-model="resetPasswordInfo.id" />
+        </el-form-item>
+        <el-form-item label="新密码" prop="password">
+          <el-input
+            v-model="resetPasswordInfo.password"
+            placeholder="新密码"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="resetPasswordDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleResetPassword">确 定</el-button>
+      </span>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -121,7 +156,11 @@ export default {
       users: [],
       createDialogFormVisible: false,
       editDialogFormVisible: false,
-      editRolesDialogFormVisible: false,
+      resetPasswordDialogVisible: false,
+      resetPasswordInfo: {
+        id: 0,
+        password: ''
+      },
       editIndex: 0,
       rules: {
         id: [
@@ -130,6 +169,9 @@ export default {
             trigger: 'blur'
           }
         ]
+      },
+      resetPasswordRules: {
+        password: [{ required: true, message: '密码不能为空' }]
       }
     };
   },
@@ -229,6 +271,31 @@ export default {
             message: '已取消禁用'
           });
         });
+    },
+    resetPassword(index) {
+      this.resetPasswordInfo.id = this.users[index].id;
+      this.resetPasswordDialogVisible = true;
+    },
+    handleResetPassword() {
+      let _this = this;
+      this.$refs.resetPasswordInfo.validate(valid => {
+        if (valid) {
+          _this.resetPasswordDialogVisible = false;
+          let data = _this.resetPasswordInfo;
+
+          _this.axios.post('/api/user/password', data).then(res => {
+            _this.$message({
+              message: res.data.message,
+              type: 'success',
+              showClose: true,
+              center: true
+            });
+            _this.$emit('success', res.data.data);
+          });
+        } else {
+          return false;
+        }
+      });
     },
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
