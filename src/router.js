@@ -16,6 +16,8 @@ const Work = () => import('@/views/work/Work.vue');
 const WorkDetail = () => import('@/views/work/WorkDetail');
 const Process = () => import('@/views/work/Process');
 
+const Worker = () => import('@/views/worker/Worker');
+
 Vue.use(VueRouter);
 
 export default new VueRouter({
@@ -73,6 +75,11 @@ export default new VueRouter({
           path: '/processManage',
           name: 'process',
           component: Process
+        },
+        {
+          path: '/workerProcessManage',
+          name: 'workProcess',
+          component: Worker
         }
       ]
     },
