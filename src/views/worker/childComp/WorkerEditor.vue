@@ -60,6 +60,9 @@
       <el-button v-if="processChange" type="primary" @click="updateProcesses"
         >更新工序</el-button
       >
+      <el-button v-if="isNotWorker" type="primary" @click="setWorker"
+        >设置为生产人员</el-button
+      >
       <el-button type="primary" @click="updateUserInfo">编辑</el-button>
     </div>
   </el-dialog>
@@ -76,6 +79,8 @@ export default {
         name: '',
         processes: []
       },
+
+      isNotWorker: false,
 
       tmpProcesses: [],
       newProcesses: [],
@@ -109,6 +114,17 @@ export default {
   },
   methods: {
     addProcesses() {
+      if (this.isNotWorker) {
+        this.$message({
+          message: '该用户还不是生产人员，请先设置为生产人员再进行工序操作',
+          type: 'error',
+          showClose: true,
+          center: true
+        });
+
+        return;
+      }
+
       this.processChange = true;
 
       this.user.processes.push.apply(this.user.processes, this.newProcesses);
@@ -125,6 +141,17 @@ export default {
       this.newProcesses.splice(0, this.newProcesses.length);
     },
     wipeOffProcess(index) {
+      if (this.isNotWorker) {
+        this.$message({
+          message: '该用户还不是生产人员，请先设置为生产人员再进行工序操作',
+          type: 'error',
+          showClose: true,
+          center: true
+        });
+
+        return;
+      }
+
       this.processChange = true;
       const id = this.user.processes[index];
 
@@ -134,6 +161,24 @@ export default {
         })
       );
       this.user.processes.splice(index, 1);
+    },
+    setWorker() {
+      let _this = this;
+      this.axios
+        .post('/api/worker/set', {
+          id: this.user.id,
+          operation: true
+        })
+        .then(res => {
+          _this.isNotWorker = false;
+
+          _this.$message({
+            message: res.data.message,
+            type: 'success',
+            showClose: true,
+            center: true
+          });
+        });
     },
     updateUserInfo() {
       let data = {
@@ -194,6 +239,10 @@ export default {
             _this.tmpProcesses.push(process);
           }
         }
+      });
+
+      this.axios('/api/worker/check?id=' + newV.id).then(res => {
+        _this.isNotWorker = !res.data.data;
       });
     }
   }
