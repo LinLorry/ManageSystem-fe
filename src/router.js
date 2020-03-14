@@ -34,6 +34,22 @@ export default new VueRouter({
       component: WechatLogin
     },
     {
+      path: '/worker',
+      component: Index,
+      children: [
+        {
+          path: 'workerManage',
+          name: 'worker',
+          component: Worker
+        },
+        {
+          path: 'wechatWorkerManage',
+          name: 'wechatWorker',
+          component: WechatWorker
+        }
+      ]
+    },
+    {
       path: '/',
       component: Index,
       redirect: 'home',
@@ -76,16 +92,6 @@ export default new VueRouter({
           path: '/processManage',
           name: 'process',
           component: Process
-        },
-        {
-          path: '/workerProcessManage',
-          name: 'workProcess',
-          component: Worker
-        },
-        {
-          path: '/wechatWorkerManage',
-          name: 'wechatWorker',
-          component: WechatWorker
         }
       ]
     },

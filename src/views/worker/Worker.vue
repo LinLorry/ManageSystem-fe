@@ -55,7 +55,7 @@
 import WorkerEditor from '@/views/worker/childComp/WorkerEditor';
 
 export default {
-  name: 'WorkerProcess',
+  name: 'Worker',
   components: {
     WorkerEditor
   },
