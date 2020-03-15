@@ -1,6 +1,9 @@
 <template>
-  <el-dialog title="新建生产流程" :visible="show" v-on:close="$emit('close')">
-    <el-form :model="work" label-width="auto" ref="work" :rules="rules">
+  <el-dialog title="编辑生产流程" :visible="show" v-on:close="$emit('close')">
+    <el-form :model="work" label-width="60px" ref="work" :rules="rules">
+      <el-form-item label="ID" prop="id">
+        <el-input disabled :value="work.id" />
+      </el-form-item>
       <el-form-item label="名称" prop="name">
         <el-input
           placeholder="请输入名称"
@@ -16,9 +19,10 @@
         ></el-input>
       </el-form-item>
     </el-form>
+
     <div slot="footer">
       <el-button @click="$emit('close')">取 消</el-button>
-      <el-button type="primary" @click="submitForm('work')">创建</el-button>
+      <el-button type="primary" @click="submitForm('work')">更新</el-button>
     </div>
   </el-dialog>
 </template>
@@ -26,13 +30,15 @@
 <script>
 export default {
   name: 'workCreator',
-  props: ['show'],
+  props: ['show', 'data'],
   data: function() {
     return {
       work: {
+        id: 0,
         name: '',
         comment: ''
       },
+
       rules: {
         name: [
           {
@@ -47,9 +53,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$emit('close');
-
           const data = this.work;
+
           let _this = this;
           this.axios.post('/api/work', data).then(res => {
             _this.$message({
@@ -64,6 +69,11 @@ export default {
           return false;
         }
       });
+    }
+  },
+  watch: {
+    data(newV) {
+      Object.assign(this.work, newV);
     }
   }
 };
