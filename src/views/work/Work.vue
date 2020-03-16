@@ -60,7 +60,7 @@
       <div class="create-box">
         <el-button
           style="display: inline-block;"
-          @click="$router.push('/work/create')"
+          @click="$router.push('/work/createWork')"
           >新建</el-button
         >
       </div>
