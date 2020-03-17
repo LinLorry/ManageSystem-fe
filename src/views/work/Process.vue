@@ -98,12 +98,6 @@
           <el-button size="mini" @click="handleEdit(scope.$index)"
             >编辑</el-button
           >
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.$index)"
-            >删除</el-button
-          >
         </template>
       </el-table-column>
     </el-table>
@@ -194,34 +188,6 @@ export default {
       });
 
       this.processes.splice(index, 0, data);
-    },
-    handleDelete(index) {
-      const _this = this;
-
-      this.$confirm('此操作将永久删除该工序, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          _this.axios
-            .delete('/api/process?id=' + _this.processes[index].id)
-            .then(res => {
-              _this.$message({
-                message: res.data.message,
-                type: 'success',
-                showClose: true,
-                center: true
-              });
-              _this.processes.splice(index, 1);
-            });
-        })
-        .catch(() => {
-          _this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
     },
     submitQuery(formName) {
       this.$refs[formName].validate(valid => {
