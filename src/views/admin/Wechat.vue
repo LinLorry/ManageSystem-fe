@@ -47,16 +47,16 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
-            v-if="wechatUsers[scope.$index].user"
+            v-if="scope.row.user"
             size="mini"
-            @click="handleSet(scope.$index)"
+            @click="handleSet(scope.row.id)"
             >编辑</el-button
           >
           <el-button
             v-else
             type="info"
             size="mini"
-            @click="createUser(scope.$index)"
+            @click="createUser(scope.row.id)"
             >启用</el-button
           >
         </template>
@@ -74,7 +74,7 @@
     />
     <WechatUserSetter
       :show="setterDialogFormVisible"
-      :data="tmp"
+      :data="wechatUsers[editIndex]"
       @close="setterDialogFormVisible = false"
       @success="setSuccess($event)"
     />
@@ -105,8 +105,7 @@ export default {
 
       wechatUsers: [],
       setterDialogFormVisible: false,
-      editIndex: 0,
-      tmp: {}
+      editIndex: 0
     };
   },
   created() {
@@ -126,7 +125,10 @@ export default {
         }
       });
     },
-    createUser(index) {
+    createUser(id) {
+      const index = this.wechatUsers.findIndex(u => {
+        return u.id === id;
+      });
       const data = this.wechatUsers[index];
       let _this = this;
       this.axios.post('/api/wechat/user/enable', { id: data.id }).then(res => {
@@ -139,17 +141,15 @@ export default {
         Object.assign(_this.wechatUsers[index], res.data.data);
       });
     },
-    handleSet(index) {
-      this.editIndex = index;
-      this.tmp = this.wechatUsers[index];
+    handleSet(id) {
+      this.editIndex = this.wechatUsers.findIndex(u => {
+        return u.id === id;
+      });
+
       this.setterDialogFormVisible = true;
     },
     setSuccess(data) {
-      this.wechatUsers.splice(
-        this.wechatUsers.findIndex(one => one.id === data.id),
-        1,
-        data
-      );
+      this.wechatUsers[this.editIndex].user = data;
     },
     sexFormatter(row, column, sex) {
       if (sex) {

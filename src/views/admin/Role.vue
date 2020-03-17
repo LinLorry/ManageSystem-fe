@@ -89,13 +89,13 @@
       />
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index)"
+          <el-button size="mini" @click="handleEdit(scope.row.id)"
             >编辑</el-button
           >
           <el-button
             size="mini"
             type="danger"
-            @click="handleDelete(scope.$index)"
+            @click="handleDelete(scope.row.id)"
             >删除</el-button
           >
         </template>
@@ -147,12 +147,13 @@ export default {
     });
   },
   methods: {
-    handleEdit(index) {
-      this.editIndex = index;
-      this.tmp = this.roles[index];
+    handleEdit(id) {
+      this.tmp = this.roles.find(r => {
+        return r.id === id;
+      });
       this.editDialogFormVisible = true;
     },
-    handleDelete(index) {
+    handleDelete(id) {
       let _this = this;
       this.$confirm('此操作将永久删除该权限, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -160,17 +161,20 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          _this.axios
-            .delete('/api/role?id=' + _this.roles[index].id)
-            .then(res => {
-              _this.$message({
-                message: res.data.message,
-                type: 'success',
-                showClose: true,
-                center: true
-              });
-              _this.roles.splice(index, 1);
+          _this.axios.delete('/api/role?id=' + id).then(res => {
+            _this.$message({
+              message: res.data.message,
+              type: 'success',
+              showClose: true,
+              center: true
             });
+            _this.roles.splice(
+              _this.roles.findIndex(r => {
+                return r.id === id;
+              }),
+              1
+            );
+          });
         })
         .catch(() => {
           _this.$message({
@@ -180,10 +184,12 @@ export default {
         });
     },
     editSuccess(data) {
-      let role = this.roles[this.editIndex];
-      for (const i in role) {
-        role[i] = data[i];
-      }
+      Object.assign(
+        this.roles.find(r => {
+          return r.id === data.id;
+        }),
+        data
+      );
     },
     timeFormatter(row, column, cellValue) {
       return new Date(cellValue).toLocaleDateString();

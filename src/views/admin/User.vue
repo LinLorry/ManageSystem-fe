@@ -45,27 +45,27 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button-group>
-            <el-button size="mini" @click="handleEdit(scope.$index)"
+            <el-button size="mini" @click="handleEdit(scope.row.id)"
               >编辑</el-button
             >
             <el-button
               size="mini"
-              v-if="users[scope.$index].disable"
+              v-if="scope.row.disable"
               type="success"
-              @click="enable(scope.$index)"
+              @click="enable(scope.row.id)"
               >启用</el-button
             >
             <el-button
               size="mini"
               v-else
               type="danger"
-              @click="disable(scope.$index)"
+              @click="disable(scope.row.id)"
               >禁用</el-button
             >
             <el-button
               type="info"
               size="mini"
-              @click="resetPassword(scope.$index)"
+              @click="resetPassword(scope.row.id)"
               >重置密码</el-button
             >
           </el-button-group>
@@ -193,14 +193,19 @@ export default {
         }
       });
     },
-    handleEdit(index) {
-      this.editIndex = index;
+    handleEdit(id) {
+      this.editIndex = this.users.findIndex(u => {
+        return u.id === id;
+      });
       this.editDialogFormVisible = true;
     },
     editSuccess(data) {
       Object.assign(this.users[this.editIndex], data);
     },
-    enable(index) {
+    enable(id) {
+      const index = this.users.findIndex(u => {
+        return u.id === id;
+      });
       let data = this.users[index];
       let _this = this;
 
@@ -236,7 +241,10 @@ export default {
           });
         });
     },
-    disable(index) {
+    disable(id) {
+      const index = this.users.findIndex(u => {
+        return u.id === id;
+      });
       let data = this.users[index];
       let _this = this;
 
@@ -272,8 +280,8 @@ export default {
           });
         });
     },
-    resetPassword(index) {
-      this.resetPasswordInfo.id = this.users[index].id;
+    resetPassword(id) {
+      this.resetPasswordInfo.id = id;
       this.resetPasswordDialogVisible = true;
     },
     handleResetPassword() {
