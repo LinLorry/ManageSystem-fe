@@ -91,7 +91,13 @@
 
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.row.id)"
+          <el-button
+            size="mini"
+            @click="
+              $router.push({
+                path: '/work/workDetail/' + scope.row.id
+              })
+            "
             >编辑</el-button
           >
         </template>
@@ -107,28 +113,12 @@
       @size-change="handleSizeChange"
       @current-change="handlePageNumberChange"
     />
-
-    <WorkEditor
-      :data="
-        works.find(w => {
-          return w.id === editId;
-        })
-      "
-      :show="editDialogFormVisible"
-      @close="editDialogFormVisible = false"
-      @success="editSuccess($event)"
-    />
   </el-card>
 </template>
 
 <script>
-import WorkEditor from './childComp/WorkEditor';
-
 export default {
   name: 'workManage',
-  components: {
-    WorkEditor
-  },
   data() {
     let checkId = (rule, value, callback) => {
       if (isNaN(Number(value))) {
@@ -153,8 +143,7 @@ export default {
       pageNumber: 0,
 
       works: [],
-      editDialogFormVisible: false,
-      editId: 0,
+
       rules: {
         id: [
           {
@@ -169,18 +158,6 @@ export default {
     this.refreshData();
   },
   methods: {
-    handleEdit(id) {
-      this.editId = id;
-      this.editDialogFormVisible = true;
-    },
-    editSuccess(data) {
-      Object.assign(
-        this.works.find(w => {
-          return w.id === this.editId;
-        }),
-        data
-      );
-    },
     submitQuery(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
