@@ -95,7 +95,7 @@
 
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index)"
+          <el-button size="mini" @click="handleEdit(scope.row.id)"
             >编辑</el-button
           >
         </template>
@@ -178,16 +178,18 @@ export default {
     this.refreshData();
   },
   methods: {
-    handleEdit(index) {
+    handleEdit(id) {
       this.editDialogFormVisible = true;
-      this.tmp = this.processes[index];
+      this.tmp = this.processes.find(p => {
+        return p.id === id;
+      });
     },
     editSuccess(data) {
       const index = this.processes.findIndex(process => {
         return process.id === data.id;
       });
 
-      this.processes.splice(index, 0, data);
+      this.processes.splice(index, 1, data);
     },
     submitQuery(formName) {
       this.$refs[formName].validate(valid => {
