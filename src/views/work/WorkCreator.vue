@@ -10,7 +10,7 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>生产管理</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/workManage' }"
+        <el-breadcrumb-item :to="{ path: '/work/workManage' }"
           >生产流程管理</el-breadcrumb-item
         >
         <el-breadcrumb-item>生产流程详情</el-breadcrumb-item>
@@ -67,7 +67,7 @@
         style="text-align: center; margin: 30px 0"
       >
         <span style="size: 14px; line-height: 1.5; color: #909399"
-          >还没有添加工序</span
+          >还没有流程工序</span
         >
       </div>
       <div v-else>
@@ -211,7 +211,6 @@ export default {
     },
     create() {
       this.$refs.work.validate(valid => {
-        console.log(valid);
         if (valid) {
           let data = {
             name: this.work.name,
@@ -223,12 +222,9 @@ export default {
             data.processes.push(process.id);
           }
 
-          console.log(data);
-
           let _this = this;
 
           this.axios.post('/api/work', data).then(res => {
-            console.log(res.data.data);
             _this.$message({
               message: res.data.message,
               type: 'success',
