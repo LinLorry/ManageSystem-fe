@@ -31,6 +31,32 @@ export default new VueRouter({
       component: Login
     },
     {
+      path: '/admin',
+      component: Index,
+      children: [
+        {
+          path: 'userManage',
+          name: 'user',
+          component: User
+        },
+        {
+          path: 'roleManage',
+          name: 'role',
+          component: Role
+        },
+        {
+          path: 'wechatManage',
+          name: 'wechat',
+          component: WechatManage
+        },
+        {
+          path: 'menuManage',
+          name: 'menu',
+          component: Menu
+        }
+      ]
+    },
+    {
       path: '/wechat/login',
       component: WechatLogin
     },
@@ -84,26 +110,6 @@ export default new VueRouter({
           path: '/',
           name: 'home',
           component: Home
-        },
-        {
-          path: '/userManage',
-          name: 'user',
-          component: User
-        },
-        {
-          path: '/roleManage',
-          name: 'role',
-          component: Role
-        },
-        {
-          path: '/menuManage',
-          name: 'menu',
-          component: Menu
-        },
-        {
-          path: '/wechatManage',
-          name: 'wechat',
-          component: WechatManage
         }
       ]
     },
