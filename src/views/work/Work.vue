@@ -60,7 +60,7 @@
       <div class="create-box">
         <el-button
           style="display: inline-block;"
-          @click="createDialogFormVisible = true"
+          @click="$router.push('/work/createWork')"
           >新建</el-button
         >
       </div>
@@ -93,14 +93,12 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="$router.push({ path: '/work/' + works[scope.$index].id })"
+            @click="
+              $router.push({
+                path: '/work/workDetail/' + scope.row.id
+              })
+            "
             >编辑</el-button
-          >
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.$index)"
-            >删除</el-button
           >
         </template>
       </el-table-column>
@@ -115,22 +113,12 @@
       @size-change="handleSizeChange"
       @current-change="handlePageNumberChange"
     />
-
-    <WorkCreator
-      :show="createDialogFormVisible"
-      @close="createDialogFormVisible = false"
-    />
   </el-card>
 </template>
 
 <script>
-import WorkCreator from './childComp/WorkCreator';
-
 export default {
   name: 'workManage',
-  components: {
-    WorkCreator
-  },
   data() {
     let checkId = (rule, value, callback) => {
       if (isNaN(Number(value))) {
@@ -155,9 +143,7 @@ export default {
       pageNumber: 0,
 
       works: [],
-      createDialogFormVisible: false,
-      editIndex: 0,
-      tmp: {},
+
       rules: {
         id: [
           {
@@ -172,34 +158,6 @@ export default {
     this.refreshData();
   },
   methods: {
-    handleDelete(index) {
-      const _this = this;
-
-      this.$confirm('此操作将永久删除该生产流程, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          _this.axios
-            .delete('/api/work?id=' + _this.works[index].id)
-            .then(res => {
-              _this.$message({
-                message: res.data.message,
-                type: 'success',
-                showClose: true,
-                center: true
-              });
-              _this.works.splice(index, 1);
-            });
-        })
-        .catch(() => {
-          _this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-    },
     submitQuery(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
