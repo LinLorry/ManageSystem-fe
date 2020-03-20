@@ -21,6 +21,7 @@ const Worker = () => import('@/views/worker/Worker');
 const WechatWorker = () => import('@/views/worker/WechatWorker');
 
 const ProductCreator = () => import('@/views/product/Creator');
+const ProductDetail = () => import('@/views/product/Detail');
 
 Vue.use(VueRouter);
 
@@ -111,6 +112,11 @@ export default new VueRouter({
           path: 'create',
           name: 'createProduct',
           component: ProductCreator
+        },
+        {
+          path: 'detail/:id',
+          name: 'productDetail',
+          component: ProductDetail
         }
       ]
     },
