@@ -158,7 +158,7 @@ export default {
               showClose: true,
               center: true
             });
-            _this.$router.push('/product/productManage');
+            _this.$router.push('/product/unComplete');
           });
         } else {
           return false;
