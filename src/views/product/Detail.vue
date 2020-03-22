@@ -10,6 +10,14 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>订单管理</el-breadcrumb-item>
+        <el-breadcrumb-item
+          v-if="product.complete"
+          :to="{ path: '/product/complete' }"
+          >已完成订单</el-breadcrumb-item
+        >
+        <el-breadcrumb-item v-else :to="{ path: '/product/unComplete' }"
+          >未完成订单</el-breadcrumb-item
+        >
         <el-breadcrumb-item>订单详情</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
