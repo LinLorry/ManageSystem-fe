@@ -23,6 +23,7 @@ const WechatWorker = () => import('@/views/worker/WechatWorker');
 const ProductCreator = () => import('@/views/product/Creator');
 const ProductDetail = () => import('@/views/product/Detail');
 const UnCompleteProduct = () => import('@/views/product/Product');
+const CompleteProduct = () => import('@/views/product/CompleteProduct');
 
 Vue.use(VueRouter);
 
@@ -123,6 +124,11 @@ export default new VueRouter({
           path: 'unComplete',
           name: 'unCompleteProductManage',
           component: UnCompleteProduct
+        },
+        {
+          path: 'complete',
+          name: 'completeProductManage',
+          component: CompleteProduct
         }
       ]
     },
