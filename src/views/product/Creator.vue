@@ -16,7 +16,7 @@
         <el-breadcrumb-item>创建订单</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-card>
+    <el-card style="margin-bottom: 20px;">
       <div slot="header">
         <span>创建订单</span>
       </div>
@@ -78,6 +78,7 @@
             style="padding-right: 20px;"
             v-model="product.workId"
             placeholder="请选择生产流程"
+            @change="selectWork"
           >
             <el-option
               v-for="item in works"
@@ -92,6 +93,26 @@
           <el-button type="primary" @click="create">创建</el-button>
         </div>
       </el-form>
+    </el-card>
+    <el-card v-if="product.workId">
+      <div slot="header">
+        <span>流程工序信息</span>
+      </div>
+
+      <el-timeline style="padding-left: 20px">
+        <el-timeline-item v-for="process in processes" :key="process.id">
+          <el-card
+            body-style="
+                display: flex;
+                justify-content: space-between;
+              "
+          >
+            <span style="display: inline-block; width: 150px;">
+              {{ process.name }}
+            </span>
+          </el-card>
+        </el-timeline-item>
+      </el-timeline>
     </el-card>
   </el-card>
 </template>
@@ -117,6 +138,7 @@ export default {
       },
 
       works: [],
+      processes: [],
 
       rules: {
         serial: [{ required: true, message: '序号不能为空' }],
@@ -146,11 +168,28 @@ export default {
     this.axios(url + pageNumber).then(callback);
   },
   methods: {
+    selectWork(id) {
+      let processes = this.processes;
+
+      let work = this.works.find(w => {
+        return w.id === id;
+      });
+
+      if (work.processes) {
+        processes.splice(0, processes.length);
+        processes.push.apply(processes, work.processes);
+      } else {
+        this.axios('/api/work/processes?id=' + work.id).then(res => {
+          work.processes = res.data.data;
+          processes.splice(0, processes.length);
+          processes.push.apply(processes, res.data.data);
+        });
+      }
+    },
     create() {
       this.$refs.product.validate(valid => {
         if (valid) {
           let data = this.product;
-          console.log(data);
 
           let _this = this;
 
