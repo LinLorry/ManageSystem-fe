@@ -17,62 +17,63 @@
     </div>
 
     <div class="toolbar">
+      <div class="button-box">
+        <el-button-group>
+          <el-button @click="loadAll">所有</el-button>
+          <el-button @click="loadTodayCreate">今天创建</el-button>
+          <el-button @click="loadEnd(0)">今天出货</el-button>
+          <el-button @click="loadEnd(1)">明天出货</el-button>
+          <el-button @click="loadEnd(2)">后天出货</el-button>
+        </el-button-group>
+        <el-button-group>
+          <el-button @click="$router.push('/product/create')">新建</el-button>
+        </el-button-group>
+      </div>
       <div class="query-box">
-        <el-form
-          label-position="top"
-          label-width="auto"
-          ref="queryForm"
-          :model="queryForm"
-          :inline="true"
-        >
-          <el-form-item label="序号" prop="serial">
+        <el-form ref="queryForm" :model="queryForm" :inline="true">
+          <el-form-item prop="serial">
             <el-input
               v-model="queryForm.serial"
-              placeholder="订单序号"
+              placeholder="序号"
               autocomplete="off"
             />
           </el-form-item>
-          <el-form-item label="下单日期" prop="beginTime">
+          <el-form-item label="" prop="beginTime">
             <el-date-picker
               unlink-panels
               v-model="queryForm.beginTime"
               type="daterange"
               range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
+              start-placeholder="下单日期范围开始"
+              end-placeholder="下单日期范围结束"
               :editable="false"
             />
           </el-form-item>
-          <el-form-item label="需求日期" prop="demandTime">
+          <el-form-item prop="demandTime">
             <el-date-picker
               unlink-panels
               v-model="queryForm.demandTime"
               type="daterange"
               range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
+              start-placeholder="需求日期范围开始"
+              end-placeholder="需求日期范围结束"
               :editable="false"
             />
           </el-form-item>
-          <el-form-item label="出货日期" prop="endTime">
+          <el-form-item prop="endTime">
             <el-date-picker
               unlink-panels
               v-model="queryForm.endTime"
               type="daterange"
               range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
+              start-placeholder="出货日期范围开始"
+              end-placeholder="出货日期范围结束"
               :editable="false"
             />
           </el-form-item>
 
           <el-form-item>
             <el-button type="primary" @click="submitQuery">查询</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="$router.push('/product/create')"
-              >新建</el-button
-            >
           </el-form-item>
         </el-form>
       </div>
@@ -156,6 +157,12 @@ export default {
         endTimeBefore: ''
       },
 
+      select: {
+        accord: 0,
+        create: false,
+        end: false
+      },
+
       total: 0,
 
       products: [],
@@ -167,6 +174,26 @@ export default {
     this.refreshData();
   },
   methods: {
+    loadAll() {
+      this.select.create = false;
+      this.select.end = false;
+      this.tmp.pageNumber = 0;
+      this.refreshData();
+    },
+    loadTodayCreate() {
+      this.select.create = true;
+      this.select.end = false;
+      this.select.accord = 0;
+      this.tmp.pageNumber = 0;
+      this.refreshData();
+    },
+    loadEnd(num) {
+      this.select.create = false;
+      this.select.end = true;
+      this.select.accord = num;
+      this.tmp.pageNumber = 0;
+      this.refreshData();
+    },
     submitQuery() {
       this.$refs.queryForm.validate(valid => {
         if (valid) {
@@ -203,8 +230,6 @@ export default {
           }
 
           this.tmp.pageNumber = 0;
-
-          console.log(this.tmp);
           this.refreshData();
         } else {
           return false;
@@ -213,6 +238,7 @@ export default {
     },
     handleSizeChange(pageSize) {
       this.tmp.pageSize = pageSize;
+      this.tmp.pageNumber = 0;
       this.refreshData();
     },
     handlePageNumberChange(pageNumber) {
@@ -222,11 +248,16 @@ export default {
     refreshData() {
       let _this = this;
       const data = this.tmp;
+      const select = this.select;
 
       let params = {};
 
       Object.keys(data).forEach(key => {
         params[key] = data[key];
+      });
+
+      Object.keys(select).forEach(key => {
+        params[key] = select[key];
       });
 
       this.axios
@@ -253,7 +284,14 @@ export default {
 <style>
 .toolbar {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.button-box {
+  display: flex;
   justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .query-box {

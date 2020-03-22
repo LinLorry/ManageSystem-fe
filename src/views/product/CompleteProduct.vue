@@ -18,50 +18,44 @@
 
     <div class="toolbar">
       <div class="query-box">
-        <el-form
-          label-position="top"
-          label-width="auto"
-          ref="queryForm"
-          :model="queryForm"
-          :inline="true"
-        >
-          <el-form-item label="序号" prop="serial">
+        <el-form ref="queryForm" :model="queryForm" :inline="true">
+          <el-form-item prop="serial">
             <el-input
               v-model="queryForm.serial"
-              placeholder="订单序号"
+              placeholder="序号"
               autocomplete="off"
             />
           </el-form-item>
-          <el-form-item label="下单日期" prop="beginTime">
+          <el-form-item prop="beginTime">
             <el-date-picker
               unlink-panels
               v-model="queryForm.beginTime"
               type="daterange"
               range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
+              start-placeholder="下单日期范围开始"
+              end-placeholder="下单日期范围结束"
               :editable="false"
             />
           </el-form-item>
-          <el-form-item label="需求日期" prop="demandTime">
+          <el-form-item prop="demandTime">
             <el-date-picker
               unlink-panels
               v-model="queryForm.demandTime"
               type="daterange"
               range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
+              start-placeholder="需求日期范围开始"
+              end-placeholder="需求日期范围结束"
               :editable="false"
             />
           </el-form-item>
-          <el-form-item label="出货日期" prop="endTime">
+          <el-form-item prop="endTime">
             <el-date-picker
               unlink-panels
               v-model="queryForm.endTime"
               type="daterange"
               range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
+              start-placeholder="出货日期范围开始"
+              end-placeholder="出货日期范围结束"
               :editable="false"
             />
           </el-form-item>
