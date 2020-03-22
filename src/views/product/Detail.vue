@@ -21,7 +21,7 @@
         <el-breadcrumb-item>订单详情</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-card>
+    <el-card style="margin-bottom: 20px;">
       <div slot="header">
         <span>订单信息</span>
       </div>
@@ -101,11 +101,55 @@
         </div>
       </el-form>
     </el-card>
+    <el-card>
+      <div slot="header">
+        <span>流程工序信息</span>
+      </div>
+      <div>
+        <span style="padding-left: 20px;">完成情况:</span>
+        <el-progress
+          :percentage="processesPercentage"
+          style="margin: 10px 0 30px; padding-left: 20px"
+        />
+        <el-timeline style="padding-left: 20px">
+          <el-timeline-item
+            v-for="(process, index) in product.processes"
+            :key="process.id"
+          >
+            <el-card
+              body-style="
+                display: flex;
+                justify-content: space-between;
+              "
+            >
+              <div class="process-head">
+                <span style="display: inline-block; width: 150px;">
+                  {{ process.name }}
+                </span>
+              </div>
+              <div class="process-tail">
+                <el-button
+                  type="success"
+                  v-if="index === firstUnComplete"
+                  size="mini"
+                  >完成</el-button
+                >
+                <i
+                  v-if="process.complete"
+                  class="el-icon-success"
+                  style="color: #67C23A"
+                />
+              </div>
+            </el-card>
+          </el-timeline-item>
+        </el-timeline>
+      </div>
+    </el-card>
   </el-card>
 </template>
 
 <script>
-// TODO 工序信息展示
+// TODO 工序完成和编辑
 
 export default {
   name: 'ProductDetail',
@@ -127,7 +171,8 @@ export default {
         creatorId: 0,
         creatorName: '',
         updaterId: '',
-        updaterName: ''
+        updaterName: '',
+        processes: []
       },
 
       rules: {
@@ -144,6 +189,18 @@ export default {
         _this.product = Object.assign(_this.product, res.data.data);
         _this.product.IGT = res.data.data.igt;
         _this.product.ERP = res.data.data.erp;
+      }
+    });
+
+    this.axios('/api/product/processes?id=' + id).then(res => {
+      if (res.data.data) {
+        const data = res.data.data;
+
+        data.sort((first, second) => {
+          return first.sequence - second.sequence;
+        });
+
+        _this.product.processes.push.apply(_this.product.processes, data);
       }
     });
   },
@@ -168,6 +225,28 @@ export default {
         }
       });
     }
+  },
+  computed: {
+    firstUnComplete: function() {
+      const processes = this.product.processes;
+      if (processes.length === 0) return 0;
+
+      for (let index = 0; index < processes.length; ++index) {
+        if (!processes[index].complete) {
+          return index;
+        }
+      }
+
+      return processes.length;
+    },
+    processesPercentage: function() {
+      return (
+        (100 * this.firstUnComplete) /
+        (this.product.processes.length === 0
+          ? 1
+          : this.product.processes.length)
+      );
+    }
   }
 };
 </script>
@@ -175,5 +254,12 @@ export default {
 <style>
 .product-info .el-input {
   width: 300px;
+}
+
+.process-head {
+  display: flex;
+}
+.process-tail {
+  display: flex;
 }
 </style>
