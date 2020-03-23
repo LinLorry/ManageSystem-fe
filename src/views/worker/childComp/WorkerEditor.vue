@@ -229,6 +229,7 @@ export default {
 
         let _this = this;
 
+        this.newProcesses.splice(0, this.newProcesses.length);
         this.user.processes.splice(0, this.user.processes.length);
         this.processChange = false;
 
