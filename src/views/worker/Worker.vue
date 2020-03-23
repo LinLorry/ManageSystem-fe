@@ -15,7 +15,7 @@
       </el-breadcrumb>
     </div>
 
-    <el-table stripe :data="workers" style="flex-grow: 1">
+    <el-table stripe :data="workers">
       <el-table-column fixed sortable prop="id" label="ID" />
       <el-table-column fixed sortable prop="name" label="名字" />
 
