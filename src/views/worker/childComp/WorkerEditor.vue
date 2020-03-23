@@ -217,33 +217,35 @@ export default {
   },
   watch: {
     data(newV) {
-      Object.assign(this.user, newV);
+      if (newV) {
+        Object.assign(this.user, newV);
 
-      let _this = this;
+        let _this = this;
 
-      this.user.processes.splice(0, this.user.processes.length);
-      this.processChange = false;
+        this.user.processes.splice(0, this.user.processes.length);
+        this.processChange = false;
 
-      this.axios('/api/userProcess?id=' + newV.id).then(res => {
-        res.data.data.sort((first, second) => {
-          return first.id - second.id;
+        this.axios('/api/userProcess?id=' + newV.id).then(res => {
+          res.data.data.sort((first, second) => {
+            return first.id - second.id;
+          });
+
+          for (const one of res.data.data) {
+            _this.user.processes.push(one.id);
+          }
+
+          _this.tmpProcesses.splice(0, _this.tmpProcesses.length);
+          for (const process of _this.processes) {
+            if (_this.user.processes.indexOf(process.id) === -1) {
+              _this.tmpProcesses.push(process);
+            }
+          }
         });
 
-        for (const one of res.data.data) {
-          _this.user.processes.push(one.id);
-        }
-
-        _this.tmpProcesses.splice(0, _this.tmpProcesses.length);
-        for (const process of _this.processes) {
-          if (_this.user.processes.indexOf(process.id) === -1) {
-            _this.tmpProcesses.push(process);
-          }
-        }
-      });
-
-      this.axios('/api/worker/check?id=' + newV.id).then(res => {
-        _this.isNotWorker = !res.data.data;
-      });
+        this.axios('/api/worker/check?id=' + newV.id).then(res => {
+          _this.isNotWorker = !res.data.data;
+        });
+      }
     }
   }
 };

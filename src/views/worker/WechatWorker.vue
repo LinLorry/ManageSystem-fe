@@ -75,7 +75,9 @@
     <WorkerEditor
       :show="editDialogFormVisible"
       :data="
-        wechatUsers[editIndex] === undefined ? {} : wechatUsers[editIndex].user
+        wechatUsers[editIndex] === undefined
+          ? null
+          : wechatUsers[editIndex].user
       "
       @close="editDialogFormVisible = false"
     />
