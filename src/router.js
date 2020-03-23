@@ -20,6 +20,11 @@ const Process = () => import('@/views/work/Process');
 const Worker = () => import('@/views/worker/Worker');
 const WechatWorker = () => import('@/views/worker/WechatWorker');
 
+const ProductCreator = () => import('@/views/product/Creator');
+const ProductDetail = () => import('@/views/product/Detail');
+const UnCompleteProduct = () => import('@/views/product/Product');
+const CompleteProduct = () => import('@/views/product/CompleteProduct');
+
 Vue.use(VueRouter);
 
 export default new VueRouter({
@@ -98,6 +103,32 @@ export default new VueRouter({
           path: 'wechatWorkerManage',
           name: 'wechatWorker',
           component: WechatWorker
+        }
+      ]
+    },
+    {
+      path: '/product',
+      component: Index,
+      children: [
+        {
+          path: 'create',
+          name: 'createProduct',
+          component: ProductCreator
+        },
+        {
+          path: 'detail/:id',
+          name: 'productDetail',
+          component: ProductDetail
+        },
+        {
+          path: 'unComplete',
+          name: 'unCompleteProductManage',
+          component: UnCompleteProduct
+        },
+        {
+          path: 'complete',
+          name: 'completeProductManage',
+          component: CompleteProduct
         }
       ]
     },
