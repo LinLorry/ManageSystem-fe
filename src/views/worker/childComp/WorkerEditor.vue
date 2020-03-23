@@ -8,23 +8,25 @@
         <el-input v-model="user.name" />
       </el-form-item>
       <el-form-item label="工序">
-        <el-select
-          style="padding-right: 20px"
-          :disable="tmpProcesses.length === 0"
-          v-model="newProcesses"
-          multiple
-          clearable
-          placeholder="请选择工序"
-        >
-          <el-option
-            v-for="item in tmpProcesses"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
+        <div style="display: flex">
+          <el-select
+            style="padding-right: 20px"
+            :disable="tmpProcesses.length === 0"
+            v-model="newProcesses"
+            multiple
+            clearable
+            placeholder="请选择工序"
           >
-          </el-option>
-        </el-select>
-        <el-button type="primary" @click="addProcesses">添加</el-button>
+            <el-option
+              v-for="item in tmpProcesses"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+          <el-button type="primary" @click="addProcesses">添加</el-button>
+        </div>
       </el-form-item>
     </el-form>
 
