@@ -16,7 +16,7 @@
       </el-breadcrumb>
     </div>
 
-    <div class="toolbar">
+    <div class="product-toolbar">
       <div class="button-box">
         <el-button-group>
           <el-button @click="loadAll">所有</el-button>
@@ -79,7 +79,7 @@
       </div>
     </div>
 
-    <el-table stripe :data="products" style="flex-grow: 1" height="use">
+    <el-table stripe :data="products" height="use">
       <el-table-column fixed sortable prop="id" label="ID" />
       <el-table-column sortable prop="serial" label="序号" />
       <el-table-column sortable prop="igt" label="IGT号" />
@@ -282,20 +282,15 @@ export default {
 </script>
 
 <style>
-.toolbar {
+.product-toolbar {
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .button-box {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
-}
-
-.query-box {
-  display: inline-block;
 }
 
 .query-box .el-input {

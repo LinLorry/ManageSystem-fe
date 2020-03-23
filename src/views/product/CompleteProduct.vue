@@ -67,7 +67,7 @@
       </div>
     </div>
 
-    <el-table stripe :data="products" style="flex-grow: 1" height="use">
+    <el-table stripe :data="products" height="use">
       <el-table-column fixed sortable prop="id" label="ID" />
       <el-table-column sortable prop="serial" label="序号" />
       <el-table-column sortable prop="igt" label="IGT号" />
@@ -245,10 +245,7 @@ export default {
 .toolbar {
   display: flex;
   justify-content: space-between;
-}
-
-.query-box {
-  display: inline-block;
+  align-items: flex-start;
 }
 
 .query-box .el-input {
