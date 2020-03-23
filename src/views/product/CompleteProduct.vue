@@ -100,7 +100,7 @@
             <el-button
               size="mini"
               @click="$router.push('/product/detail/' + scope.row.id)"
-              >编辑</el-button
+              >详情</el-button
             >
           </el-button-group>
         </template>

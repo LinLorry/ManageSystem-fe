@@ -40,28 +40,50 @@
         </el-form-item>
         <el-form-item label="序号" prop="serial">
           <el-input
+            :readonly="product.complete"
             v-model="product.serial"
             placeholder="请输入订单序号"
             autocomplete="off"
           />
         </el-form-item>
         <el-form-item label="IGT" prop="IGT">
-          <el-input v-model="product.IGT" autocomplete="off" />
+          <el-input
+            :readonly="product.complete"
+            v-model="product.IGT"
+            autocomplete="off"
+          />
         </el-form-item>
         <el-form-item label="ERP" prop="ERP">
-          <el-input v-model="product.ERP" autocomplete="off" />
+          <el-input
+            :readonly="product.complete"
+            v-model="product.ERP"
+            autocomplete="off"
+          />
         </el-form-item>
         <el-form-item label="central" prop="central">
-          <el-input v-model="product.central" autocomplete="off" />
+          <el-input
+            :readonly="product.complete"
+            v-model="product.central"
+            autocomplete="off"
+          />
         </el-form-item>
         <el-form-item label="地区" prop="area">
-          <el-input v-model="product.area" autocomplete="off" />
+          <el-input
+            :readonly="product.complete"
+            v-model="product.area"
+            autocomplete="off"
+          />
         </el-form-item>
         <el-form-item label="花色" prop="design">
-          <el-input v-model="product.design" autocomplete="off" />
+          <el-input
+            :readonly="product.complete"
+            v-model="product.design"
+            autocomplete="off"
+          />
         </el-form-item>
         <el-form-item label="下单日期" prop="beginTime">
           <el-date-picker
+            :readonly="product.complete"
             v-model="product.beginTime"
             type="date"
             placeholder="选择下单日期"
@@ -69,6 +91,7 @@
         </el-form-item>
         <el-form-item label="需求日期" prop="demandTime">
           <el-date-picker
+            :readonly="product.complete"
             v-model="product.demandTime"
             type="date"
             placeholder="选择需求日期"
@@ -76,6 +99,7 @@
         </el-form-item>
         <el-form-item label="出货日期" prop="endTime">
           <el-date-picker
+            :readonly="product.complete"
             v-model="product.endTime"
             type="date"
             placeholder="选择出货日期"
@@ -96,7 +120,8 @@
         <el-form-item label="更新人名称">
           <el-input readonly :value="product.updaterName" />
         </el-form-item>
-        <div style="text-align: center">
+
+        <div style="text-align: center" v-if="!product.complete">
           <el-button type="primary" @click="update">更新</el-button>
         </div>
       </el-form>
@@ -157,6 +182,7 @@ export default {
     return {
       product: {
         id: 0,
+        complete: true,
         serial: '',
         IGT: '',
         ERP: '',
