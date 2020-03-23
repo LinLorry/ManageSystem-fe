@@ -61,15 +61,11 @@
         </el-form>
       </div>
 
-      <div class="create-box">
-        <el-button
-          style="display: inline-block;"
-          @click="createDialogFormVisible = true"
-          >新建</el-button
-        >
-      </div>
+      <el-button class="create-box" @click="createDialogFormVisible = true"
+        >新建</el-button
+      >
     </div>
-    <el-table stripe :data="processes" style="flex-grow: 1" height="use">
+    <el-table stripe :data="processes" height="use">
       <el-table-column fixed sortable prop="id" label="ID" />
 
       <el-table-column fixed sortable prop="name" label="名字" />
@@ -269,19 +265,14 @@ export default {
 .toolbar {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
 }
 
-.query-box {
-  display: inline-block;
-  width: 700px;
-}
-
-.query-box .el-form-item {
+.query-box .el-input {
   width: 150px;
 }
 
 .create-box {
-  display: inline-block;
   margin-left: 10px;
 }
 </style>

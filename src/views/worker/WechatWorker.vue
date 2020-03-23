@@ -15,12 +15,12 @@
         <el-breadcrumb-item>微信用户管理</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-form inline ref="queryForm" :model="queryForm">
-      <el-form-item style="width: 150px" prop="id">
+    <el-form inline ref="queryForm" :model="queryForm" class="query-box">
+      <el-form-item prop="id">
         <el-input placeholder="微信用户ID" v-model="queryForm.id" clearable>
         </el-input>
       </el-form-item>
-      <el-form-item style="width: 150px" prop="name">
+      <el-form-item prop="name">
         <el-input placeholder="名字" v-model="queryForm.name" clearable>
         </el-input>
       </el-form-item>
@@ -32,7 +32,7 @@
       </el-form-item>
     </el-form>
 
-    <el-table stripe :data="wechatUsers" style="flex-grow: 1" height="use">
+    <el-table stripe :data="wechatUsers" height="use">
       <el-table-column fixed sortable prop="id" label="ID" />
       <el-table-column fixed sortable prop="name" label="名字" />
       <el-table-column fixed sortable prop="nickname" label="微信名称" />
@@ -75,7 +75,9 @@
     <WorkerEditor
       :show="editDialogFormVisible"
       :data="
-        wechatUsers[editIndex] === undefined ? {} : wechatUsers[editIndex].user
+        wechatUsers[editIndex] === undefined
+          ? null
+          : wechatUsers[editIndex].user
       "
       @close="editDialogFormVisible = false"
     />
@@ -206,4 +208,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.query-box .el-input {
+  width: 150px;
+}
+</style>

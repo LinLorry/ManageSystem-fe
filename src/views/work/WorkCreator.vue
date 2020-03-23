@@ -13,7 +13,7 @@
         <el-breadcrumb-item :to="{ path: '/work/workManage' }"
           >生产流程管理</el-breadcrumb-item
         >
-        <el-breadcrumb-item>生产流程详情</el-breadcrumb-item>
+        <el-breadcrumb-item>创建生产流程</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <el-card>

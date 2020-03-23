@@ -1,30 +1,32 @@
 <template>
   <el-dialog title="编辑用户" :visible="show" v-on:close="$emit('close')">
-    <el-form label-width="60px" ref="user">
+    <el-form label-width="60px" ref="user" :model="user" :rules="rules">
       <el-form-item label="ID">
         <el-input disabled :value="user.id" />
       </el-form-item>
-      <el-form-item label="名称">
+      <el-form-item label="名称" prop="name">
         <el-input v-model="user.name" />
       </el-form-item>
       <el-form-item label="工序">
-        <el-select
-          style="padding-right: 20px"
-          :disable="tmpProcesses.length === 0"
-          v-model="newProcesses"
-          multiple
-          clearable
-          placeholder="请选择工序"
-        >
-          <el-option
-            v-for="item in tmpProcesses"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
+        <div style="display: flex; align-items: flex-start">
+          <el-select
+            style="padding-right: 20px"
+            :disable="tmpProcesses.length === 0"
+            v-model="newProcesses"
+            multiple
+            clearable
+            placeholder="请选择工序"
           >
-          </el-option>
-        </el-select>
-        <el-button type="primary" @click="addProcesses">添加</el-button>
+            <el-option
+              v-for="item in tmpProcesses"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+          <el-button type="primary" @click="addProcesses">添加</el-button>
+        </div>
       </el-form-item>
     </el-form>
 
@@ -87,30 +89,30 @@ export default {
       processChange: false,
       processes: [],
       rules: {
-        username: [{ required: true, message: '用户名不能为空' }]
+        name: [{ required: true, message: '性名不能为空', trigger: 'blur' }]
       }
     };
   },
   created() {
     let _this = this;
-    let pageNumber = 1;
-    let total;
-    let callback = res => {
-      _this.processes.push.apply(_this.processes, res.data.data.processes);
+    let pageNumber = 0;
+    let total = 0;
+    const url = '/api/process?pageSize=50&pageNumber=';
 
+    let callback = res => {
+      total = res.data.data.total;
+      pageNumber++;
+      _this.processes.push.apply(_this.processes, res.data.data.processes);
       if (pageNumber < total) {
-        _this.axios('/api/process?pageNumber=' + pageNumber).then(callback);
+        _this.axios(url + pageNumber).then(callback);
       } else {
-        _this.processes.sort((first, second) => {
-          return first.id - second.id;
+        _this.processes.sort((p1, p2) => {
+          return p1.id - p2.id;
         });
       }
     };
 
-    this.axios('/api/process').then(res => {
-      total = res.data.data.total;
-      callback(res);
-    });
+    this.axios(url + pageNumber).then(callback);
   },
   methods: {
     addProcesses() {
@@ -181,20 +183,25 @@ export default {
         });
     },
     updateUserInfo() {
-      let data = {
-        id: this.user.id,
-        name: this.user.name
-      };
-
       let _this = this;
-      this.axios.post('/api/worker', data).then(res => {
-        _this.$message({
-          message: res.data.message,
-          type: 'success',
-          showClose: true,
-          center: true
-        });
-        _this.$emit('success', res.data.data);
+      this.$refs.user.validate(value => {
+        if (value) {
+          let data = {
+            id: _this.user.id,
+            name: _this.user.name
+          };
+
+          let __this = _this;
+          this.axios.post('/api/worker', data).then(res => {
+            __this.$message({
+              message: res.data.message,
+              type: 'success',
+              showClose: true,
+              center: true
+            });
+            __this.$emit('success', res.data.data);
+          });
+        }
       });
     },
     updateProcesses() {
@@ -217,33 +224,36 @@ export default {
   },
   watch: {
     data(newV) {
-      Object.assign(this.user, newV);
+      if (newV) {
+        Object.assign(this.user, newV);
 
-      let _this = this;
+        let _this = this;
 
-      this.user.processes.splice(0, this.user.processes.length);
-      this.processChange = false;
+        this.newProcesses.splice(0, this.newProcesses.length);
+        this.user.processes.splice(0, this.user.processes.length);
+        this.processChange = false;
 
-      this.axios('/api/userProcess?id=' + newV.id).then(res => {
-        res.data.data.sort((first, second) => {
-          return first.id - second.id;
+        this.axios('/api/userProcess?id=' + newV.id).then(res => {
+          res.data.data.sort((first, second) => {
+            return first.id - second.id;
+          });
+
+          for (const one of res.data.data) {
+            _this.user.processes.push(one.id);
+          }
+
+          _this.tmpProcesses.splice(0, _this.tmpProcesses.length);
+          for (const process of _this.processes) {
+            if (_this.user.processes.indexOf(process.id) === -1) {
+              _this.tmpProcesses.push(process);
+            }
+          }
         });
 
-        for (const one of res.data.data) {
-          _this.user.processes.push(one.id);
-        }
-
-        _this.tmpProcesses.splice(0, _this.tmpProcesses.length);
-        for (const process of _this.processes) {
-          if (_this.user.processes.indexOf(process.id) === -1) {
-            _this.tmpProcesses.push(process);
-          }
-        }
-      });
-
-      this.axios('/api/worker/check?id=' + newV.id).then(res => {
-        _this.isNotWorker = !res.data.data;
-      });
+        this.axios('/api/worker/check?id=' + newV.id).then(res => {
+          _this.isNotWorker = !res.data.data;
+        });
+      }
     }
   }
 };
