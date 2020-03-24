@@ -16,60 +16,18 @@
       </el-breadcrumb>
     </div>
 
-    <div>
-      <div class="query-box">
-        <el-form
-          label-width="auto"
-          ref="queryFrom"
-          :model="queryForm"
-          :inline="true"
-        >
-          <el-form-item>
-            <el-input
-              class="input_test"
-              placeholder="权限ID"
-              v-model="queryForm.roleId"
-              clearable
-            >
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-input
-              class="input_test"
-              type="text"
-              placeholder="权限名称"
-              v-model="queryForm.roleName"
-              clearable
-            >
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-input
-              class="input_test"
-              type="text"
-              placeholder="权限控制"
-              v-model="queryForm.roleRole"
-              clearable
-            >
-            </el-input>
-          </el-form-item>
-
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-
-      <div class="create-box">
-        <el-button
-          style="display: inline-block;"
-          @click="createDialogFormVisible = true"
-          >新建</el-button
-        >
-      </div>
-    </div>
-
-    <el-table stripe :data="roles" style="flex-grow: 1" height="use">
+    <el-table
+      stripe
+      :data="
+        roles.filter(
+          data =>
+            !search ||
+            data.name.toLowerCase().includes(search.toLowerCase()) ||
+            data.role.toLowerCase().includes(search.toLowerCase())
+        )
+      "
+      height="use"
+    >
       <el-table-column fixed sortable prop="id" label="ID" />
       <el-table-column fixed sortable prop="name" label="权限名称" />
       <el-table-column fixed sortable prop="role" label="权限控制" />
@@ -87,17 +45,33 @@
         label="更新时间"
         :formatter="timeFormatter"
       />
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.row.id)"
-            >编辑</el-button
-          >
-          <el-button
+      <el-table-column label="操作" align="right">
+        <template slot="header" slot-scope="scope">
+          <el-input
+            v-model="search"
             size="mini"
-            type="danger"
-            @click="handleDelete(scope.row.id)"
-            >删除</el-button
+            placeholder="输入关键字搜索"
+            :slot="scope"
+          />
+          <el-button
+            style="margin-top: 5px"
+            size="mini"
+            @click="createDialogFormVisible = true"
+            >新建</el-button
           >
+        </template>
+        <template slot-scope="scope">
+          <el-button-group>
+            <el-button size="mini" @click="handleEdit(scope.row.id)"
+              >编辑</el-button
+            >
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.row.id)"
+              >删除</el-button
+            >
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
@@ -128,11 +102,7 @@ export default {
   },
   data() {
     return {
-      queryForm: {
-        roleId: '',
-        roleName: '',
-        roleRole: ''
-      },
+      search: '',
       roles: [],
       createDialogFormVisible: false,
       editDialogFormVisible: false,
@@ -198,20 +168,4 @@ export default {
 };
 </script>
 
-<style>
-.query-box {
-  display: block;
-  width: 700px;
-  /* clear: both; */
-}
-
-.query-box .el-form-item {
-  width: 150px;
-}
-
-.create-box {
-  display: block;
-  width: 80px;
-  /* float: right; */
-}
-</style>
+<style></style>
