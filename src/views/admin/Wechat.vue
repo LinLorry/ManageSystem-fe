@@ -34,17 +34,16 @@
 
     <el-table stripe :data="wechatUsers" style="flex-grow: 1" height="use">
       <el-table-column fixed sortable prop="id" label="ID" />
-      <el-table-column fixed sortable prop="name" label="名字" />
-      <el-table-column fixed sortable prop="nickname" label="微信名称" />
-      <el-table-column fixed sortable prop="city" label="城市" />
+      <el-table-column sortable prop="name" label="名字" />
+      <el-table-column sortable prop="nickname" label="微信名称" />
+      <el-table-column sortable prop="city" label="城市" />
       <el-table-column
-        fixed
         sortable
         prop="sex"
         label="性别"
         :formatter="sexFormatter"
       />
-      <el-table-column label="操作">
+      <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-button
             v-if="scope.row.user"

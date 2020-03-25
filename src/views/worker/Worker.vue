@@ -17,9 +17,9 @@
 
     <el-table stripe :data="workers">
       <el-table-column fixed sortable prop="id" label="ID" />
-      <el-table-column fixed sortable prop="name" label="名字" />
+      <el-table-column sortable prop="name" label="名字" />
 
-      <el-table-column label="操作">
+      <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-button-group>
             <el-button size="mini" @click="handleEdit(scope.$index)"

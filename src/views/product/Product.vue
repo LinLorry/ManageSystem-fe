@@ -38,7 +38,7 @@
               autocomplete="off"
             />
           </el-form-item>
-          <el-form-item label="" prop="beginTime">
+          <el-form-item prop="beginTime">
             <el-date-picker
               unlink-panels
               v-model="queryForm.beginTime"
@@ -79,7 +79,7 @@
       </div>
     </div>
 
-    <el-table stripe :data="products" height="use">
+    <el-table stripe :data="products" style="flex-grow: 1" height="use">
       <el-table-column fixed sortable prop="id" label="ID" />
       <el-table-column sortable prop="serial" label="序号" />
       <el-table-column sortable prop="igt" label="IGT号" />
@@ -106,7 +106,7 @@
         :formatter="timeFormatter"
       />
 
-      <el-table-column label="操作">
+      <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-button-group>
             <el-button

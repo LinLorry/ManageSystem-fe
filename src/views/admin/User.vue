@@ -40,9 +40,9 @@
 
     <el-table stripe :data="users" style="flex-grow: 1" height="use">
       <el-table-column fixed sortable prop="id" label="ID" />
-      <el-table-column fixed sortable prop="username" label="用户名" />
-      <el-table-column fixed sortable prop="name" label="名字" />
-      <el-table-column label="操作">
+      <el-table-column sortable prop="username" label="用户名" />
+      <el-table-column sortable prop="name" label="名字" />
+      <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-button-group>
             <el-button size="mini" @click="handleEdit(scope.row.id)"

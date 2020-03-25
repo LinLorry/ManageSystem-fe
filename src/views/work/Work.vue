@@ -64,28 +64,26 @@
     <el-table stripe :data="works" height="use">
       <el-table-column fixed sortable prop="id" label="ID" />
 
-      <el-table-column fixed sortable prop="name" label="名字" />
-      <el-table-column fixed sortable prop="comment" label="备注" />
+      <el-table-column sortable prop="name" label="名字" />
+      <el-table-column sortable prop="comment" label="备注" />
 
       <el-table-column
-        fixed
         sortable
         prop="createTime"
         label="创建时间"
         :formatter="timeFormatter"
       />
-      <el-table-column fixed sortable prop="creatorName" label="创建人" />
+      <el-table-column sortable prop="creatorName" label="创建人" />
 
       <el-table-column
-        fixed
         sortable
         prop="updateTime"
         label="更新时间"
         :formatter="timeFormatter"
       />
-      <el-table-column fixed sortable prop="updaterName" label="更新人" />
+      <el-table-column sortable prop="updaterName" label="更新人" />
 
-      <el-table-column label="操作">
+      <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-button
             size="mini"
