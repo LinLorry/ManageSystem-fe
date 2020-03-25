@@ -1,12 +1,10 @@
 <template>
   <el-card
     body-style="
-    display: flex;
-    flex-direction: column;
-    flex-grow:1;
-    margin-bottom: 20px"
-    style="display: flex;
-    flex-direction: column;"
+      display: flex;
+      flex-direction: column;
+      flex-grow:1;
+    "
   >
     <div slot="header">
       <el-breadcrumb separator-class="el-icon-arrow-right">

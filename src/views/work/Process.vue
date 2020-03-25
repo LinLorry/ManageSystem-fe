@@ -1,12 +1,10 @@
 <template>
   <el-card
     body-style="
-    display: flex; 
-    flex-direction: column; 
-    flex-grow:1; 
-    margin-bottom: 20px"
-    style="display: flex; 
-    flex-direction: column;"
+      display: flex;
+      flex-direction: column;
+      flex-grow:1;
+    "
   >
     <div slot="header">
       <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -65,7 +63,7 @@
         >新建</el-button
       >
     </div>
-    <el-table stripe :data="processes" height="use">
+    <el-table stripe height="use" :data="processes">
       <el-table-column fixed sortable prop="id" label="ID" />
 
       <el-table-column sortable prop="name" label="名字" />
@@ -98,11 +96,11 @@
 
     <el-pagination
       background
-      hide-on-single-page
+      style="padding-top: 10px; text-align: right"
+      layout="sizes, prev, pager, next"
       :page-count="total"
       :page-sizes="[10, 20, 30, 40]"
       :page-size="pageSize"
-      layout="sizes, prev, pager, next"
       @size-change="handleSizeChange"
       @current-change="handlePageNumberChange"
     />
@@ -149,7 +147,7 @@ export default {
       queryName: '',
       queryComment: '',
 
-      pageSize: 10,
+      pageSize: 20,
       total: 0,
       pageNumber: 0,
 

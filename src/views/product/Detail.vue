@@ -1,11 +1,5 @@
 <template>
-  <el-card
-    body-style="
-    overflow: auto;
-    margin-bottom: 20px"
-    style="display: flex;
-    flex-direction: column;"
-  >
+  <el-card body-style="overflow: auto;">
     <div slot="header">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -126,7 +120,7 @@
         </div>
       </el-form>
     </el-card>
-    <el-card>
+    <el-card style="margin-bottom: 20px;">
       <div slot="header">
         <span>流程工序信息</span>
       </div>

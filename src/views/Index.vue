@@ -9,9 +9,7 @@
       </el-header>
       <el-main class="main">
         <IndexMenu />
-        <router-view
-          style="margin: 20px; flex-grow: 1;background-color: aliceblue;"
-        />
+        <router-view class="content" />
       </el-main>
     </el-container>
   </div>
@@ -62,5 +60,13 @@ export default {
   display: flex;
   padding: 0;
   background-color: #97999c;
+}
+
+.content {
+  margin: 20px;
+  flex-grow: 1;
+  background-color: aliceblue;
+  display: flex;
+  flex-direction: column;
 }
 </style>
