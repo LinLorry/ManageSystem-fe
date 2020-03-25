@@ -69,4 +69,8 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
+.query-box .el-input {
+  width: 150px;
+}
 </style>

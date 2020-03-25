@@ -13,20 +13,16 @@
         <el-breadcrumb-item>微信用户管理</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-form inline ref="queryForm" :model="queryForm">
-      <el-form-item style="width: 150px" prop="id">
-        <el-input placeholder="微信用户ID" v-model="queryForm.id" clearable>
-        </el-input>
+    <el-form inline ref="queryForm" class="query-box" :model="queryForm">
+      <el-form-item prop="id">
+        <el-input clearable placeholder="微信用户ID" v-model="queryForm.id" />
       </el-form-item>
-      <el-form-item style="width: 150px" prop="name">
-        <el-input placeholder="名字" v-model="queryForm.name" clearable>
-        </el-input>
+      <el-form-item prop="name">
+        <el-input clearable placeholder="名字" v-model="queryForm.name" />
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="submitQuery('queryForm')"
-          >查询</el-button
-        >
+        <el-button type="primary" @click="submitQuery">查询</el-button>
       </el-form-item>
     </el-form>
 
@@ -109,8 +105,8 @@ export default {
     this.refreshData();
   },
   methods: {
-    submitQuery(formName) {
-      this.$refs[formName].validate(valid => {
+    submitQuery() {
+      this.$refs.queryForm.validate(valid => {
         if (valid) {
           const data = this.queryForm;
           this.queryId = data.id;

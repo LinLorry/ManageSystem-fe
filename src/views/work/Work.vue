@@ -15,36 +15,37 @@
     </div>
 
     <div class="toolbar">
-      <div class="query-box">
+      <div>
         <el-form
-          :rules="rules"
-          label-width="auto"
+          inline
           ref="queryFrom"
+          class="query-box"
           :model="queryForm"
-          :inline="true"
+          :rules="rules"
         >
           <el-form-item prop="id">
-            <el-input placeholder="生产流程ID" v-model="queryForm.id" clearable>
-            </el-input>
+            <el-input
+              clearable
+              placeholder="生产流程ID"
+              v-model="queryForm.id"
+            />
           </el-form-item>
           <el-form-item prop="name">
             <el-input
+              clearable
               type="text"
               placeholder="生产流程名字"
               v-model="queryForm.name"
-              clearable
-            >
-            </el-input>
+            />
           </el-form-item>
 
           <el-form-item prop="comment">
             <el-input
+              clearable
               type="text"
               placeholder="生产流程备注"
               v-model="queryForm.comment"
-              clearable
-            >
-            </el-input>
+            />
           </el-form-item>
 
           <el-form-item>
@@ -229,10 +230,6 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-}
-
-.query-box .el-input {
-  width: 150px;
 }
 
 .create-box {

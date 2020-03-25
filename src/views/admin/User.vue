@@ -14,23 +14,27 @@
       </el-breadcrumb>
     </div>
     <div class="toolbar">
-      <el-form inline ref="queryForm" :model="queryForm" :rules="rules">
-        <el-form-item style="width: 150px" prop="id">
-          <el-input placeholder="用户ID" v-model="queryForm.id" clearable />
+      <el-form
+        inline
+        ref="queryForm"
+        class="query-box"
+        :model="queryForm"
+        :rules="rules"
+      >
+        <el-form-item prop="id">
+          <el-input clearable placeholder="用户ID" v-model="queryForm.id" />
         </el-form-item>
-        <el-form-item style="width: 150px" prop="name">
+        <el-form-item prop="name">
           <el-input
+            clearable
             type="text"
             placeholder="名字"
             v-model="queryForm.name"
-            clearable
           />
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="submitQuery('queryForm')"
-            >查询</el-button
-          >
+          <el-button type="primary" @click="submitQuery">查询</el-button>
         </el-form-item>
       </el-form>
       <el-button @click="createDialogFormVisible = true">新建</el-button>
@@ -177,8 +181,8 @@ export default {
     this.refreshData();
   },
   methods: {
-    submitQuery(formName) {
-      this.$refs[formName].validate(valid => {
+    submitQuery() {
+      this.$refs.queryForm.validate(valid => {
         if (valid) {
           const data = this.queryForm;
           this.queryId = data.id;

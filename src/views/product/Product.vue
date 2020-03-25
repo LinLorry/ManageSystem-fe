@@ -27,54 +27,62 @@
           <el-button @click="$router.push('/product/create')">新建</el-button>
         </el-button-group>
       </div>
-      <div class="query-box">
-        <el-form ref="queryForm" :model="queryForm" :inline="true">
-          <el-form-item prop="serial">
-            <el-input
-              v-model="queryForm.serial"
-              placeholder="序号"
-              autocomplete="off"
-            />
-          </el-form-item>
-          <el-form-item prop="beginTime">
-            <el-date-picker
-              unlink-panels
-              v-model="queryForm.beginTime"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="下单日期范围开始"
-              end-placeholder="下单日期范围结束"
-              :editable="false"
-            />
-          </el-form-item>
-          <el-form-item prop="demandTime">
-            <el-date-picker
-              unlink-panels
-              v-model="queryForm.demandTime"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="需求日期范围开始"
-              end-placeholder="需求日期范围结束"
-              :editable="false"
-            />
-          </el-form-item>
-          <el-form-item prop="endTime">
-            <el-date-picker
-              unlink-panels
-              v-model="queryForm.endTime"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="出货日期范围开始"
-              end-placeholder="出货日期范围结束"
-              :editable="false"
-            />
-          </el-form-item>
+      <el-form
+        inline
+        ref="queryForm"
+        class="query-box"
+        :model="queryForm"
+        :rules="rules"
+      >
+        <el-form-item prop="serial">
+          <el-input
+            clearable
+            v-model="queryForm.serial"
+            placeholder="序号"
+            autocomplete="off"
+          />
+        </el-form-item>
+        <el-form-item prop="beginTime">
+          <el-date-picker
+            clearable
+            unlink-panels
+            v-model="queryForm.beginTime"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="下单日期范围开始"
+            end-placeholder="下单日期范围结束"
+            :editable="false"
+          />
+        </el-form-item>
+        <el-form-item prop="demandTime">
+          <el-date-picker
+            clearable
+            unlink-panels
+            v-model="queryForm.demandTime"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="需求日期范围开始"
+            end-placeholder="需求日期范围结束"
+            :editable="false"
+          />
+        </el-form-item>
+        <el-form-item prop="endTime">
+          <el-date-picker
+            clearable
+            unlink-panels
+            v-model="queryForm.endTime"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="出货日期范围开始"
+            end-placeholder="出货日期范围结束"
+            :editable="false"
+          />
+        </el-form-item>
 
-          <el-form-item>
-            <el-button type="primary" @click="submitQuery">查询</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+        <el-form-item>
+          <el-button type="primary" @click="submitQuery">查询</el-button>
+        </el-form-item>
+      </el-form>
     </div>
 
     <el-table stripe height="use" :data="products">
@@ -289,9 +297,5 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
-}
-
-.query-box .el-input {
-  width: 150px;
 }
 </style>
