@@ -1,11 +1,5 @@
 <template>
-  <el-card
-    body-style="
-      display: flex;
-      flex-direction: column;
-      flex-grow:1;
-    "
-  >
+  <el-card body-style="overflow: auto;">
     <div slot="header">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -73,7 +67,7 @@
       </el-form>
     </div>
 
-    <el-table stripe height="use" :data="products">
+    <el-table stripe :data="products">
       <el-table-column fixed sortable prop="id" label="ID" />
       <el-table-column sortable prop="serial" label="序号" />
       <el-table-column sortable prop="igt" label="IGT号" />
@@ -114,7 +108,7 @@
     </el-table>
     <el-pagination
       background
-      style="padding-top: 10px; text-align: right"
+      style="padding-top: 10px; text-align: right; margin-bottom: 20px"
       layout="sizes, prev, pager, next"
       :current-page="this.tmp.pageNumber + 1"
       :page-count="total"
