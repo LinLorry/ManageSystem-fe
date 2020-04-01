@@ -31,9 +31,9 @@
         @node-drag-end="handleDragEnd"
         @node-drop="handleDrag"
       >
-        <span slot-scope="{ node, data }">
-          <el-button type="text" size="mini" @click="() => edit(data)">
-            {{ data.label }}
+        <span slot-scope="scope">
+          <el-button type="text" @click="() => edit(scope.data)">
+            {{ scope.data.label }}
           </el-button>
         </span>
       </el-tree>
@@ -114,9 +114,7 @@ export default {
       _this.sortMenu(data);
       let menus = _this.menus;
 
-      for (const parentIndex in data) {
-        let parent = data[parentIndex];
-
+      for (const parent of data) {
         menus.push(
           Object.assign(parent, {
             label: parent.name,
@@ -124,9 +122,7 @@ export default {
           })
         );
 
-        for (const childIndex in parent.children) {
-          let child = parent.children[childIndex];
-
+        for (const child of parent.children) {
           Object.assign(child, {
             label: child.name,
             isChild: true,
@@ -138,11 +134,12 @@ export default {
   },
   methods: {
     sortMenu(menus) {
-      for (const i in menus) {
-        menus[i].children.sort((first, second) => {
+      for (const menu of menus) {
+        menu.children.sort((first, second) => {
           return first.location - second.location;
         });
       }
+
       menus.sort((first, second) => {
         return first.location - second.location;
       });
@@ -298,7 +295,7 @@ export default {
       return false;
     },
     handleDragStart() {
-      this.$refs.tree.append(this.deleteNode);
+      this.menus.push(this.deleteNode);
     },
     handleDragEnd() {
       if (this.deleteAdmin) {
@@ -310,7 +307,8 @@ export default {
           center: true
         });
       }
-      this.$refs.tree.remove(this.deleteNode);
+
+      this.menus.splice(this.menus.length - 1, 1);
     },
     handleDrag(draggingNode, dropNode, type) {
       if (dropNode.data.isDelete && type !== 'before') {
