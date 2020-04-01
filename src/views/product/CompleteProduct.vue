@@ -9,13 +9,7 @@
     </div>
 
     <div class="toolbar">
-      <el-form
-        inline
-        ref="queryFrom"
-        class="query-box"
-        :model="queryForm"
-        :rules="rules"
-      >
+      <el-form inline ref="queryFrom" class="query-box" :model="queryForm">
         <el-form-item prop="serial">
           <el-input
             clearable

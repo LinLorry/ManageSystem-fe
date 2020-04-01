@@ -21,13 +21,7 @@
           <el-button @click="$router.push('/product/create')">新建</el-button>
         </el-button-group>
       </div>
-      <el-form
-        inline
-        ref="queryForm"
-        class="query-box"
-        :model="queryForm"
-        :rules="rules"
-      >
+      <el-form inline ref="queryForm" class="query-box" :model="queryForm">
         <el-form-item prop="serial">
           <el-input
             clearable
