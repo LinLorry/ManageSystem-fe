@@ -18,6 +18,11 @@
           <el-button @click="loadEnd(2)">后天出货</el-button>
         </el-button-group>
         <el-button-group>
+          <el-button
+            v-if="multipleSelection.length !== 0"
+            @click="downloadQrCode"
+            >下载二维码</el-button
+          >
           <el-button @click="$router.push('/product/create')">新建</el-button>
         </el-button-group>
       </div>
@@ -73,7 +78,8 @@
       </el-form>
     </div>
 
-    <el-table stripe :data="products">
+    <el-table stripe :data="products" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" />
       <el-table-column fixed sortable prop="id" label="ID" />
       <el-table-column sortable prop="serial" label="序号" />
       <el-table-column sortable prop="igt" label="IGT号" />
@@ -127,6 +133,10 @@
 </template>
 
 <script>
+import QRCode from 'qrcodejs2';
+import JSZip from 'jszip';
+import saveAs from 'file-saver';
+
 export default {
   name: 'Product',
   data() {
@@ -161,7 +171,10 @@ export default {
 
       products: [],
       editDialogFormVisible: false,
-      editIndex: 0
+      editIndex: 0,
+      multipleSelection: [],
+      imgList: new Map(),
+      lengthTmp: 0
     };
   },
   created() {
@@ -270,6 +283,68 @@ export default {
     },
     timeFormatter(row, column, cellValue) {
       return new Date(cellValue).toLocaleDateString();
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    downloadQrCode() {
+      this.imgList.clear();
+
+      for (const select of this.multipleSelection) {
+        let tmp = document.createElement('div');
+        new QRCode(tmp, location.host + '/product/' + select.id);
+        this.imgList.set(select.serial, tmp.getElementsByTagName('img')[0]);
+      }
+
+      this.lengthTmp = this.imgList.size;
+      setTimeout(this.downloadQrCodeCallback, 10 * this.imgList.size);
+    },
+    downloadQrCodeCallback() {
+      let tmp = 0;
+
+      for (const value of this.imgList.values()) {
+        if (value.src.length !== 0) {
+          tmp++;
+        }
+      }
+
+      if (this.lengthTmp !== tmp) {
+        setTimeout(
+          this.downloadQrCodeCallback,
+          10 * (this.lengthTmp - this.imgList.size)
+        );
+        return;
+      }
+
+      if (this.imgList.size === 1) {
+        const data = this.imgList.values().next().value.src;
+        const serial = this.imgList.keys().next().value;
+        saveAs(data, serial + '.png');
+      } else {
+        let zip = new JSZip();
+
+        for (const key of this.imgList.keys()) {
+          let arr = this.imgList.get(key).src.split(',');
+          let mime = arr[0].match(/:(.*?);/)[1] || 'image/png';
+          let bytes = window.atob(arr[1]);
+          let ab = new ArrayBuffer(bytes.length);
+          let ia = new Uint8Array(ab);
+
+          for (let i = 0; i < bytes.length; i++) {
+            ia[i] = bytes.charCodeAt(i);
+          }
+
+          zip.file(
+            key + '.png',
+            new Blob([ab], {
+              type: mime
+            })
+          );
+        }
+        zip.generateAsync({ type: 'blob' }).then(function(content) {
+          saveAs(content, '二维码.zip');
+        });
+      }
     }
   }
 };

@@ -114,6 +114,9 @@
         <el-form-item label="更新人名称">
           <el-input readonly :value="product.updaterName" />
         </el-form-item>
+        <div style="text-align: center;margin-bottom: 20px;">
+          <div ref="qrCodeDiv" style="display: inline-block" />
+        </div>
 
         <div style="text-align: center" v-if="!product.complete">
           <el-button type="primary" @click="update">更新</el-button>
@@ -169,6 +172,7 @@
 
 <script>
 // TODO 工序完成和编辑
+import QRCode from 'qrcodejs2';
 
 export default {
   name: 'ProductDetail',
@@ -209,6 +213,12 @@ export default {
         _this.product = Object.assign(_this.product, res.data.data);
         _this.product.IGT = res.data.data.igt;
         _this.product.ERP = res.data.data.erp;
+        new QRCode(this.$refs.qrCodeDiv, {
+          text: location.href,
+          width: 200,
+          height: 200,
+          correctLevel: QRCode.CorrectLevel.L //容错率，L/M/H
+        });
       }
     });
 
