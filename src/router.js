@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 const Login = () => import('@/views/Login.vue');
 const Index = () => import('@/views/Index.vue');
 const Home = () => import('@/views/Home.vue');
+const WechatIndex = () => import('@/views/WechatIndex');
 
 const User = () => import('@/views/admin/User');
 const Role = () => import('@/views/admin/Role.vue');
@@ -62,8 +63,14 @@ export default new VueRouter({
       ]
     },
     {
-      path: '/wechat/login',
-      component: WechatLogin
+      path: '/wechat',
+      component: WechatIndex,
+      children: [
+        {
+          path: 'login',
+          component: WechatLogin
+        }
+      ]
     },
     {
       path: '/work',
