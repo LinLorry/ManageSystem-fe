@@ -6,6 +6,7 @@ export default {
     const code = this.$route.query.code;
 
     if (code) {
+      this.$loginFlag = false;
       const _this = this;
       this.axios('/api/wechat/login?code=' + code).then(res => {
         const token = res.data.token;

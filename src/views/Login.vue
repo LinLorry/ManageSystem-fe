@@ -67,10 +67,12 @@ export default {
     };
   },
   created() {
-    const token = this.$route.query.token;
-    if (token) {
-      localStorage.setItem('token', token);
-      this.$router.push('/');
+    let _this = this;
+    if (localStorage.getItem('token')) {
+      this.$axios('/api/user/profile').then(res => {
+        _this.$router.push('/');
+        localStorage.setItem('userInfo', JSON.stringify(res.data.data));
+      });
     }
   },
   methods: {
@@ -89,6 +91,7 @@ export default {
               });
               localStorage.setItem('token', res.data.token);
               _this.$router.push('/');
+              _this.$loginFlag = false;
             });
           }
         } else {

@@ -8,6 +8,8 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const _axios = axios.create();
 
+let loginFlag = false;
+
 _axios.interceptors.request.use(
   function(config) {
     let token = localStorage.getItem('token');
@@ -39,25 +41,28 @@ _axios.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          if (localStorage.getItem('platform') === 'wechat') {
-            localStorage.clear();
-            router.push({ path: '/wechat/login' });
-          } else {
-            let message;
-            if (localStorage.getItem('token')) {
-              message = '登陆信息过期，请重新登陆';
+          if (!loginFlag) {
+            loginFlag = true;
+            if (localStorage.getItem('platform') === 'wechat') {
+              localStorage.clear();
+              router.push({ path: '/wechat/login' });
             } else {
-              message = '请登陆';
-            }
+              let message;
+              if (localStorage.getItem('token')) {
+                message = '登陆信息过期，请重新登陆';
+              } else {
+                message = '请登陆';
+              }
 
-            Vue.prototype.$message({
-              type: 'error',
-              message: message,
-              showClose: true,
-              center: true
-            });
-            localStorage.clear();
-            router.push({ path: '/login' });
+              Vue.prototype.$message({
+                type: 'error',
+                message: message,
+                showClose: true,
+                center: true
+              });
+              localStorage.clear();
+              router.push({ path: '/login' });
+            }
           }
 
           break;
@@ -86,6 +91,18 @@ Plugin.install = function(Vue) {
     $axios: {
       get() {
         return _axios;
+      }
+    },
+    $loginFlag: {
+      get() {
+        return loginFlag;
+      },
+      set(v) {
+        if (typeof v === 'boolean') {
+          loginFlag = v;
+        } else {
+          throw new Error('loginFlag must be boolean');
+        }
       }
     }
   });
