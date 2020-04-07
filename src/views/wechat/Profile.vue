@@ -1,5 +1,19 @@
 <template>
   <div>
+    <div style="text-align: center; margin: 10px">
+      <van-image
+        round
+        fit="contain"
+        width="10rem"
+        height="10rem"
+        :src="headImgUrl"
+      >
+        <template v-slot:loading>
+          <van-loading type="spinner" size="20" />
+        </template>
+      </van-image>
+    </div>
+
     <van-cell-group title="个人信息">
       <van-cell title="姓名" :value="userInfo.name" />
     </van-cell-group>
@@ -14,19 +28,27 @@
 export default {
   name: 'Profile',
   data() {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    let processes = JSON.parse(localStorage.getItem('userProcesses'));
-
+    let userInfo = localStorage.getItem('userInfo');
     let id = 0;
     let name = '';
-
     if (userInfo) {
+      userInfo = JSON.parse(userInfo);
       id = userInfo.id;
       name = userInfo.name;
     }
 
-    if (!processes) {
+    let processes = localStorage.getItem('userProcesses');
+    if (processes) {
+      processes = JSON.parse(processes);
+    } else {
       processes = [];
+    }
+
+    let wechatUserInfo = localStorage.getItem('wechatUserInfo');
+    let headImgUrl = '';
+    if (wechatUserInfo) {
+      wechatUserInfo = JSON.parse(wechatUserInfo);
+      headImgUrl = wechatUserInfo.headImgUrl;
     }
 
     return {
@@ -34,6 +56,7 @@ export default {
         id,
         name
       },
+      headImgUrl,
       processes
     };
   },
