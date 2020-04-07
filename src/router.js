@@ -64,18 +64,17 @@ export default new VueRouter({
       ]
     },
     {
+      path: '/wechat/login',
+      component: WechatLogin
+    },
+    {
+      path: '/wechat/info',
+      component: WechatInfo
+    },
+    {
       path: '/wechat',
       component: WechatIndex,
-      children: [
-        {
-          path: 'login',
-          component: WechatLogin
-        },
-        {
-          path: 'info',
-          component: WechatInfo
-        }
-      ]
+      children: []
     },
     {
       path: '/work',

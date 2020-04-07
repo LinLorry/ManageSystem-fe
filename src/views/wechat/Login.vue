@@ -20,7 +20,6 @@ export default {
       });
       return;
     }
-    localStorage.removeItem('platform');
 
     location.href =
       'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8eb0addaf4641342&redirect_uri=' +
