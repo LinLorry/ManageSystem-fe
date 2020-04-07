@@ -14,6 +14,8 @@ const WechatManage = () => import('@/views/admin/Wechat.vue');
 const WechatLogin = () => import('@/views/wechat/Login');
 const WechatInfo = () => import('@/views/wechat/Info');
 
+const WechatProfile = () => import('@/views/wechat/Profile');
+
 const Work = () => import('@/views/work/Work.vue');
 const WorkCreator = () => import('@/views/work/WorkCreator');
 const WorkDetail = () => import('@/views/work/WorkDetail');
@@ -74,7 +76,12 @@ export default new VueRouter({
     {
       path: '/wechat',
       component: WechatIndex,
-      children: []
+      children: [
+        {
+          path: 'profile',
+          component: WechatProfile
+        }
+      ]
     },
     {
       path: '/work',
