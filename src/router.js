@@ -4,13 +4,17 @@ import VueRouter from 'vue-router';
 const Login = () => import('@/views/Login.vue');
 const Index = () => import('@/views/Index.vue');
 const Home = () => import('@/views/Home.vue');
+const Wechat = () => import('@/views/Wechat');
 
 const User = () => import('@/views/admin/User');
 const Role = () => import('@/views/admin/Role.vue');
 const Menu = () => import('@/views/admin/Menu.vue');
 const WechatManage = () => import('@/views/admin/Wechat.vue');
 
-const WechatLogin = () => import('@/views/wechat/Login.vue');
+const WechatLogin = () => import('@/views/wechat/Login');
+const WechatInfo = () => import('@/views/wechat/Info');
+
+const WechatIndex = () => import('@/views/wechat/Index');
 
 const Work = () => import('@/views/work/Work.vue');
 const WorkCreator = () => import('@/views/work/WorkCreator');
@@ -64,6 +68,24 @@ export default new VueRouter({
     {
       path: '/wechat/login',
       component: WechatLogin
+    },
+    {
+      path: '/wechat/info',
+      component: WechatInfo
+    },
+    {
+      path: '/wechat',
+      component: Wechat,
+      children: [
+        {
+          path: '',
+          component: WechatIndex
+        },
+        {
+          path: '*',
+          redirect: '/wechat'
+        }
+      ]
     },
     {
       path: '/work',
