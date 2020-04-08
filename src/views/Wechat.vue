@@ -1,22 +1,12 @@
 <template>
-  <div>
-    <router-view />
-    <IndexTabbar />
-  </div>
+  <router-view />
 </template>
 
 <script>
-import IndexTabbar from '@/components/IndexTabbar';
-
 export default {
   name: 'WechatIndex',
-  components: {
-    IndexTabbar
-  },
   created() {
     localStorage.setItem('platform', 'wechat');
   }
 };
 </script>
-
-<style scoped></style>
