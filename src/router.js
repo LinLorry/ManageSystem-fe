@@ -16,6 +16,7 @@ const WechatInfo = () => import('@/views/wechat/Info');
 
 const WechatIndex = () => import('@/views/wechat/Index');
 const WechatProduct = () => import('@/views/wechat/Product');
+const WechatProductDetail = () => import('@/views/wechat/ProductDetail');
 
 const Work = () => import('@/views/work/Work.vue');
 const WorkCreator = () => import('@/views/work/WorkCreator');
@@ -85,6 +86,10 @@ export default new VueRouter({
         {
           path: 'product',
           component: WechatProduct
+        },
+        {
+          path: 'product/:id',
+          component: WechatProductDetail
         },
         {
           path: '*',
