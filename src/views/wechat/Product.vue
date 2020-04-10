@@ -1,5 +1,12 @@
 <template>
   <div>
+    <van-nav-bar
+      fixed
+      placeholder
+      left-arrow
+      title="订单列表"
+      @click-left="$router.go(-1)"
+    />
     <van-search
       v-model="serial"
       show-action
