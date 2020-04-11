@@ -66,6 +66,19 @@ _axios.interceptors.response.use(
           }
 
           break;
+        case 403:
+          Vue.prototype.$message({
+            type: 'error',
+            message: '你没有权限访问相关内容',
+            showClose: true,
+            center: true
+          });
+          if (localStorage.getItem('platform') === 'wechat') {
+            router.push({ path: '/wechat' });
+          } else {
+            router.push({ path: '/' });
+          }
+          break;
         default:
           Vue.prototype.$message({
             type: 'error',
