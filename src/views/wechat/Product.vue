@@ -26,7 +26,7 @@
           v-for="item in products"
           :key="item.id"
           :title="item.serial"
-          @click="$router.push('/wechat/product/' + item.id)"
+          @click="$router.push('/wechat/product/' + item.id + '?detail=true')"
         >
           <template #label>
             <div style="font-size: 1rem">
