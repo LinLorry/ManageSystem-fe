@@ -37,20 +37,42 @@
           style="margin: 20px 0"
         />
       </template>
-      <van-cell
-        v-for="process of product.processes"
-        :key="process.id"
-        :title="process.name"
-      >
-        <template #default>
-          <div v-if="process.complete">
-            <span style="margin-right: 3px">{{
-              process.completeUserName + ' ' + formatTime(process.completeTime)
-            }}</span>
-            <van-icon name="success" />
+      <van-collapse v-model="activeProcess" accordion>
+        <van-collapse-item
+          v-for="process of product.processes"
+          :key="process.id"
+          :title="process.name"
+          :name="process.id"
+        >
+          <template #right-icon>
+            <div v-if="process.complete" style="margin-right: 5px">
+              <span style="margin-right: 3px">{{
+                process.completeUserName +
+                  ' ' +
+                  formatTime(process.completeTime)
+              }}</span>
+              <van-icon name="success" />
+            </div>
+            <van-icon
+              v-if="parseInt(activeProcess) === process.id"
+              name="arrow-up"
+            />
+            <van-icon v-else name="arrow-down" />
+          </template>
+          <div style="text-align: center">
+            <van-button
+              v-if="process.complete"
+              type="danger"
+              @click="cancelProcesses"
+            >
+              取消完成该工序
+            </van-button>
+            <van-button v-else type="primary" @click="completeProcess">
+              完成该工序
+            </van-button>
           </div>
-        </template>
-      </van-cell>
+        </van-collapse-item>
+      </van-collapse>
     </van-cell-group>
     <div v-else-if="productProcesses.length === 0" class="complete-info">
       <span>该订单的你能完成的所有工序都已经完成！</span>
@@ -71,6 +93,14 @@
         </van-collapse-item>
       </van-collapse>
     </van-cell-group>
+    <van-overlay
+      :show="loadAction"
+      style="display: flex; align-items: stretch; justify-content:center;"
+    >
+      <div style="display: flex;align-items:center ">
+        <van-loading />
+      </div>
+    </van-overlay>
   </div>
 </template>
 
@@ -104,6 +134,8 @@ export default {
 
       userProcesses,
       activeProcess: '',
+
+      loadAction: false,
 
       showDetail: [],
       timeFormatter: new Intl.DateTimeFormat('zh', {
@@ -174,7 +206,33 @@ export default {
         productId: this.product.id,
         processId: parseInt(this.activeProcess)
       };
+      this.loadAction = true;
       this.$axios.post('/api/product/completeProcess', data).then(res => {
+        _this.$message({
+          type: 'success',
+          message: res.data.message,
+          showClose: true,
+          center: true
+        });
+
+        let process = _this.product.processes.find(
+          p => p.id === data.processId
+        );
+
+        process.complete = true;
+        Object.assign(process, res.data.data);
+        _this.loadAction = false;
+      });
+    },
+    cancelProcesses() {
+      let _this = this;
+      const data = {
+        productId: this.product.id,
+        processId: parseInt(this.activeProcess)
+      };
+
+      this.loadAction = true;
+      this.$axios.post('/api/product/unCompleteProcess', data).then(res => {
         _this.$message({
           type: 'success',
           message: res.data.message,
@@ -184,7 +242,9 @@ export default {
 
         _this.product.processes.find(
           p => p.id === data.processId
-        ).complete = true;
+        ).complete = false;
+
+        _this.loadAction = false;
       });
     }
   },
