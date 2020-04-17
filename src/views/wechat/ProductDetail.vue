@@ -9,8 +9,8 @@
     />
     <van-cell-group title="基础信息">
       <van-cell title="订单号" :value="product.serial" />
-      <van-cell title="IGT" :value="product.IGT" />
-      <van-cell title="ERP" :value="product.ERP" />
+      <van-cell v-if="detail" title="IGT" :value="product.igt" />
+      <van-cell v-if="detail" title="ERP" :value="product.erp" />
       <van-cell title="花色" :value="product.design" />
       <van-cell title="订单状态">
         <template #default>
@@ -20,20 +20,20 @@
         </template>
       </van-cell>
     </van-cell-group>
-    <van-collapse v-model="showDetail">
+    <van-collapse v-if="detail" v-model="showDetail">
       <van-collapse-item title="更多信息" name="1">
-        <van-cell title="下单时间" :value="formatterTime(product.beginTime)" />
-        <van-cell title="需求时间" :value="formatterTime(product.demandTime)" />
-        <van-cell title="出货时间" :value="formatterTime(product.endTime)" />
+        <van-cell title="下单时间" :value="formatTime(product.beginTime)" />
+        <van-cell title="需求时间" :value="formatTime(product.demandTime)" />
+        <van-cell title="出货时间" :value="formatTime(product.endTime)" />
       </van-collapse-item>
     </van-collapse>
 
-    <van-cell-group>
+    <van-cell-group v-if="detail">
       <template #title>
         <span>订单进度</span>
         <van-progress
           v-if="status === 1"
-          :percentage="product.percentage"
+          :percentage="percentage"
           style="margin: 20px 0"
         />
       </template>
@@ -43,9 +43,33 @@
         :title="process.name"
       >
         <template #default>
-          <van-icon v-if="process.complete" name="success" />
+          <div v-if="process.complete">
+            <span style="margin-right: 3px">{{
+              process.completeUserName + ' ' + formatTime(process.completeTime)
+            }}</span>
+            <van-icon name="success" />
+          </div>
         </template>
       </van-cell>
+    </van-cell-group>
+    <div v-else-if="productProcesses.length === 0" class="complete-info">
+      <span>该订单的你能完成的所有工序都已经完成！</span>
+    </div>
+    <van-cell-group v-else title="订单进度">
+      <van-collapse v-model="activeProcess" accordion>
+        <van-collapse-item
+          v-for="process of productProcesses"
+          :key="process.id"
+          :title="process.name"
+          :name="process.id"
+        >
+          <div style="text-align: center">
+            <van-button type="primary" @click="completeProcess"
+              >完成该工序</van-button
+            >
+          </div>
+        </van-collapse-item>
+      </van-collapse>
     </van-cell-group>
   </div>
 </template>
@@ -53,13 +77,20 @@
 <script>
 export default {
   name: 'ProductDetail',
+  props: ['detail'],
   data() {
+    let tmp = localStorage.getItem('userProcesses');
+    let userProcesses = [];
+    if (tmp) {
+      userProcesses = JSON.parse(tmp);
+    }
+
     return {
       product: {
         id: 0,
         serial: '',
-        IGT: '',
-        ERP: '',
+        igt: '',
+        erp: '',
         central: '',
         area: '',
         design: '',
@@ -67,10 +98,13 @@ export default {
         beginTime: '',
         demandTime: '',
         endTime: '',
-        percentage: 0,
         workName: '',
         processes: []
       },
+
+      userProcesses,
+      activeProcess: '',
+
       showDetail: [],
       timeFormatter: new Intl.DateTimeFormat('zh', {
         year: 'numeric',
@@ -83,77 +117,130 @@ export default {
     let _this = this;
     const id = this.$route.params.id;
 
-    let params = {
-      id: id,
-      withProcesses: true
-    };
-
-    this.$axios
-      .request({
-        url: '/api/product',
-        method: 'get',
-        params
-      })
-      .then(res => {
+    if (this.detail) {
+      this.$axios('/api/product?id= ' + id).then(res => {
         if (res.data.data) {
-          _this.dealWith(res.data.data);
+          Object.assign(_this.product, res.data.data);
         }
       });
+
+      this.$axios('/api/product/processes?id=' + id).then(res => {
+        _this.product.processes.push.apply(
+          _this.product.processes,
+          res.data.data
+        );
+        _this.sortProcesses();
+      });
+    } else {
+      let params = {
+        id: id,
+        withProcesses: true
+      };
+
+      this.$axios
+        .request({
+          url: '/api/product',
+          method: 'get',
+          params
+        })
+        .then(res => {
+          if (res.data.data) {
+            const product = res.data.data;
+            Object.assign(_this.product, product);
+            _this.sortProcesses();
+          }
+        });
+
+      this.$axios('/api/user/processes').then(res => {
+        _this.userProcesses.splice(0, _this.userProcesses.length);
+        _this.userProcesses.push.apply(_this.userProcesses, res.data.data);
+      });
+    }
   },
   methods: {
-    dealWith(data) {
-      let product = this.product;
-
-      Object.assign(product, data);
-      this.sortProcesses();
-
-      if (product.processes.length === 0) {
-        product.percentage = 0;
-      } else {
-        product.completeNumber = 0;
-        for (const process of product.processes) {
-          if (process.complete) {
-            product.completeNumber++;
-          }
-        }
-        product.percentage = parseInt(
-          (product.completeNumber * 100) / product.processes.length
-        );
-        if (product.completeNumber === product.processes.length) {
-          product.complete = true;
-        }
-      }
-    },
-    async sortProcesses() {
+    sortProcesses() {
       this.product.processes.sort((f, s) => f.sequence - s.sequence);
     },
-    formatterTime(time) {
+    formatTime(time) {
       if (time) {
         return this.timeFormatter.format(new Date(time));
       } else {
         return '';
       }
+    },
+    completeProcess() {
+      let _this = this;
+      const data = {
+        productId: this.product.id,
+        processId: parseInt(this.activeProcess)
+      };
+      this.$axios.post('/api/product/completeProcess', data).then(res => {
+        _this.$message({
+          type: 'success',
+          message: res.data.message,
+          showClose: true,
+          center: true
+        });
+
+        _this.product.processes.find(
+          p => p.id === data.processId
+        ).complete = true;
+      });
     }
   },
   computed: {
-    desc() {
-      const product = this.product;
-
-      return 'IGT: ' + product.IGT + '\n' + 'ERP: ' + product.ERP;
-    },
     status() {
-      const completeNumber = this.product.completeNumber;
+      const completeNumber = this.completeNumber;
 
-      if (completeNumber === this.product.processes.length) {
+      if (this.product.complete) {
         return 0;
       } else if (completeNumber > 0) {
         return 1;
       } else {
         return 2;
       }
+    },
+    percentage() {
+      let product = this.product;
+
+      if (product.processes.length === 0) {
+        return 0;
+      }
+
+      return parseInt((this.completeNumber * 100) / product.processes.length);
+    },
+    completeNumber() {
+      let completeNumber = 0;
+      for (const process of this.product.processes) {
+        if (process.complete) {
+          completeNumber++;
+        }
+      }
+
+      return completeNumber;
+    },
+    productProcesses() {
+      let productProcesses = [];
+      for (const up of this.userProcesses) {
+        const p = this.product.processes.find(p => p.id === up.id);
+        if (p && !p.complete) {
+          productProcesses.push(p);
+        }
+      }
+
+      productProcesses.sort((f, s) => f.sequence - s.sequence);
+
+      return productProcesses;
     }
   }
 };
 </script>
 
-<style></style>
+<style>
+.complete-info {
+  text-align: center;
+  margin: 30px 0;
+  color: #969799;
+  font-size: 14px;
+}
+</style>

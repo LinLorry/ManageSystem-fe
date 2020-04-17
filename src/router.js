@@ -89,6 +89,7 @@ export default new VueRouter({
         },
         {
           path: 'product/:id',
+          props: route => ({ detail: route.query.detail }),
           component: WechatProductDetail
         },
         {
