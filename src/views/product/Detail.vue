@@ -149,7 +149,7 @@
                   {{ process.name }}
                 </span>
               </div>
-              <div class="process-tail">
+              <div v-if="!product.complete" class="process-tail">
                 <el-button
                   v-if="process.complete"
                   type="danger"
@@ -166,6 +166,13 @@
                 >
                   完成
                 </el-button>
+              </div>
+              <div v-else class="process-tail">
+                <i
+                  v-if="process.complete"
+                  class="el-icon-success"
+                  style="color: #67C23A"
+                />
               </div>
             </el-card>
           </el-timeline-item>
@@ -329,25 +336,18 @@ export default {
     }
   },
   computed: {
-    firstUnComplete: function() {
-      const processes = this.product.processes;
-      if (processes.length === 0) return 0;
+    processesPercentage() {
+      let completeNumber = 0;
+      const length = this.product.processes.length;
+      if (length === 0) return 100;
 
-      for (let index = 0; index < processes.length; ++index) {
-        if (!processes[index].complete) {
-          return index;
+      for (const process of this.product.processes) {
+        if (process.complete) {
+          completeNumber++;
         }
       }
 
-      return processes.length;
-    },
-    processesPercentage: function() {
-      return (
-        (100 * this.firstUnComplete) /
-        (this.product.processes.length === 0
-          ? 1
-          : this.product.processes.length)
-      );
+      return parseInt((completeNumber * 100) / length);
     }
   }
 };
