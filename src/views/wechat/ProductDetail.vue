@@ -93,14 +93,6 @@
         </van-collapse-item>
       </van-collapse>
     </van-cell-group>
-    <van-overlay
-      :show="loadAction"
-      style="display: flex; align-items: stretch; justify-content:center;"
-    >
-      <div style="display: flex;align-items:center ">
-        <van-loading />
-      </div>
-    </van-overlay>
   </div>
 </template>
 
@@ -134,8 +126,6 @@ export default {
 
       userProcesses,
       activeProcess: '',
-
-      loadAction: false,
 
       showDetail: [],
       timeFormatter: new Intl.DateTimeFormat('zh', {
@@ -206,22 +196,30 @@ export default {
         productId: this.product.id,
         processId: parseInt(this.activeProcess)
       };
-      this.loadAction = true;
-      this.$axios.post('/api/product/completeProcess', data).then(res => {
-        _this.$message({
-          type: 'success',
-          message: res.data.message,
-          showClose: true,
-          center: true
-        });
+      let process = this.product.processes.find(p => p.id === data.processId);
 
-        let process = _this.product.processes.find(
-          p => p.id === data.processId
-        );
+      let beforeClose = (action, done) => {
+        if (action === 'confirm') {
+          _this.$axios.post('/api/product/completeProcess', data).then(res => {
+            _this.$message({
+              type: 'success',
+              message: res.data.message,
+              showClose: true,
+              center: true
+            });
 
-        process.complete = true;
-        Object.assign(process, res.data.data);
-        _this.loadAction = false;
+            process.complete = true;
+            Object.assign(process, res.data.data);
+            done();
+          });
+        } else {
+          done();
+        }
+      };
+
+      this.$dialog.confirm({
+        message: '确定完成 ' + process.name + ' 工序？',
+        beforeClose
       });
     },
     cancelProcesses() {
@@ -230,21 +228,32 @@ export default {
         productId: this.product.id,
         processId: parseInt(this.activeProcess)
       };
+      let process = this.product.processes.find(p => p.id === data.processId);
 
-      this.loadAction = true;
-      this.$axios.post('/api/product/unCompleteProcess', data).then(res => {
-        _this.$message({
-          type: 'success',
-          message: res.data.message,
-          showClose: true,
-          center: true
-        });
+      let beforeClose = (action, done) => {
+        if (action === 'confirm') {
+          _this.$axios
+            .post('/api/product/unCompleteProcess', data)
+            .then(res => {
+              _this.$message({
+                type: 'success',
+                message: res.data.message,
+                showClose: true,
+                center: true
+              });
 
-        _this.product.processes.find(
-          p => p.id === data.processId
-        ).complete = false;
+              process.complete = false;
 
-        _this.loadAction = false;
+              done();
+            });
+        } else {
+          done();
+        }
+      };
+
+      this.$dialog.confirm({
+        message: '确定取消完成 ' + process.name + ' 工序？',
+        beforeClose
       });
     }
   },
