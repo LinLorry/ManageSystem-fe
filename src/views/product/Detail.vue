@@ -135,7 +135,7 @@
         />
         <el-timeline style="padding-left: 20px">
           <el-timeline-item
-            v-for="(process, index) in product.processes"
+            v-for="process in product.processes"
             :key="process.id"
           >
             <el-card
@@ -151,16 +151,21 @@
               </div>
               <div class="process-tail">
                 <el-button
-                  type="success"
-                  v-if="index === firstUnComplete"
-                  size="mini"
-                  >完成</el-button
-                >
-                <i
                   v-if="process.complete"
-                  class="el-icon-success"
-                  style="color: #67C23A"
-                />
+                  type="danger"
+                  size="mini"
+                  @click="unCompleteProcess(process.id)"
+                >
+                  取消完成
+                </el-button>
+                <el-button
+                  v-else
+                  type="success"
+                  size="mini"
+                  @click="completeProcess(process.id)"
+                >
+                  完成
+                </el-button>
               </div>
             </el-card>
           </el-timeline-item>
@@ -171,7 +176,6 @@
 </template>
 
 <script>
-// TODO 工序完成和编辑
 import QRCode from 'qrcodejs2';
 
 export default {
@@ -254,6 +258,74 @@ export default {
           return false;
         }
       });
+    },
+    completeProcess(processId) {
+      let _this = this;
+      const process = this.product.processes.find(p => p.id === processId);
+      const data = {
+        productId: this.product.id,
+        processId
+      };
+
+      this.$confirm('确定完成该订单的' + process.name + '工序？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          _this.$axios.post('/api/product/completeProcess', data).then(res => {
+            _this.$message({
+              message: res.data.message,
+              type: 'success',
+              showClose: true,
+              center: true
+            });
+            _this.product.processes.find(
+              p => p.id === processId
+            ).complete = true;
+          });
+        })
+        .catch(() => {
+          _this.$message({
+            type: 'info',
+            message: '已取消'
+          });
+        });
+    },
+    unCompleteProcess(processId) {
+      let _this = this;
+      const process = this.product.processes.find(p => p.id === processId);
+      const data = {
+        productId: this.product.id,
+        processId
+      };
+
+      this.$confirm('确定完成该订单的' + process.name + '工序？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          _this.$axios
+            .post('/api/product/unCompleteProcess', data)
+            .then(res => {
+              _this.$message({
+                message: res.data.message,
+                type: 'success',
+                showClose: true,
+                center: true
+              });
+              _this.product.processes.find(
+                p => p.id === processId
+              ).complete = false;
+            });
+        })
+        .catch(() => {
+          _this.$message({
+            type: 'info',
+            message: '已取消'
+          });
+        });
     }
   },
   computed: {
