@@ -3,30 +3,48 @@
     <el-container style="height: 100% !important;border: 1px solid #eee">
       <el-header class="header">
         <span>管理系统</span>
-        <span style="color: white">
-          <strong> {{ userInfo.username }} </strong>
-        </span>
+
+        <el-dropdown @command="dropDownCommand">
+          <span style="color: white">
+            <strong> {{ userInfo.username }} </strong>
+          </span>
+          <el-dropdown-menu>
+            <el-dropdown-item command="changePassword">
+              修改密码
+            </el-dropdown-item>
+            <el-dropdown-item command="logout">
+              退出系统
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-header>
       <el-main class="main">
         <IndexMenu />
         <router-view class="content" />
       </el-main>
     </el-container>
+    <ChangePassword
+      :show="changePasswordDialogFormVisible"
+      @close="changePasswordDialogFormVisible = false"
+    />
   </div>
 </template>
 
 <script>
 import IndexMenu from '@/components/IndexMenu.vue';
+import ChangePassword from '@/components/ChangePassword';
 
 export default {
   name: 'index',
   components: {
-    IndexMenu
+    IndexMenu,
+    ChangePassword
   },
   data() {
     this.getProfile();
     return {
-      userInfo: {}
+      userInfo: {},
+      changePasswordDialogFormVisible: false
     };
   },
   methods: {
@@ -36,6 +54,23 @@ export default {
         localStorage.setItem('userInfo', JSON.stringify(res.data.data));
         _this.userInfo = res.data.data;
       });
+    },
+    dropDownCommand(command) {
+      switch (command) {
+        case 'changePassword':
+          this.changePasswordDialogFormVisible = true;
+          break;
+        case 'logout':
+          localStorage.clear();
+          this.$message({
+            type: 'info',
+            message: '退出登陆成功',
+            showClose: true,
+            center: true
+          });
+          this.$router.replace('/login');
+          break;
+      }
     }
   }
 };
