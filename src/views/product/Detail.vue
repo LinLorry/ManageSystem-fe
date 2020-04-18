@@ -120,6 +120,9 @@
 
         <div style="text-align: center" v-if="!product.complete">
           <el-button type="primary" @click="update">更新</el-button>
+          <el-button type="primary" @click="completeProduct">
+            完成该订单
+          </el-button>
         </div>
       </el-form>
     </el-card>
@@ -265,6 +268,38 @@ export default {
           return false;
         }
       });
+    },
+    completeProduct() {
+      let _this = this;
+
+      this.$confirm(
+        '确定完成订单号为' + this.product.serial + '的订单？',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      )
+        .then(() => {
+          _this.axios
+            .post('/api/product/complete', { id: this.product.id })
+            .then(res => {
+              _this.$message({
+                message: res.data.message,
+                type: 'success',
+                showClose: true,
+                center: true
+              });
+              _this.product.complete = true;
+            });
+        })
+        .catch(() => {
+          _this.$message({
+            type: 'info',
+            message: '已取消'
+          });
+        });
     },
     completeProcess(processId) {
       let _this = this;
