@@ -186,8 +186,6 @@ export default {
           }
 
           this.tmp.pageNumber = 0;
-
-          console.log(this.tmp);
           this.refreshData();
         } else {
           return false;
