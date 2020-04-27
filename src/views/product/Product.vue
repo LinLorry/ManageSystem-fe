@@ -71,6 +71,7 @@
             range-separator="至"
             start-placeholder="出货日期范围开始"
             end-placeholder="出货日期范围结束"
+            :disabled="end"
             :editable="false"
           />
         </el-form-item>
@@ -125,10 +126,10 @@
       background
       style="padding-top: 10px; text-align: right; margin-bottom: 20px"
       layout="sizes, prev, pager, next"
-      :current-page="this.tmp.pageNumber + 1"
+      :current-page="pageNumber + 1"
       :page-count="total"
       :page-sizes="[10, 20, 30, 40]"
-      :page-size="tmp.pageSize"
+      :page-size="pageSize"
       @size-change="handleSizeChange"
       @current-change="handlePageNumberChange"
     />
@@ -157,25 +158,22 @@ export default {
         endTime: []
       },
 
-      tmp: {
-        pageSize: 20,
-        pageNumber: 0,
+      end: false,
 
-        serial: '',
-        beginTimeAfter: '',
-        beginTimeBefore: '',
-        demandTimeAfter: '',
-        demandTimeBefore: '',
-        endTimeAfter: '',
-        endTimeBefore: ''
+      params: {
+        serial: null,
+        createTimeAfter: null,
+        createTimeBefore: null,
+        beginTimeAfter: null,
+        beginTimeBefore: null,
+        demandTimeAfter: null,
+        demandTimeBefore: null,
+        endTimeAfter: null,
+        endTimeBefore: null
       },
 
-      select: {
-        accord: 0,
-        create: false,
-        end: false
-      },
-
+      pageSize: 20,
+      pageNumber: 0,
       total: 0,
 
       products: [],
@@ -191,62 +189,86 @@ export default {
     this.refreshData();
   },
   methods: {
+    clear() {
+      this.pageNumber = 0;
+      this.end = false;
+
+      this.queryForm.serial = '';
+      this.queryForm.beginTime = [];
+      this.queryForm.demandTime = [];
+      this.queryForm.endTime = [];
+
+      Object.keys(this.params).forEach(key => (this.params[key] = null));
+    },
     loadAll() {
-      this.select.create = false;
-      this.select.end = false;
-      this.tmp.pageNumber = 0;
+      this.clear();
       this.refreshData();
     },
     loadTodayCreate() {
-      this.select.create = true;
-      this.select.end = false;
-      this.select.accord = 0;
-      this.tmp.pageNumber = 0;
+      let today = new Date(new Date().toLocaleDateString());
+
+      this.clear();
+
+      this.params.createTimeAfter = today;
+      this.params.createTimeBefore = new Date(today);
+      this.params.createTimeBefore.setDate(today.getDate() + 1);
+
       this.refreshData();
     },
     loadEnd(num) {
-      this.select.create = false;
-      this.select.end = true;
-      this.select.accord = num;
-      this.tmp.pageNumber = 0;
+      let today = new Date(new Date().toLocaleDateString());
+      this.clear();
+      this.end = true;
+
+      this.params.endTimeAfter = new Date(today);
+      this.params.endTimeAfter.setDate(today.getDate() + num);
+      this.params.endTimeBefore = new Date(today);
+      this.params.endTimeBefore.setDate(today.getDate() + num + 1);
+
       this.refreshData();
     },
     submitQuery() {
       this.$refs.queryForm.validate(valid => {
         if (valid) {
-          Object.keys(this.tmp).forEach(key => {
-            this.tmp[key] = null;
-          });
-
           if (this.queryForm.serial) {
-            this.tmp.serial = this.queryForm.serial;
+            this.params.serial = this.queryForm.serial;
+          } else {
+            this.params.serial = null;
           }
 
           if (
             this.queryForm.beginTime &&
             this.queryForm.beginTime.length === 2
           ) {
-            this.tmp.beginTimeAfter = this.queryForm.beginTime[0];
-            this.tmp.beginTimeBefore = this.queryForm.beginTime[1];
+            this.params.beginTimeAfter = this.queryForm.beginTime[0];
+            this.params.beginTimeBefore = this.queryForm.beginTime[1];
+          } else {
+            this.params.beginTimeAfter = null;
+            this.params.beginTimeBefore = null;
           }
 
           if (
             this.queryForm.demandTime &&
             this.queryForm.demandTime.length === 2
           ) {
-            this.tmp.demandTimeAfter = this.queryForm.demandTime[0];
-            this.tmp.demandTimeBefore = this.queryForm.demandTime[1];
+            this.params.demandTimeAfter = this.queryForm.demandTime[0];
+            this.params.demandTimeBefore = this.queryForm.demandTime[1];
+          } else {
+            this.params.demandTimeAfter = null;
+            this.params.demandTimeBefore = null;
           }
 
-          if (
-            this.queryForm.demandTime &&
-            this.queryForm.endTime.length === 2
-          ) {
-            this.tmp.endTimeAfter = this.queryForm.endTime[0];
-            this.tmp.endTimeBefore = this.queryForm.endTime[1];
+          if (!this.end) {
+            if (this.queryForm.endTime && this.queryForm.endTime.length === 2) {
+              this.params.endTimeAfter = this.queryForm.endTime[0];
+              this.params.endTimeBefore = this.queryForm.endTime[1];
+            } else {
+              this.params.endTimeAfter = null;
+              this.params.endTimeBefore = null;
+            }
           }
 
-          this.tmp.pageNumber = 0;
+          this.pageNumber = 0;
           this.refreshData();
         } else {
           return false;
@@ -254,18 +276,17 @@ export default {
       });
     },
     handleSizeChange(pageSize) {
-      this.tmp.pageSize = pageSize;
-      this.tmp.pageNumber = 0;
+      this.pageSize = pageSize;
+      this.pageNumber = 0;
       this.refreshData();
     },
     handlePageNumberChange(pageNumber) {
-      this.tmp.pageNumber = pageNumber - 1;
+      this.pageNumber = pageNumber - 1;
       this.refreshData();
     },
     refreshData() {
       let _this = this;
-      const data = this.tmp;
-      const select = this.select;
+      const data = this.params;
 
       let params = {};
 
@@ -273,9 +294,8 @@ export default {
         params[key] = data[key];
       });
 
-      Object.keys(select).forEach(key => {
-        params[key] = select[key];
-      });
+      params['pageSize'] = this.pageSize;
+      params['pageNumber'] = this.pageNumber;
 
       this.axios
         .request({
