@@ -79,6 +79,14 @@ _axios.interceptors.response.use(
             router.push({ path: '/' });
           }
           break;
+        case 500:
+          Vue.prototype.$message({
+            type: 'error',
+            message: '服务出现了问题，请稍后重试',
+            showClose: true,
+            center: true
+          });
+          break;
         default:
           Vue.prototype.$message({
             type: 'error',
