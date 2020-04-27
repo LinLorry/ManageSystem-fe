@@ -23,6 +23,9 @@
             @click="downloadQrCode"
             >下载二维码</el-button
           >
+          <el-button @click="createByExcelDialogFormVisible = true"
+            >使用Excel导入</el-button
+          >
           <el-button @click="$router.push('/product/create')">新建</el-button>
         </el-button-group>
       </div>
@@ -129,6 +132,10 @@
       @size-change="handleSizeChange"
       @current-change="handlePageNumberChange"
     />
+    <CreateByExcel
+      :show="createByExcelDialogFormVisible"
+      @close="createByExcelDialogFormVisible = false"
+    />
   </el-card>
 </template>
 
@@ -136,9 +143,11 @@
 import QRCode from 'qrcodejs2';
 import JSZip from 'jszip';
 import saveAs from 'file-saver';
+import CreateByExcel from './childComp/CreateByExcel';
 
 export default {
   name: 'Product',
+  components: { CreateByExcel },
   data() {
     return {
       queryForm: {
@@ -174,7 +183,8 @@ export default {
       editIndex: 0,
       multipleSelection: [],
       imgList: new Map(),
-      lengthTmp: 0
+
+      createByExcelDialogFormVisible: false
     };
   },
   created() {
