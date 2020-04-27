@@ -45,7 +45,10 @@ _axios.interceptors.response.use(
             loginFlag = true;
             if (localStorage.getItem('platform') === 'wechat') {
               localStorage.clear();
-              router.push({ path: '/wechat/login' });
+              router.push({
+                path: '/wechat/login',
+                query: { preUrl: location.pathname }
+              });
             } else {
               let message;
               if (localStorage.getItem('token')) {
@@ -61,7 +64,10 @@ _axios.interceptors.response.use(
                 center: true
               });
               localStorage.clear();
-              router.push({ path: '/login' });
+              router.push({
+                path: '/login',
+                query: { preUrl: location.pathname }
+              });
             }
           }
 

@@ -79,6 +79,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          const preUrl = this.$route.query.preUrl;
+
           const data = this.loginForm;
           let _this = this;
           if (data.username && data.password) {
@@ -90,7 +92,11 @@ export default {
                 center: true
               });
               localStorage.setItem('token', res.data.token);
-              _this.$router.push('/');
+              if (preUrl) {
+                _this.$router.push({ path: preUrl });
+              } else {
+                _this.$router.push('/');
+              }
               _this.$loginFlag = false;
             });
           }
