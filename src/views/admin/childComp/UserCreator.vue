@@ -65,7 +65,7 @@ export default {
 
           const data = this.user;
           let _this = this;
-          this.axios.post('/api/user', data).then(res => {
+          this.axios.post('/api/admin/user', data).then(res => {
             _this.$message({
               message: res.data.message,
               type: 'success',

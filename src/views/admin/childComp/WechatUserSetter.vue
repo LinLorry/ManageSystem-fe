@@ -85,7 +85,7 @@ export default {
       }
 
       let _this = this;
-      this.axios.post('/api/user', data).then(res => {
+      this.axios.post('/api/admin/user', data).then(res => {
         _this.$message({
           message: res.data.message,
           type: 'success',
@@ -100,7 +100,7 @@ export default {
       let _this = this;
 
       _this.axios
-        .post('/api/user/disable', {
+        .post('/api/admin/user/disable', {
           id: data.id,
           operation: false
         })
@@ -119,7 +119,7 @@ export default {
       let _this = this;
 
       _this.axios
-        .post('/api/user/disable', {
+        .post('/api/admin/user/disable', {
           id: data.id,
           operation: true
         })
@@ -146,7 +146,7 @@ export default {
         Object.assign(this.user, user);
         let _this = this;
 
-        this.axios('/api/user/authority?id=' + user.id).then(res => {
+        this.axios('/api/admin/user/authority?id=' + user.id).then(res => {
           res.data.data.sort((first, second) => {
             return first.id - second.id;
           });

@@ -74,7 +74,7 @@ export default {
           }
 
           let _this = this;
-          this.axios.post('/api/user', data).then(res => {
+          this.axios.post('/api/admin/user', data).then(res => {
             _this.$message({
               message: res.data.message,
               type: 'success',
@@ -98,7 +98,7 @@ export default {
       this.user.roles.splice(0, this.user.roles.length);
       this.rolesChange = false;
 
-      this.axios('/api/user/authority?id=' + newV.id).then(res => {
+      this.axios('/api/admin/user/authority?id=' + newV.id).then(res => {
         res.data.data.sort((first, second) => {
           return first.id - second.id;
         });

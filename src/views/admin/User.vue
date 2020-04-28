@@ -222,7 +222,7 @@ export default {
       )
         .then(() => {
           _this.axios
-            .post('/api/user/disable', {
+            .post('/api/admin/user/disable', {
               id: data.id,
               operation: false
             })
@@ -261,7 +261,7 @@ export default {
       )
         .then(() => {
           _this.axios
-            .post('/api/user/disable', {
+            .post('/api/admin/user/disable', {
               id: data.id,
               operation: true
             })
@@ -293,7 +293,7 @@ export default {
           _this.resetPasswordDialogVisible = false;
           let data = _this.resetPasswordInfo;
 
-          _this.axios.post('/api/user/password', data).then(res => {
+          _this.axios.post('/api/admin/user/password', data).then(res => {
             _this.$message({
               message: res.data.message,
               type: 'success',
@@ -321,7 +321,7 @@ export default {
       let id = this.queryId;
 
       if (id !== undefined && id !== null && id.length !== 0) {
-        this.axios.get('/api/user?id=' + id).then(res => {
+        this.axios.get('/api/admin/user?id=' + id).then(res => {
           const data = res.data.data;
 
           if (data) {
@@ -334,7 +334,7 @@ export default {
         });
       } else {
         let url =
-          '/api/user?pageSize=' +
+          '/api/admin/user?pageSize=' +
           this.pageSize +
           '&pageNumber=' +
           this.pageNumber;
