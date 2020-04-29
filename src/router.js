@@ -23,6 +23,7 @@ const Process = () => import('@/views/work/Process');
 
 const Worker = () => import('@/views/worker/Worker');
 const WechatWorker = () => import('@/views/worker/WechatWorker');
+const WorkloadStatistics = () => import('@/views/worker/WorkloadStatistics');
 
 const ProductCreator = () => import('@/views/product/Creator');
 const ProductDetail = () => import('@/views/product/Detail');
@@ -125,6 +126,11 @@ export default new VueRouter({
           path: 'wechatWorkerManage',
           name: 'wechatWorker',
           component: WechatWorker
+        },
+        {
+          path: 'workloadStatistics',
+          name: 'workloadStatistics',
+          component: WorkloadStatistics
         }
       ]
     },
