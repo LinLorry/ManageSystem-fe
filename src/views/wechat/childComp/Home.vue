@@ -21,19 +21,25 @@
 
 <script>
 const raw = {
-  productManagerMenus: [],
+  productManagerMenus: [
+    {
+      name: '订单列表',
+      icon: 'orders-o',
+      to: '/wechat/product'
+    }
+  ],
   workerManagerMenus: [],
   workerMenus: []
 };
 
 const levelSelect = {
   productManager: {
-    productManagerMenus: [],
+    productManagerMenus: [0],
     workerManagerMenus: [],
     workerMenus: []
   },
   workerManager: {
-    productManagerMenus: [],
+    productManagerMenus: [0],
     workerManagerMenus: [],
     workerMenus: []
   },
