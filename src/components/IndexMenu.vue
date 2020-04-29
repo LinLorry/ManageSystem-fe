@@ -9,7 +9,7 @@
       :collapse="isCollapse"
     >
       <el-menu-item index="home" route="/">
-        <i class="el-icon-s-home"></i> <span slot="title">首页</span>
+        <i class="el-icon-s-home" /> <span slot="title">首页</span>
       </el-menu-item>
       <el-submenu
         v-for="subMenu in menus"
@@ -17,7 +17,7 @@
         v-bind:index="subMenu.name"
       >
         <template slot="title">
-          <i v-bind:class="subMenu.icon"></i>
+          <i v-bind:class="subMenu.icon" />
           <span slot="title">{{ subMenu.name }}</span>
         </template>
         <el-menu-item
@@ -30,13 +30,11 @@
         </el-menu-item>
       </el-submenu>
       <el-menu-item index="logout" @click="logout">
-        <i class="el-icon-s-fold"></i> <span slot="title">退出系统</span>
+        <i class="el-icon-s-fold" /> <span slot="title">退出系统</span>
       </el-menu-item>
     </el-menu>
     <div class="collapse" @click="isCollapse = !isCollapse">
-      <i
-        :class="[isCollapse ? 'el-icon-arrow-right' : 'el-icon-arrow-left']"
-      ></i>
+      <i :class="[isCollapse ? 'el-icon-arrow-right' : 'el-icon-arrow-left']" />
     </div>
   </div>
 </template>
@@ -52,7 +50,7 @@ export default {
   },
   created() {
     let _this = this;
-    this.axios.get('/api/menu').then(res => {
+    this.axios.get('/api/user/menu').then(res => {
       _this.sortMenu(res.data.data);
       _this.menus = res.data.data;
     });
