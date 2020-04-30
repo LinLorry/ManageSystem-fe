@@ -17,6 +17,8 @@ const WechatInfo = () => import('@/views/wechat/Info');
 const WechatIndex = () => import('@/views/wechat/Index');
 const WechatProduct = () => import('@/views/wechat/Product');
 const WechatProductDetail = () => import('@/views/wechat/ProductDetail');
+const WechatWorkloadStatistics = () =>
+  import('@/views/wechat/worker/WorkloadStatistics');
 
 const Work = () => import('@/views/work/Work.vue');
 const WorkCreator = () => import('@/views/work/WorkCreator');
@@ -25,6 +27,7 @@ const Process = () => import('@/views/work/Process');
 
 const Worker = () => import('@/views/worker/Worker');
 const WechatWorker = () => import('@/views/worker/WechatWorker');
+const WorkloadStatistics = () => import('@/views/worker/WorkloadStatistics');
 
 const ProductCreator = () => import('@/views/product/Creator');
 const ProductDetail = () => import('@/views/product/Detail');
@@ -93,6 +96,11 @@ export default new VueRouter({
           component: WechatProductDetail
         },
         {
+          path: 'worker/workloadStatistics',
+          name: 'wechatWorkloadStatistics',
+          component: WechatWorkloadStatistics
+        },
+        {
           path: '*',
           redirect: '/wechat'
         }
@@ -136,6 +144,11 @@ export default new VueRouter({
           path: 'wechatWorkerManage',
           name: 'wechatWorker',
           component: WechatWorker
+        },
+        {
+          path: 'workloadStatistics',
+          name: 'workloadStatistics',
+          component: WorkloadStatistics
         }
       ]
     },
