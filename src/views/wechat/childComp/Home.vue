@@ -26,6 +26,11 @@ const raw = {
       name: '订单列表',
       icon: 'orders-o',
       to: '/wechat/product'
+    },
+    {
+      name: '近期工序',
+      icon: 'todo-list-o',
+      to: '/wechat/recentFinishProcess'
     }
   ],
   workerManagerMenus: [],
@@ -34,12 +39,12 @@ const raw = {
 
 const levelSelect = {
   productManager: {
-    productManagerMenus: [0],
+    productManagerMenus: [0, 1],
     workerManagerMenus: [],
     workerMenus: []
   },
   workerManager: {
-    productManagerMenus: [0],
+    productManagerMenus: [0, 1],
     workerManagerMenus: [],
     workerMenus: []
   },

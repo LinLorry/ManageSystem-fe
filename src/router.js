@@ -17,6 +17,8 @@ const WechatInfo = () => import('@/views/wechat/Info');
 const WechatIndex = () => import('@/views/wechat/Index');
 const WechatProduct = () => import('@/views/wechat/Product');
 const WechatProductDetail = () => import('@/views/wechat/ProductDetail');
+const WechatRecentFinishProcess = () =>
+  import('@/views/wechat/RecentFinishProcess');
 
 const Work = () => import('@/views/work/Work.vue');
 const WorkCreator = () => import('@/views/work/WorkCreator');
@@ -91,6 +93,10 @@ export default new VueRouter({
           path: 'product/:id',
           props: route => ({ detail: route.query.detail }),
           component: WechatProductDetail
+        },
+        {
+          path: 'recentFinishProcess',
+          component: WechatRecentFinishProcess
         },
         {
           path: '*',
