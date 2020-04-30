@@ -15,8 +15,11 @@ const WechatLogin = () => import('@/views/wechat/Login');
 const WechatInfo = () => import('@/views/wechat/Info');
 
 const WechatIndex = () => import('@/views/wechat/Index');
-const WechatProduct = () => import('@/views/wechat/Product');
-const WechatProductDetail = () => import('@/views/wechat/ProductDetail');
+const WechatProduct = () => import('@/views/wechat/product/Product');
+const WechatProductDetail = () =>
+  import('@/views/wechat/product/ProductDetail');
+const WechatRecentFinishProcess = () =>
+  import('@/views/wechat/product/RecentFinishProcess');
 const WechatWorkloadStatistics = () =>
   import('@/views/wechat/worker/WorkloadStatistics');
 
@@ -94,6 +97,10 @@ export default new VueRouter({
           path: 'product/:id',
           props: route => ({ detail: route.query.detail }),
           component: WechatProductDetail
+        },
+        {
+          path: 'recentFinishProcess',
+          component: WechatRecentFinishProcess
         },
         {
           path: 'worker/workloadStatistics',
