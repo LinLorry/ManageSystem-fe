@@ -99,31 +99,13 @@ export default {
 
       data.forEach(o => {
         o.num = o.finishList.length;
-        o.finishSet = [];
-        let tmp = {};
+        o.todayNum = 0;
 
-        let todayNum = 0;
-
-        for (const f of o.finishList) {
-          let date = new Date(f.finishTime);
-          if (date > today) todayNum++;
-
-          let index = tmp[f.processId];
-          if (index !== undefined) {
-            o.finishSet[index].list.push(f);
-          } else {
-            tmp[f.processId] = o.finishSet.length;
-            o.finishSet.push({
-              id: f.processId,
-              name: f.processName,
-              list: [f]
-            });
-          }
-        }
-
-        o.todayNum = todayNum;
-
-        o.finishSet.forEach(f => (f.num = f.list.length));
+        o.finishList.forEach(f => {
+          f.finishDate = new Date(f.finishTime);
+          if (f.finishDate > today) o.todayNum++;
+        });
+        o.finishList.sort((f, s) => s.finishDate - f.finishDate);
       });
 
       this.data.sort((f, s) => f.id - s.id);
