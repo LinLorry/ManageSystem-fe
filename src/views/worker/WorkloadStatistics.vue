@@ -102,7 +102,7 @@ export default {
 
         for (const f of o.finishList) {
           let index = tmp[f.processId];
-          if (index) {
+          if (index !== undefined) {
             o.finishSet[index].list.push(f);
           } else {
             tmp[f.processId] = o.finishSet.length;

@@ -109,11 +109,12 @@ export default {
           if (date > today) todayNum++;
 
           let index = tmp[f.processId];
-          if (index) {
+          if (index !== undefined) {
             o.finishSet[index].list.push(f);
           } else {
             tmp[f.processId] = o.finishSet.length;
             o.finishSet.push({
+              id: f.processId,
               name: f.processName,
               list: [f]
             });
