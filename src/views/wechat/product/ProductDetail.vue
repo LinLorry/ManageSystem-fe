@@ -181,19 +181,13 @@ export default {
             }
           });
 
-          this.$axios('/api/product/processes?id=' + id).then(
-            res => {
-              _this.product.processes.push.apply(
-                _this.product.processes,
-                res.data.data
-              );
-              _this.sortProcesses();
-              console.log('then');
-            },
-            () => {
-              console.log('one');
-            }
-          );
+          this.$axios('/api/product/processes?id=' + id).then(res => {
+            _this.product.processes.push.apply(
+              _this.product.processes,
+              res.data.data
+            );
+            _this.sortProcesses();
+          });
         } else {
           this.$router.replace({ path: '/wechat/product/' + id });
           callback();
