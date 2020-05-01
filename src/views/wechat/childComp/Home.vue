@@ -56,7 +56,7 @@ const levelSelect = {
     workerMenus: [0]
   },
   workerManager: {
-    productManagerMenus: [0, 1],
+    productManagerMenus: [],
     workerManagerMenus: [0],
     workerMenus: [0]
   },
