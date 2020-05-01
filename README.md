@@ -1,6 +1,6 @@
-# Manage-fe
+# ManageSystem-fe
 
-后端仓库： [Manage-be](https://github.com/LinLorry/Manage-be)
+后端仓库： [ManageSystem-be](https://github.com/LinLorry/ManageSystem-be)
 
 
 
