@@ -8,7 +8,15 @@
       @click-left="$emit('close')"
     />
     <van-list>
-      <div v-for="(productProcess, index) of value.finishList" :key="index">
+      <div
+        v-for="(productProcess, index) of value.finishList"
+        :key="index"
+        @click="
+          $router.push({
+            path: '/wechat/product/' + productProcess.productId + '?detail=true'
+          })
+        "
+      >
         <el-card class="productProcess-info-card">
           <div class="content">
             <div>

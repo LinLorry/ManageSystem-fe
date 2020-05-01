@@ -17,7 +17,11 @@
         <div
           v-for="(item, index) in workloads"
           :key="index"
-          @click="$router.push({ path: '/wechat/product/' + item.productId })"
+          @click="
+            $router.push({
+              path: '/wechat/product/' + item.productId + '?detail=true'
+            })
+          "
         >
           <el-card class="productProcess-info-card">
             <div class="content">

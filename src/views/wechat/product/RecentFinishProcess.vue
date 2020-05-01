@@ -14,29 +14,37 @@
         finished-text="没有更多了"
         @load="onLoad"
       >
-        <el-card
+        <div
           class="product-process-info-card"
           v-for="(productProcess, index) of productProcesses"
           :key="index"
+          @click="
+            $router.push({
+              path:
+                '/wechat/product/' + productProcess.productId + '?detail=true'
+            })
+          "
         >
-          <div slot="header" class="header">
-            <span>{{
-              dateFormat.format(new Date(productProcess.finishTime))
-            }}</span>
-          </div>
-          <div class="content">
-            <span>订单编号：</span>
-            <strong>{{ productProcess.serial }}</strong>
-            <br />
+          <el-card>
+            <div slot="header" class="header">
+              <span>{{
+                dateFormat.format(new Date(productProcess.finishTime))
+              }}</span>
+            </div>
+            <div class="content">
+              <span>订单编号：</span>
+              <strong>{{ productProcess.serial }}</strong>
+              <br />
 
-            <span>工序：</span>
-            <strong>{{ productProcess.processName }}</strong>
-            <br />
+              <span>工序：</span>
+              <strong>{{ productProcess.processName }}</strong>
+              <br />
 
-            <span>负责人：</span>
-            <strong>{{ productProcess.finisherName }}</strong>
-          </div>
-        </el-card>
+              <span>负责人：</span>
+              <strong>{{ productProcess.finisherName }}</strong>
+            </div>
+          </el-card>
+        </div>
       </van-list>
     </van-pull-refresh>
   </div>
