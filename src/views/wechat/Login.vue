@@ -29,8 +29,9 @@ export default {
           _this.$router.push('/wechat');
         });
     } else {
+      // TODO App Id
       location.href =
-        'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8eb0addaf4641342&redirect_uri=' +
+        'https://open.weixin.qq.com/connect/oauth2/authorize?appid=appid&redirect_uri=' +
         location.href +
         '&response_type=code&scope=snsapi_base#wechat_redirect';
     }
