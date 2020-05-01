@@ -36,28 +36,34 @@ const raw = {
   workerManagerMenus: [
     {
       name: '员工工序统计',
-      icon: 'friends-o',
+      icon: 'bar-chart-o',
       to: '/wechat/worker/workloadStatistics'
     }
   ],
-  workerMenus: []
+  workerMenus: [
+    {
+      name: '我完成的工序',
+      icon: 'records',
+      to: '/wechat/user/myWorkload'
+    }
+  ]
 };
 
 const levelSelect = {
   productManager: {
     productManagerMenus: [0, 1],
     workerManagerMenus: [],
-    workerMenus: []
+    workerMenus: [0]
   },
   workerManager: {
     productManagerMenus: [0, 1],
     workerManagerMenus: [0],
-    workerMenus: []
+    workerMenus: [0]
   },
   worker: {
     productManagerMenus: [],
     workerManagerMenus: [],
-    workerMenus: []
+    workerMenus: [0]
   }
 };
 

@@ -22,6 +22,7 @@ const WechatRecentFinishProcess = () =>
   import('@/views/wechat/product/RecentFinishProcess');
 const WechatWorkloadStatistics = () =>
   import('@/views/wechat/worker/WorkloadStatistics');
+const WechatMyWorkload = () => import('@/views/wechat/user/MyWorkload');
 
 const Work = () => import('@/views/work/Work.vue');
 const WorkCreator = () => import('@/views/work/WorkCreator');
@@ -106,6 +107,11 @@ export default new VueRouter({
           path: 'worker/workloadStatistics',
           name: 'wechatWorkloadStatistics',
           component: WechatWorkloadStatistics
+        },
+        {
+          path: 'user/myWorkload',
+          name: 'wechatMyWorkload',
+          component: WechatMyWorkload
         },
         {
           path: '*',
