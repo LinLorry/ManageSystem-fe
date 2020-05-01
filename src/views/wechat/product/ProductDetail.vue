@@ -139,27 +139,13 @@ export default {
     let _this = this;
     const id = this.$route.params.id;
 
-    if (this.detail) {
-      this.$axios('/api/product?id= ' + id).then(res => {
-        if (res.data.data) {
-          Object.assign(_this.product, res.data.data);
-        }
-      });
-
-      this.$axios('/api/product/processes?id=' + id).then(res => {
-        _this.product.processes.push.apply(
-          _this.product.processes,
-          res.data.data
-        );
-        _this.sortProcesses();
-      });
-    } else {
+    let callback = function() {
       let params = {
         id: id,
         withProcesses: true
       };
 
-      this.$axios
+      _this.$axios
         .request({
           url: '/api/product',
           method: 'get',
@@ -173,10 +159,48 @@ export default {
           }
         });
 
-      this.$axios('/api/user/processes').then(res => {
+      _this.$axios('/api/user/processes').then(res => {
         _this.userProcesses.splice(0, _this.userProcesses.length);
         _this.userProcesses.push.apply(_this.userProcesses, res.data.data);
       });
+    };
+
+    if (this.detail) {
+      this.$axios('/api/user/level').then(res => {
+        let can = false;
+        for (const level of res.data.data) {
+          if (level === 'admin' || level === 'product manager') {
+            can = true;
+            break;
+          }
+        }
+        if (can) {
+          this.$axios('/api/product?id= ' + id).then(res => {
+            if (res.data.data) {
+              Object.assign(_this.product, res.data.data);
+            }
+          });
+
+          this.$axios('/api/product/processes?id=' + id).then(
+            res => {
+              _this.product.processes.push.apply(
+                _this.product.processes,
+                res.data.data
+              );
+              _this.sortProcesses();
+              console.log('then');
+            },
+            () => {
+              console.log('one');
+            }
+          );
+        } else {
+          this.$router.replace({ path: '/wechat/product/' + id });
+          callback();
+        }
+      });
+    } else {
+      callback();
     }
   },
   methods: {
