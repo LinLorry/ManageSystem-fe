@@ -39,7 +39,9 @@
             autocomplete="off"
           />
         </el-form-item>
-        <el-button type="primary" @click="update">更新</el-button>
+        <div style="text-align: center">
+          <el-button type="primary" @click="update">更新</el-button>
+        </div>
       </el-form>
     </el-card>
     <el-card style="margin-bottom: 20px">
@@ -56,7 +58,7 @@
               <span style="display: inline-block; width: 150px;">
                 {{ workProcess.name }}
               </span>
-              <span v-if="workProcess.comment.length !== 0">
+              <span v-if="workProcess.comment">
                 备注: {{ workProcess.comment }}
               </span>
             </el-card>
