@@ -21,20 +21,37 @@
         finished-text="没有更多了"
         @load="onLoad"
       >
-        <van-cell
-          style="font-size: 1.2rem"
+        <div
+          class="product-info-card"
           v-for="item in products"
           :key="item.id"
-          :title="item.serial"
           @click="$router.push('/wechat/product/' + item.id + '?detail=true')"
         >
-          <template #label>
-            <div style="font-size: 1rem">
-              <span>{{ item.igt + ' ' + item.design }}</span> <br />
-              <span> {{ item.central }}</span> <br />
+          <el-card>
+            <div slot="header" class="header">
+              <strong>{{ item.serial }}</strong>
+              <span>{{ new Date(item.createTime).toLocaleDateString() }}</span>
             </div>
-          </template>
-        </van-cell>
+            <div class="content">
+              <div style="display: flex; justify-content: space-between">
+                <span>
+                  IGT: <strong>{{ item.igt }}</strong>
+                </span>
+                <span>{{ item.design }}</span>
+              </div>
+              <div>
+                <span>
+                  ERP: <strong>{{ item.erp }}</strong>
+                </span>
+              </div>
+              <div>
+                <span>
+                  Central: <strong>{{ item.central }}</strong>
+                </span>
+              </div>
+            </div>
+          </el-card>
+        </div>
       </van-list>
     </van-pull-refresh>
   </div>
@@ -96,4 +113,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.product-info-card {
+  margin: 10px 10px 30px;
+}
+
+.product-info-card .header {
+  display: flex;
+  justify-content: space-between;
+}
+</style>
